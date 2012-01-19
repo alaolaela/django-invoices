@@ -6,6 +6,7 @@
 /.project
 /.pydevproject
 /.settings
+*.egg-info
 *.sassc
 .sass-cache
 .sass-cache/*
