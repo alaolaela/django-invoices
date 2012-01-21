@@ -2,13 +2,14 @@
 from __future__ import absolute_import
 
 from django.db import models
-
-from invoices.models import Customer
-
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 class InvoiceBase(models.Model):
 
-    customer = models.ForeignKey(Customer)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField(db_index=True)
+    customer = generic.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         abstract = True
