@@ -11,3 +11,4 @@
 .sass-cache
 .sass-cache/*
 /*.nja
+.DS_Store
