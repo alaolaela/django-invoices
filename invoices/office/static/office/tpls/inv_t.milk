@@ -1,0 +1,8 @@
+<tr>
+    <td class="check-column"><input id="" type="checkbox" value="checkbox"></td>
+    <td class="doc_name-column"><a href="#">{{ key }}</a></td>
+    <td class="family_name-column"><a href="#">#{{ id }} Chlothilde Peter</a></td>
+    <td class="issue_date-column">{{ date_created }}</td>
+    <td class="doc_type-column">Faktura VAT</td>
+    <td class="gross_value-column">{{ net_price }} €</td>
+</tr>

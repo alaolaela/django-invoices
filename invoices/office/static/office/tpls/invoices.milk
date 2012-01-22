@@ -1,3 +1,10 @@
+<div class="page_header clearfix">
+    <h3>Przychody - zestawienie</h3>
+</div><!-- page_header -->
+<div class="overview_header">
+    <h4 class="overview_type overview_type_gray_bg">Szkice</h4>
+    <a class="fl" href="#" >Pokaż wszystkie</a>
+</div><!-- overview_header -->
 <div class="overview">
     <table class="overview">
         <thead>
@@ -11,54 +18,6 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="check-column"><input id="" type="checkbox" value="checkbox"></td>
-                <td class="doc_name-column"><a href="#">1/PRO/04/2012</a></td>
-                <td class="family_name-column"><a href="#">#435 Clevinghaus Bernd</a></td>
-                <td class="issue_date-column">2012-01-19</td>
-                <td class="doc_type-column">Faktura Proforma</td>
-                <td class="gross_value-column">1850 €</td>
-            </tr>
-            <tr>
-                <td class="check-column"><input id="" type="checkbox" value="checkbox"></td>
-                <td class="doc_name-column"><a href="#">3/03/2012</a></td>
-                <td class="family_name-column"><a href="#">#24 Chlothilde Peter</a></td>
-                <td class="issue_date-column">2012-01-18</td>
-                <td class="doc_type-column">Faktura VAT</td>
-                <td class="gross_value-column">1550 €</td>
-            </tr>
-            <tr>
-                <td class="check-column"><input id="" type="checkbox" value="checkbox"></td>
-                <td class="doc_name-column"><a href="#">1/PRO/04/2012</a></td>
-                <td class="family_name-column"><a href="#">#435 Clevinghaus Bernd</a></td>
-                <td class="issue_date-column">2012-01-19</td>
-                <td class="doc_type-column">Faktura Proforma</td>
-                <td class="gross_value-column">1850 €</td>
-            </tr>
-            <tr>
-                <td class="check-column"><input id="" type="checkbox" value="checkbox"></td>
-                <td class="doc_name-column"><a href="#">3/03/2012</a></td>
-                <td class="family_name-column"><a href="#">#24 Chlothilde Peter</a></td>
-                <td class="issue_date-column">2012-01-18</td>
-                <td class="doc_type-column">Faktura VAT</td>
-                <td class="gross_value-column">1550 €</td>
-            </tr>
-            <tr>
-                <td class="check-column"><input id="" type="checkbox" value="checkbox"></td>
-                <td class="doc_name-column"><a href="#">1/PRO/04/2012</a></td>
-                <td class="family_name-column"><a href="#">#435 Clevinghaus Bernd</a></td>
-                <td class="issue_date-column">2012-01-19</td>
-                <td class="doc_type-column">Faktura Proforma</td>
-                <td class="gross_value-column">1850 €</td>
-            </tr>
-            <tr>
-                <td class="check-column"><input id="" type="checkbox" value="checkbox"></td>
-                <td class="doc_name-column"><a href="#">3/03/2012</a></td>
-                <td class="family_name-column"><a href="#">#24 Chlothilde Peter</a></td>
-                <td class="issue_date-column">2012-01-18</td>
-                <td class="doc_type-column">Faktura VAT</td>
-                <td class="gross_value-column">1550 €</td>
-            </tr>
         </tbody>
     </table>
 </div>

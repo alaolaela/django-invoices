@@ -8,13 +8,8 @@ class App extends Spine.Controller
                 console.log("/users/", params.id)
             "/users": ->
                 console.log("users")
-        ind = new Index el: $('#content')
+        ind = new controllers.Index el: $('#content')
 
-class Index extends Spine.Controller
-    constructor: ->
-        super
-        tpl.load OFFICE_APP_NAME, 'index', =>
-            @replace tpl.render 'index', {}
         
 $ ->
     Spine.Route.setup()

@@ -1,0 +1,132 @@
+body {
+	margin:0 auto;
+	padding:0;
+	font-family: "Lucida Grande",verdana,arial,helvetica,sans-serif;
+	color:#222;
+	min-width:870px;
+        font-size: 12px;
+}
+body {
+	background:#eeeeee
+}
+
+body {margin: 10px !important;}
+
+.fl {float: left;}
+.fr {float: right;}
+
+.layout {background-color: #fff;}
+.page_header, .overview_header, .overview, .overview_footer {padding: 5px 10px; clear: both;}
+
+.page_header {background-color: #eef8ff;}
+.page_header h3 {
+    font-size: 13px;
+    font-weight: bold;
+    font-style: normal;
+    text-decoration: none;
+    color: #333;
+    float: left;
+}
+.overview_header {margin: 20px 0 10px 0; font-size: 13px; font-weight: normal; font-style: normal;}
+h4.overview_type {
+    font-size: 11px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: normal;
+    color: white;
+    padding: 5px 25px;
+    float: left;
+    margin-right: 30px;
+}
+h4.overview_type_no_bg {font-weight: bold; font-size: 16px; color: #333; text-transform: none; padding: 5px;}
+h4.overview_type_gray_bg {background-color: #666;}
+h4.overview_type_red_bg {background-color: red;}
+h4.overview_type_blue_bg {background-color: blue;}
+h4.overview_type_green_bg {background-color: green;}
+table.overview {
+    font-size: 12px; 
+    font-weight: normal; 
+    font-style: normal; 
+    color: #333;
+    padding: 0;
+    margin: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    text-align: left;
+    border-bottom: 2px solid #666;
+}
+table.overview thead th {font-size: 9px; font-weight: bold; font-style: normal; text-decoration: none; color: #666; border-bottom: 1px solid #666; line-height: 11px; padding-bottom: 5px;}
+table.overview td {vertical-align: baseline; text-align: left; padding: 4px 15px 8px 5px; border-top: 1px solid #666;}
+table.overview tbody td a {font-size: 12px; font-weight: normal; font-style: normal; text-decoration: underline; color: #004080;}
+table.overview tbody td.doc_name-column a {font-weight: bold;}
+table.overview tbody td.doc_type-column {font-size: 13px;}
+table.overview tbody td {white-space: nowrap;}
+table.overview tbody td.family_name-column {width: 80%;}
+table.overview td.status-column {text-align: center; padding: 8px 10px 8px 5px; vertical-align: top;}
+table.overview p.status {text-transform: uppercase; font-size: 8px; font-weight: normal; font-style: normal; text-decoration: none; color: white; padding: 3px 10px;}
+tr.status_green_bg p.status {background-color: green;}
+tr.status_blue_bg p.status {background-color: blue;}
+tr.status_gray_bg p.status {background-color: gray;}
+
+
+.overview_footer {padding-top: 0; margin: 0px 0 60px 0;}
+.overview_footer > * {margin: 0px 5px 5px 5px;}
+.overview_footer p.total_gross {font-size: 14px; font-weight: bold; font-style: normal; text-decoration: none; color: #333; margin-right: 20px;}
+.overview_footer p.total_gross span.total_gross_value {margin-left: 5px;}
+
+.facture_details .col {margin: 40px 100px 40px 25px; font-size: 12px; font-style: normal; text-decoration: none; color: #333; line-height: 14px;}
+.facture_details .col p.title {font-weight: bold; margin-bottom: 10px; }
+.two_cols {width: 50%;}
+.facture_preview h3 {font-size: 18px;}
+h2.products {font-size: 18px; margin: 10px;}
+form.facture {}
+form.facture input, form.facture label, form.facture select, form.facture textarea {float: left; clear: both;}
+form.facture select {width: 80px;}
+form.facture select.long {width: 270px;}
+form.facture label {margin: 20px 0 5px 0; font-size: 12px; font-style: normal; text-decoration: none; color: #333;}
+form.facture label.bold {font-weight: bold;}
+form.facture .radio_label {clear: none; margin: 2px 0 5px 0;}
+form.facture a.calendar {float: left; margin: 0 5px;}
+form.facture a.calendar img {width: 20px;}
+textarea.chosen_data {width: 230px; height: 100px; text-align: left; font-family: 'Arial'; font-size: 13px; color: black; font-style: normal; font-weight: normal; text-decoration: none;}
+form.facture a.add_new_client {margin-left: 10px; line-height: 22px; font-size: 13px; font-weight: normal; font-style: normal; text-decoration: underline; color: #004080;}
+table.client_data {float: left; clear: both;}
+table.client_data td {vertical-align: bottom;}
+
+.goods {padding-bottom: 200px;}
+.goods p {line-height: 1.4;}
+.goods table {width: 100%; font-size: 13px; margin-bottom: 100px;}
+.goods table thead td {border-bottom: solid 2px #808285; font-size: 9px; font-weight: bold; font-style: normal; text-decoration: none; color: #666; text-transform: uppercase;}
+.goods table tfoot tr:nth-child(1) td {border-top: solid 2px #808285;}
+.goods table td {border-bottom: solid 1px #808285; vertical-align: top;}
+.goods table td.left_border {border-left: solid 1px #808285;}
+.goods table td.very_small input {width: 20px;}
+.goods table td.small input {width: 30px;}
+.goods table td.medium input {width: 60px;}
+.goods table td.large input {width: 90px;}
+.goods table td.commodity {white-space: pre-line; line-height: 15px;}
+.goods table td.no_borders {border: none; padding-bottom: 0;}
+.goods table td.commodity textarea {
+    width: 250px;
+    height: 90px;
+    text-align: left;
+    font-family: 'Arial';
+    font-size: 13px;
+    color: black;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none
+}
+.goods table td.delete_commodity {text-align: left;}
+.goods table td { padding: 5px 0; text-align: left;}
+.goods table td:first-child {text-align: left;}
+   
+.goods .facture_foot {font-size: 13px; font-weight: normal; font-style: normal; text-decoration: none; color: #333;}
+.goods table tr td {text-align: left; padding: 10px;}
+.goods table tr td:nth-child(1) { width: 43%; text-align: left; padding-right: 15px;}
+.goods .total_cost { font-size: 16px; font-weight: bold; font-style: normal; text-decoration: none; color: #333;}
+.goods .total_cost td {text-align: right; border-top: solid 2px #808285; border-bottom: none;}
+.goods .total_cost td p {margin-right: 25px;}
+.goods td span.head {font-size: 14px; font-weight: bold;}
+    

@@ -1,0 +1,297 @@
+
+* + html body.milestones_add_many span.due_pop_wrapper { display:inline; }
+* + html div.move_menu { display:inline; }
+* + html body.touch div.nubbin span.button a { display:inline; }
+* + html .global_pagination a { display:inline; }
+* + html table.overview th span.sort_by { display:inline; }
+* + html a.edit_record span { display:inline; }
+* + html a.delete_record span { display:inline; }
+* + html div.image_form div.image_current { display:inline; }
+* + html .sprite { display:inline; }
+* + html span.date_pop_wrapper { display:inline; }
+* + html body.todos div.list a.pill_todo_item { display:inline; }
+* + html body.todos span.assign_due_pop_wrapper { display:inline; }
+* + html body.todos ul.addtl_fields { display:inline; }
+* + html #trial_footer span.fancy_button { display:inline; }
+* + html div.medicalSpecialization a.dropDownMenuAnchor span.dropDownMenuArrow { display:inline; }
+* + html a.add_new span { display:inline; }
+* + html .gray_background_border { display:inline; }
+* + html table.account_chart td .button a { display:inline; }
+* + html #upgradeOffer .upgraded_card { display:inline; }
+* + html #upgradeOffer .card { display:inline; }
+* + html #upgradeOffer .awesome { display:inline; }
+
+div#Header {
+  z-index: 400;
+}
+
+div#launchbar {
+  z-index: 500;
+}
+
+div#Header,
+div#screen_body,
+div.Full,
+div.Left,
+div.col,
+div.col div.innercol,
+body.message div.Comments,
+body.overview span.event_type span,
+div#LockBar,
+.Right #categories div.category,
+div.color_picker div.submit,
+body.companies div.company h1,
+body.administrators div.candidates_nav_indent,
+body.candidates div.candidates_nav_indent,
+#post_form_container div.main_attributes {
+  zoom: 100%;
+}
+
+div.color_picker div.submit {
+  font-family: tahoma, sans-serif;
+}
+
+div.Right {
+  width: 29%;
+}
+
+div#LogoBox img {
+  width: expression(this.width > 300 ? 300: true);
+}
+
+body.comments div.comment div.rich_text_area div.editor {
+  width: 98%;
+  position: relative;
+}
+
+/* fixes a display bug in wys for IE7/8 */
+body.message_form div.rich_text_area div.editor ,
+body.message_form div.rich_text_area div.editor *,
+body.comments div.comment div.rich_text_area div.editor * {position: relative;}
+
+div.button_to_add_new a {
+  display: block;
+}
+
+div.button_to_add_new div.other_ways_to_add a {
+  display: inline;
+}
+
+body.companies div.page_header div.button_to_add_new div.button {display: inline;}
+
+body.overview span.event_type span.completed {
+  background-image: none;
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/events/check.png',sizingMethod='crop');
+}
+
+.commentable div.comments a.comments_link {
+  padding: 0;
+}
+
+body.milestones div.Milestone div.nubbin span.sprite.intl_edit_icon,
+body.files div.widget div.file div.nubbin span.sprite.intl_edit_icon,
+div.list .nubbin span.sprite.intl_edit_icon {
+  margin-top: -1px;
+}
+
+a span.sprite {cursor: hand;}
+
+/* Color scheme */
+
+body.appearance .Preview {
+  zoom: 1;
+}
+
+body.appearance .Preview ul a span.pointer {
+  background-image: none;
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/pointer.png',sizingMethod='crop');
+}
+
+/* Legacy elements needing layout */
+
+div.showhide,
+div.popup_add_dialog,
+div#new_time_report,
+div#new_list,
+div#choose_company {
+  height: 1%;
+}
+
+.popup_add_dialog SELECT { width: auto; }
+
+span.switch div.menu {top: 0;}
+span.switch div.menu div.shadow,
+span.switch div.menu div.bottom_shadow {height: 1%;}
+
+span.switch div.menu div.projects div.inner {
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  border-color: #ccc;
+}
+
+body.companies div.page_header div.button_to_add_new div.button span {
+  float: left;
+  cursor: hand;
+}
+
+body.companies div.page_header div.button_to_add_new span {
+  vertical-align: middle;
+}
+
+.container {
+	position: relative;
+}
+
+div.widget div.nubbin li.edit {margin-top: -2px;}
+div.widget div.nubbin span.sprite {margin-top: 0;}
+body.todos div.list span.sprite.drag {margin-top: 1px;}
+	
+/* fancyzoom */
+
+div.uploaded_images .loading {
+  top: 2px;
+  left: 2px;
+}
+
+/* assign-due/calendar pop-ups */
+
+body.todos span.assign_due_pop {
+  top: -37px;
+}
+
+body.todos span.due_pop {
+  top: -34px;
+  right: -198px;
+}
+
+body.todos span.assign_due_pop span.inner,
+body.todos span.due_pop span.inner,
+span.date_pop span.inner {
+  padding-top: 16px;
+}
+
+body.milestones_add_many span.due_pop,
+span.date_pop {
+  padding-top: 16px;
+  top: -31px;
+  right: -202px;
+}
+
+body.todos .active_menu span.assign_due_pop_container,
+body.todos .active_menu span.due_pop_container,
+body.milestones_add_many .active_menu span.due_pop_container,
+.active_menu span.date_pop_container {
+  position: static;
+  zoom: 1;
+}
+
+body.todos span.assign_due_pop span.close_link,
+body.todos span.due_pop span.close_link,
+body.milestones_add_many span.due_pop span.close_link {
+  margin-top: -24px;
+}
+
+div.formatted_text_body code, 
+div.formatted_text_body pre,
+div.formatted_text_body code *, 
+div.formatted_text_body pre *	{
+	font-size: 12px !important;
+	}
+	
+div.textile_text_area textarea { display:block; }
+
+/* quick window shadow */
+
+div.quick_window {
+  padding: 27px;
+  background: url(/images/quick_window/quicklook_top.png) no-repeat left top;
+}
+
+div.quick_window div.middle {
+  padding: 0 27px 0 27px;
+  margin: 0 -27px 0 -37px;
+  background: url(/images/quick_window/quicklook_middle.png) repeat-y center top;
+}
+
+div.quick_window div.bottom {
+  padding: 27px 0 0;
+  margin: 0 -27px -27px -27px;
+  background: url(/images/quick_window/quicklook_bottom.png) no-repeat left bottom;
+}
+
+div.dim_zum_window {width: 734px;}
+
+div.nubbin div.wrapper,
+div.nubbin div.wrapper div.buttons {
+  zoom: 1;
+}
+
+div.nubbin div.buttons span.button {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+div.nubbin span.delete_button .trash { padding:0px; }
+
+
+/*-------------------------------------------------
+CALENDAR
+-------------------------------------------------*/
+
+body.milestones div.page_header div.button_to_add_new div.button {
+  margin: 0;
+  padding: 0;
+}
+
+table.milestone td.label {
+  /* padding-top: 4px; IE: top padding needs to be 4px */
+}
+
+table.milestone_entry td.checkbox input {
+  height: 10px;
+  width: 10px;
+  margin: 0;
+  padding: 0;
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  *overflow: hidden;
+}
+
+div.month_row_spanned div.event {
+  border: none;
+}
+
+table.month_row_content div.new_entry_form_menu_container div.balloon {
+  bottom: -10px;
+  left: -1px;
+}
+
+table.month_row_content div.new_entry_form_menu_container div.balloon_arrow,
+table.month_row_content div.new_entry_form_menu_container div.balloon_arrow_border {
+  left: 20px;
+  right: auto;
+}
+
+div.month_row_spanned div.event div.commentable span.sprite {
+  margin-top: 2px !important;
+}
+
+div.latemilestones div.balloon {
+  margin-top: -10px;
+}
+
+body.calendar #today_link_wrapper {
+  left: 190px;
+}
+
+div.balloon div.move_delete_container {
+  margin-top: -10px;
+}
+
+div.balloon span.submit_buttons_block input {
+  vertical-align: middle;
+}
+
+.global_pagination .button {height: 27px;}
+a.add_new span {margin: 8px;}
