@@ -1,0 +1,13 @@
+{% extends "admin/double_column_layout.html" %}
+{% load compressed %}
+
+
+{% block extrahead %}
+{{ block.super }}
+{% compressed_js 'spinejs' %}
+{% compressed_js 'spinejs_models' %}
+{% compressed_js 'office' %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}

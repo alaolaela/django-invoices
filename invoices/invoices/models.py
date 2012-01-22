@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext_lazy as _
 
-from invoices import settings
+from .. import settings
 
 
 class Invoice(models.Model):
