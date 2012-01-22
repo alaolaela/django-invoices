@@ -29,6 +29,8 @@ class InvoiceProductInlineAdmin(admin.StackedInline):
 
 class InvoiceAdmin(ModelAdmin):
     
+    list_display = ('key', 'status')
+    list_editable = ('status',)
     inlines = (InvoiceProductInlineAdmin,)
     
     def __init__(self, *args, **kwargs):

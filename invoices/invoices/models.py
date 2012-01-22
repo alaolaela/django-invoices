@@ -15,6 +15,19 @@ class Invoice(models.Model):
         (2, _('commodity'))
     )
 
+    STATUS_TOBEPAID = 1
+    STATUS_OVERDUE = 2
+    STATUS_DRAFT = 3
+    STATUS_PAID = 4
+
+    STATUS_CHOICES = (
+        (STATUS_TOBEPAID, _('to be paid')),
+        (STATUS_OVERDUE, _('overdue')),
+        (STATUS_DRAFT, _('draft')),
+        (STATUS_PAID, _('paid')),
+
+    )
+
     key = models.CharField(max_length=20, unique=True)
     date_created = models.DateField()
     date_sale = models.DateField()
@@ -27,6 +40,7 @@ class Invoice(models.Model):
     customer_object_id = models.PositiveIntegerField(db_index=True)
     customer = generic.GenericForeignKey('customer_content_type',
             'customer_object_id')
+    status = models.PositiveSmallIntegerField(_('status'))
 
     def __unicode__(self):
         return self.key
