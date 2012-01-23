@@ -3,13 +3,17 @@ class Invoice extends Spine.Controller
 
     constructor: ->
         super
-
+        @item.bind("destroy", @remove)
+    
     render: (item) =>
         if (item)
             @item = item
         tpl.load OFFICE_APP_NAME, 'inv_t', =>
             @html tpl.render('inv_t', @item)
         @
+
+    remove: =>
+        @el.remove()
 
 class Invoices extends Spine.Controller
     constructor: ->
@@ -23,12 +27,16 @@ class Invoices extends Spine.Controller
             @html ''
             (@append a for a in filterted_items)
 
+    delete: =>
+        for check in @el.find("input:checked")
+            $(check).parent().item().destroy()
+
 
 class Index extends Spine.Controller
     #elements:
     
     events:
-        "click div": "click"
+        "click input.delete": "delete_invoice"
 
     constructor: ->
         super
@@ -40,15 +48,27 @@ class Index extends Spine.Controller
                 [models.Invoice.STATUS_OVERDUE, 'overdue', 'Przeterminowane']
             ]
             paid_action = (invoice_status, text) ->
-                console.log "KLAMSTWO", text, invoice_status
                 if invoice_status == models.Invoice.STATUS_PAID
                     ''
                 else
                     text
-            @replace tpl.render 'index', {blocks: ({type: c[0], id: c[1], name: c[2], 'paid_action': (text) -> paid_action(c[0], text)} for c in controller_names)}
-            @controllers = ((new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
+            @el.find('.left').html tpl.render 'index', {blocks: ({type: c[0], id: c[1], name: c[2], 'paid_action': (text) -> paid_action(c[0], text)} for c in controller_names)}
+            @controllers = {}
+            (@controllers[record[0]] = (new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
 
+    delete_invoice: (e) =>
+        console.log e
+        @controllers[$(e.target).data('ref')].delete()
+
+
+class InvoiceAddition extends Spine.Controller
+    
+    constructor: ->
+        super
+        tpl.load OFFICE_APP_NAME, 'add', =>
+            @el.find('.left').html tpl.render 'add', {}
 
 
 window.controllers = {}
 window.controllers.Index = Index
+window.controllers.InvoiceAddition = InvoiceAddition

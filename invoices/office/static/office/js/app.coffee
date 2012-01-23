@@ -4,14 +4,14 @@ window.OFFICE_APP_NAME = OFFICE_APP_NAME
 class App extends Spine.Controller
     constructor: ->
         @routes
-            "/users/:id": (params) ->
-                console.log("/users/", params.id)
+            "/add-invoice": (params) ->
+                new controllers.InvoiceAddition el: $('#content')
             "/users": ->
                 console.log("users")
-        ind = new controllers.Index el: $('#content')
+            "/": ->
+                ind = new controllers.Index el: $('#content')
+        Spine.Route.setup()
 
         
 $ ->
-    Spine.Route.setup()
     a = new App()
-    window.a = a
