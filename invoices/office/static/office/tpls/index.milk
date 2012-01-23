@@ -2,11 +2,12 @@
             <div class="page_header clearfix">
                 <h3>Przychody - zestawienie</h3>
             </div><!-- page_header -->
+            {{#blocks}} 
             <div class="overview_header">
-                <h4 class="overview_type overview_type_gray_bg">Szkice</h4>
+                <h4 class="overview_type invoice{{type}}">{{ name }}</h4>
                 <a class="fl" href="#" >Pokaż wszystkie</a>
             </div><!-- overview_header -->
-            <div id="drafts" class="overview">
+            <div id="{{ id }}" class="overview">
                 <table class="overview">
                     <thead>
                         <tr>
@@ -24,91 +25,11 @@
             </div><!-- overview -->
             <div class="overview_footer">
                 <p class="fr total_gross">Suma brutto:  <span class="total_gross_value">23 450 €</span></p>
-                <img src="styles/images/overview-bottom-arrow.png" class="fl" />
-                <input id="" type="submit" class="fl" value="Oznacz jako zapłacone" />
-                <input id="" type="submit" class="fl" value="Drukuj" />
-                <input id="" type="submit" class="fl" value="Usuń" />
-            </div><!-- overview_footer -->
-            <div class="overview_header">
-                <h4 class="overview_type overview_type_red_bg">Z przekroczonym terminem</h4>
-                <a class="fl" href="#" >Pokaż wszystkie</a>
-            </div><!-- overview_header -->
-            <div id="overdue" class="overview">
-                <table class="overview">
-                    <thead>
-                        <tr>
-                            <th class="check-column"></th>
-                            <th class="doc_name-column">Numer dokumentu</th>
-                            <th class="family_name-column">Rodzina</th>
-                            <th class="issue_date-column">Data wystawienia</th>
-                            <th class="doc_type-column">Rodzaj dokumentu</th>
-                            <th class="gross_value-column">Wartość brutto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div><!-- overview -->
-            <div class="overview_footer">
-                <p class="fr total_gross">Suma brutto:  <span class="total_gross_value">23 450 €</span></p>
-                <img src="styles/images/overview-bottom-arrow.png" class="fl" />
-                <input id="" type="submit" class="fl" value="Oznacz jako zapłacone" />
-                <input id="" type="submit" class="fl" value="Drukuj" />
-                <input id="" type="submit" class="fl" value="Usuń" />
-            </div><!-- overview_footer -->
-            <div class="overview_header">
-                <h4 class="overview_type overview_type_blue_bg">Faktury do zapłaty</h4>
-                <a class="fl" href="#" >Pokaż wszystkie</a>
-            </div><!-- overview_header -->
-            <div id="tobepaid" class="overview">
-                <table class="overview">
-                    <thead>
-                        <tr>
-                            <th class="check-column"></th>
-                            <th class="doc_name-column">Numer dokumentu</th>
-                            <th class="family_name-column">Rodzina</th>
-                            <th class="issue_date-column">Data wystawienia</th>
-                            <th class="doc_type-column">Rodzaj dokumentu</th>
-                            <th class="gross_value-column">Wartość brutto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div><!-- overview -->
-            <div class="overview_footer">
-                <p class="fr total_gross">Suma brutto:  <span class="total_gross_value">23 450 €</span></p>
-                <img src="styles/images/overview-bottom-arrow.png" class="fl" />
-                <input id="" type="submit" class="fl" value="Oznacz jako zapłacone" />
-                <input id="" type="submit" class="fl" value="Drukuj" />
-                <input id="" type="submit" class="fl" value="Usuń" />
-            </div><!-- overview_footer -->
-            <div class="overview_header">
-                <h4 class="overview_type overview_type_green_bg">Zapłacone</h4>
-                <a class="fl" href="#" >Pokaż wszystkie</a>
-            </div><!-- overview_header -->
-            <div id="paid" class="overview">
-                <table class="overview">
-                    <thead>
-                        <tr>
-                            <th class="check-column"></th>
-                            <th class="doc_name-column">Numer dokumentu</th>
-                            <th class="family_name-column">Rodzina</th>
-                            <th class="issue_date-column">Data wystawienia</th>
-                            <th class="doc_type-column">Rodzaj dokumentu</th>
-                            <th class="gross_value-column">Wartość brutto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div><!-- overview -->
-            <div class="overview_footer">
-                <p class="fr total_gross">Suma brutto:  <span class="total_gross_value">23 450 €</span></p>
-                <img src="styles/images/overview-bottom-arrow.png" class="fl" />
-                <input id="" type="submit" class="fl" value="Oznacz jako zapłacone" />
+                <img src="{{STATIC_URL}}office/css/images/overview-bottom-arrow.png" class="fl" />
+                {{#paid_action}}<input id="" type="submit" class="fl" value="Oznacz jako zapłacone" />{{/paid_action}}
                 <input id="" type="submit" class="fl" value="Drukuj" />
                 <input id="" type="submit" class="fl" value="Usuń" />
             </div><!-- overview_footer -->
             <div class="clear"></div>
+            {{/blocks}}
         </div><!-- layout -->        

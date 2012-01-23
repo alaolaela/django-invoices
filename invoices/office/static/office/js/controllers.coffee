@@ -25,18 +25,28 @@ class Invoices extends Spine.Controller
 
 
 class Index extends Spine.Controller
+    #elements:
+    
+    events:
+        "click div": "click"
+
     constructor: ->
         super
         tpl.load OFFICE_APP_NAME, 'index', =>
-            @replace tpl.render 'index', {}
             controller_names = [
-                [models.Invoice.STATUS_DRAFT, 'drafts'],
-                [models.Invoice.STATUS_TOBEPAID, 'tobepaid'],
-                [models.Invoice.STATUS_PAID, 'paid'],
-                [models.Invoice.STATUS_OVERDUE, 'overdue']
+                [models.Invoice.STATUS_DRAFT, 'drafts', 'Szkice'],
+                [models.Invoice.STATUS_TOBEPAID, 'tobepaid', 'Do zapłacenia'],
+                [models.Invoice.STATUS_PAID, 'paid', 'Zapłacone'],
+                [models.Invoice.STATUS_OVERDUE, 'overdue', 'Przeterminowane']
             ]
-            @controlles = ((new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
-            console.log controlles
+            paid_action = (invoice_status, text) ->
+                console.log "KLAMSTWO", text, invoice_status
+                if invoice_status == models.Invoice.STATUS_PAID
+                    ''
+                else
+                    text
+            @replace tpl.render 'index', {blocks: ({type: c[0], id: c[1], name: c[2], 'paid_action': (text) -> paid_action(c[0], text)} for c in controller_names)}
+            @controllers = ((new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
 
 
 
