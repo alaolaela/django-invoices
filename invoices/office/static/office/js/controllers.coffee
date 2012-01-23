@@ -18,14 +18,10 @@ class Invoices extends Spine.Controller
         models.Invoice.bind("refresh",  @add_invoice)
 
     add_invoice: (items) =>
-        @html '' 
-        (@append (new Invoice(item: item)).render() for item in items when item.status == @inv_status)
-
-    render: (item) =>
-        if (item)
-            @item = item
-        @replace render_tpl OFFICE_APP_NAME, 'invoices'
-        @
+        filterted_items = ((new Invoice(item: item)).render() for item in items when item.status == @inv_status)
+        if filterted_items.length
+            @html ''
+            (@append a for a in filterted_items)
 
 
 class Index extends Spine.Controller
@@ -35,8 +31,8 @@ class Index extends Spine.Controller
             @replace tpl.render 'index', {}
             controller_names = [
                 [models.Invoice.STATUS_DRAFT, 'drafts'],
-                #[models.Invoice.STATUS_TOBEPAID, 'tobepaid'],
-                #[models.Invoice.STATUS_PAID, 'paid'],
+                [models.Invoice.STATUS_TOBEPAID, 'tobepaid'],
+                [models.Invoice.STATUS_PAID, 'paid'],
                 [models.Invoice.STATUS_OVERDUE, 'overdue']
             ]
             @controlles = ((new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
