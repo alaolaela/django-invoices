@@ -56,6 +56,10 @@ class Index extends Spine.Controller
             @controllers = {}
             (@controllers[record[0]] = (new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
 
+        tpl.load OFFICE_APP_NAME, 'index_right', =>
+            @el.find('.right').html tpl.render 'index_right', {}
+
+
     delete_invoice: (e) =>
         console.log e
         @controllers[$(e.target).data('ref')].delete()
