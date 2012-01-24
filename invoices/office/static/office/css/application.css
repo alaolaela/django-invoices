@@ -4,13 +4,11 @@ body {
 	font-family: "Lucida Grande",verdana,arial,helvetica,sans-serif;
 	color:#222;
 	min-width:870px;
-        font-size: 12px;
+        /* font-size: 12px; */
 }
 body {
 	background:#eeeeee
 }
-
-body {margin: 10px !important;}
 
 .fl {float: left;}
 .fr {float: right;}
