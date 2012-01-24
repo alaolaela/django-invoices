@@ -39,7 +39,8 @@ class Invoice(models.Model):
             default=settings.PAYMENTS[0][0])
     payment_type = models.PositiveSmallIntegerField(u'sposób płatności', choices=settings.PAYMENTS, 
             default=settings.PAYMENTS[0][0])
-    sale_type = models.PositiveSmallIntegerField(u'rodzaj sprzedaży', choices=SALE_TYPES, default=SALE_TYPE_SERVICE)
+    sale_type = models.PositiveSmallIntegerField(u'rodzaj sprzedaży', choices=SALE_TYPES,
+            default=SALE_TYPE_SERVICE)
 
     customer_content_type = models.ForeignKey(ContentType)
     customer_object_id = models.PositiveIntegerField(db_index=True)
@@ -53,8 +54,9 @@ class Invoice(models.Model):
 
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, verbose_name='items')
-    product_content_type = models.ForeignKey(ContentType)
-    product_object_id =  models.PositiveIntegerField(db_index=True)
+    name = models.TextField()
+    product_content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    product_object_id =  models.PositiveIntegerField(db_index=True, null=True, blank=True)
     product = generic.GenericForeignKey('product_content_type',
             'product_object_id')
     net_price = models.FloatField(null=True, blank=True)
