@@ -131,11 +131,17 @@ class InvoiceAddition extends Spine.Controller
         console.log "KROWA"
 
     set_autocomplete: (el) ->
+        clear_button = $('<a href="#">X</a>').css({'display': 'block'})
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
             if ui.item
-                el.data('ct_id', ui.item.ct_id).data('obj_id', ui.item.obj_id)
+                el.data 'ct_id': ui.item.ct_id, 'obj_id': ui.item.obj_id
+                el.before clear_button
+                clear_button.bind 'click', (e) ->
+                    e.preventDefault()
+                    el.removeData ['ct_id', 'obj_id']
+                    $(@).remove()
             else
-                el.data('ct_id', None).data('obj_id', None)
+                el.removeData ['ct_id', 'obj_id']
     
 
 window.controllers = {}
