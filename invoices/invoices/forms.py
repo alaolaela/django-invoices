@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from django import forms
-from django.forms.formsets import formset_factory
+from django.forms.models import inlineformset_factory 
 from django.contrib.contenttypes.models import ContentType
 
 from .models import Invoice, InvoiceItem
@@ -25,4 +25,4 @@ class InvoiceItemForm(forms.models.ModelForm):
     class Meta:
         model = InvoiceItem
 
-InvoiceItemFormset = formset_factory(InvoiceItemForm, extra=1)
+InvoiceItemFormset = inlineformset_factory(Invoice, InvoiceItem)

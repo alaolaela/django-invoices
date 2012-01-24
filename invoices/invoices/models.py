@@ -54,14 +54,16 @@ class Invoice(models.Model):
 
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, verbose_name='items')
-    name = models.TextField()
+    name = models.TextField(u'nazwa')
+    class_code = models.CharField(u'pkwiu', max_length=100)
+    unit = models.CharField(u'jednostka miary', max_length=10)
+    quantity = models.DecimalField(u'liczba/ilość', max_digits=8, decimal_places=2)
     product_content_type = models.ForeignKey(ContentType, null=True, blank=True)
     product_object_id =  models.PositiveIntegerField(db_index=True, null=True, blank=True)
     product = generic.GenericForeignKey('product_content_type',
             'product_object_id')
     net_price = models.FloatField(null=True, blank=True)
     tax = models.PositiveSmallIntegerField(choices=settings.TAXES)
-    amount = models.PositiveSmallIntegerField(default=1)
 
     def __unicode__(self):
         return u'%s - %s' % (self.invoice, self.product)
