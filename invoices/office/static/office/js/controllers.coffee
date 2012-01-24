@@ -86,7 +86,16 @@ class InvoiceAddition extends Spine.Controller
                 showOn: "button"
                 buttonImage: "#{STATIC_URL}office/css/images/calendar.png"
                 buttonImageOnly: true
-            $('.commodity textarea').autocomplete 'source': @PRODUCTS_SEARCH_ADDR 
+
+            prod_addr = @PRODUCTS_SEARCH_ADDR
+            $('.commodity textarea').each ->
+                txta = $(@)
+                txta.autocomplete 'source': prod_addr, 'select': (e, ui) ->
+                    if ui.item
+                        txta.data('ct_id', ui.item.ct_id).data('obj_id', ui.item.obj_id)
+                    else
+                        txta.data('ct_id', None).data('obj_id', None)
+		
             @refreshElements()
 
     customer_type_chosen: (e) =>
