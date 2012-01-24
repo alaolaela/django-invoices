@@ -1,30 +1,6 @@
-body {
-	margin:0 auto;
-	padding:0;
-	font-family: "Lucida Grande",verdana,arial,helvetica,sans-serif;
-	color:#222;
-	min-width:870px;
-        /* font-size: 12px; */
-}
-body {
-	background:#eeeeee
-}
-
 .fl {float: left;}
 .fr {float: right;}
 
-.layout {background-color: #fff;}
-.page_header, .overview_header, .overview, .overview_footer {padding: 5px 10px; clear: both;}
-
-.page_header {background-color: #eef8ff;}
-.page_header h3 {
-    font-size: 13px;
-    font-weight: bold;
-    font-style: normal;
-    text-decoration: none;
-    color: #333;
-    float: left;
-}
 .overview_header {margin: 20px 0 10px 0; font-size: 13px; font-weight: normal; font-style: normal;}
 h4.overview_type {
     font-size: 11px;

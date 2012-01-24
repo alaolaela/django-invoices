@@ -98,7 +98,10 @@ class InvoiceAddition extends Spine.Controller
                 showOn: "button"
                 buttonImage: "#{STATIC_URL}office/css/images/calendar.png"
                 buttonImageOnly: true
-            $('.commodity textarea').autocomplete 'source': @PRODUCTS_SEARCH_ADDR 
+
+            $('.commodity textarea').each (i, e) =>
+                txta = @set_autocomplete $(e)
+		
             @refreshElements()
 
     customer_type_chosen: (e) =>
@@ -119,8 +122,9 @@ class InvoiceAddition extends Spine.Controller
 
     new_invoice_item: (e) =>
         e.preventDefault()
-        record_html = @empty_row.parent().html()
-        @invoice_items.append record_html.replace /__prefix__/g, @total_forms.val()
+        new_record = $(@empty_row.parent().html().replace(/__prefix__/g, @total_forms.val()))
+        @invoice_items.append new_record
+        @set_autocomplete new_record.find('.commodity textarea')
         @total_forms.val(1 + parseInt(@total_forms.val()))
 
     delete_invoice_item: (e) =>
@@ -142,22 +146,22 @@ class InvoiceAddition extends Spine.Controller
         el = $(e.target)
         p = el.parent()
         row = el.parents('tr').eq(0)
-        f = (a) => @input_val(row, a).toFixed 2
+        f = (a) => @input_val(row, a)
         quantity = f 'quantity'
         net_price = f 'net_price'
         net_value = f 'net_value'
         tax = f 'tax'
         if p.hasClass 'net_value'
             if quantity
-                net_price = net_value / quantity
+                net_price = (net_value / quantity)
         sf = (a, b) ->
             row.find(".#{a} input").val b
         net_value = quantity * net_price
-        sf 'net_value', net_value
-        sf 'net_price', net_price
-        sf 'quantity', quantity
-        sf 'taxval', (tax / 100 * net_value).toFixed(2)
-        sf 'gross', ((1 + tax / 100) * net_value).toFixed(2)
+        sf 'net_value', net_value.toFixed 2
+        sf 'net_price', net_price.toFixed 2
+        sf 'quantity', quantity.toFixed 2
+        sf 'taxval', (tax / 100 * net_value).toFixed 2
+        sf 'gross', ((1 + tax / 100) * net_value).toFixed 2
         @compute_summary()
 
     compute_summary: (e) =>
@@ -175,6 +179,18 @@ class InvoiceAddition extends Spine.Controller
         @el.find('.gross_sum').text(gross_sum)
 
                         
+    set_autocomplete: (el) ->
+        clear_button = $('<a href="#">X</a>').css({'display': 'block'})
+        el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
+            if ui.item
+                el.data 'ct_id': ui.item.ct_id, 'obj_id': ui.item.obj_id
+                el.before clear_button
+                clear_button.bind 'click', (e) ->
+                    e.preventDefault()
+                    el.removeData ['ct_id', 'obj_id']
+                    $(@).remove()
+            else
+                el.removeData ['ct_id', 'obj_id']
 
 window.controllers = {}
 window.controllers.Index = Index

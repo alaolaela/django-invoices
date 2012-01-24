@@ -42,7 +42,7 @@ def products_search(request):
         if hasattr(model_cls, 'get_for_autocomplete'):
             items += model_cls.get_for_autocomplete(request.GET['term'])
     
-    items += list(InvoiceItem.objects.filter(name__icontains=request.GET['term']).values_list('name',
-                    flat=True))
+    items += [{'label': i, 'value': 1} for i in InvoiceItem.objects.\
+            filter(name__icontains=request.GET['term']).values_list('name', flat=True)]
 
     return items
