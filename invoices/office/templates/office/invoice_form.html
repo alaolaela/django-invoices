@@ -46,10 +46,7 @@
                     <p>TOWAR/USŁUGA</p>
                 </td>
                 <td class="medium">
-                    <select name="9" id="9" class="" style="">
-                        <option value="2">PKWiU</option>
-                        <option value="1">PKOB</option>
-                    </select>
+                    PKWiU
                 </td>
                 <td class="very"><p>J.M.</p></td>
                 <td class="very_small"><p>ILOŚĆ</p></td>
@@ -128,4 +125,39 @@
         </tfoot>
     </table>
     
+    
+    <table class="empty">
+        <tr>
+            <td class="commodity">
+                {{ inv_formset.empty_form.name }}
+            </td>
+            <td class="medium">
+                {{ inv_formset.empty_form.class_code}}
+            </td>
+            <td class="small">
+                {{ inv_formset.empty_form.unit }}
+            </td>
+            <td class="very_small">
+                {{ inv_formset.empty_form.quantity }}
+            </td>
+            <td class="medium">
+                {{ inv_formset.empty_form.net_price }}
+            </td>
+            <td class="medium left_border">
+                <input type="text" name="15" id="15" value="" class=""  />
+            </td>
+            <td class="medium left_border">
+                {{ inv_formset.empty_form.tax }}
+            </td>
+            <td class="medium left_border">
+                <input type="text" name="17" id="17" value="" class=""  />
+            </td>
+            <td class="medium left_border">
+                <input type="text" name="18" id="18" value="" class=""  />
+            </td>
+            <td class="very_small delete_commodity">
+                <a href="#" class="delete_commodity">X</a>
+            </td>
+        </tr>
+    </table>
 </div>
