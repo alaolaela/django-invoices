@@ -72,6 +72,14 @@ class InvoiceAddition extends Spine.Controller
 
     events:
         "change #id_customer_content_type": "customer_type_chosen"
+        "click .add_new_product": "new_invoice_item"
+        "click a.delete_commodity": "delete_invoice_item"
+
+    elements:
+        '.add_new_product': 'new_prod_button'
+        'table.empty tr': 'empty_row'
+        '.goods table.invoice-items tbody': 'invoice_items'
+        '#id_invoiceitem_set-TOTAL_FORMS': 'total_forms'
 
     constructor: ->
         super
@@ -104,6 +112,19 @@ class InvoiceAddition extends Spine.Controller
                 sel_customer.append new_opt
 
         , 'json'
+
+    new_invoice_item: (e) =>
+        e.preventDefault()
+        record_html = @empty_row.parent().html()
+        @invoice_items.append record_html.replace /__prefix__/g, @total_forms.val()
+        @total_forms.val(1 + parseInt(@total_forms.val()))
+
+    delete_invoice_item: (e) =>
+        e.preventDefault()
+        el = $(e.target).parents('tr').eq(0)
+        el.hide()
+        el.find('.delete_commodity input').attr('checked', 'checked')
+        console.log "KROWA"
             
 
 window.controllers = {}

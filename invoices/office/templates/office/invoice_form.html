@@ -31,7 +31,7 @@
     </table>
 </div>
 <div class="goods">
-    <table>
+    <table class="invoice-items">
         <thead>
             <tr>
                 <td class="commodity">
@@ -82,6 +82,7 @@
                 </td>
                 <td class="very_small delete_commodity">
                     <a href="#" class="delete_commodity">X</a>
+                    {{ inv_formset_form.DELETE }}
                 </td>
             </tr>
             {% endfor %}
@@ -148,6 +149,7 @@
             </td>
             <td class="very_small delete_commodity">
                 <a href="#" class="delete_commodity">X</a>
+                    {{ inv_formset.empty.DELETE }}
             </td>
         </tr>
     </table>
