@@ -63,7 +63,7 @@ class InvoiceItem(models.Model):
     product = generic.GenericForeignKey('product_content_type',
             'product_object_id')
     net_price = models.FloatField(null=True, blank=True)
-    tax = models.PositiveSmallIntegerField(choices=settings.TAXES)
+    tax = models.PositiveSmallIntegerField(choices=settings.TAXES, default=settings.TAXES[0][0])
 
     def __unicode__(self):
         return u'%s - %s' % (self.invoice, self.product)

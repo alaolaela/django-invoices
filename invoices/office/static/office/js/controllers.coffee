@@ -74,6 +74,10 @@ class InvoiceAddition extends Spine.Controller
         "change #id_customer_content_type": "customer_type_chosen"
         "click .add_new_product": "new_invoice_item"
         "click a.delete_commodity": "delete_invoice_item"
+        "change .quantity input": "compute_values"
+        "change .net_price input": "compute_values"
+        "change .net_value input": "compute_values"
+        "change .tax select": "compute_values"
 
     elements:
         '.add_new_product': 'new_prod_button'
@@ -128,8 +132,53 @@ class InvoiceAddition extends Spine.Controller
         el = $(e.target).parents('tr').eq(0)
         el.hide()
         el.find('.delete_commodity input').attr('checked', 'checked')
-        console.log "KROWA"
+        @compute_summary()
+    
+    input_val: (row, a) ->
+        pf = parseFloat
+        inp_val = row.find(".#{a} input, .#{a} select").val()
+        if inp_val
+            pf(inp_val)
+        else
+            0
 
+    compute_values: (e) =>
+        el = $(e.target)
+        p = el.parent()
+        row = el.parents('tr').eq(0)
+        f = (a) => @input_val(row, a)
+        quantity = f 'quantity'
+        net_price = f 'net_price'
+        net_value = f 'net_value'
+        tax = f 'tax'
+        if p.hasClass 'net_value'
+            if quantity
+                net_price = (net_value / quantity)
+        sf = (a, b) ->
+            row.find(".#{a} input").val b
+        net_value = quantity * net_price
+        sf 'net_value', net_value.toFixed 2
+        sf 'net_price', net_price.toFixed 2
+        sf 'quantity', quantity.toFixed 2
+        sf 'taxval', (tax / 100 * net_value).toFixed 2
+        sf 'gross', ((1 + tax / 100) * net_value).toFixed 2
+        @compute_summary()
+
+    compute_summary: (e) =>
+        net_sum = 0
+        tax_sum = 0
+        gross_sum = 0
+        f = @input_val
+        for row in @invoice_items.find('tr:visible')
+            row = $ row
+            net_sum += f row, 'net_value'
+            tax_sum += f row, 'taxval'
+            gross_sum += f row, 'gross'
+        @el.find('.net_sum').text(net_sum)
+        @el.find('.tax_sum').text(tax_sum)
+        @el.find('.gross_sum').text(gross_sum)
+
+                        
     set_autocomplete: (el) ->
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
             if ui.item
@@ -142,7 +191,6 @@ class InvoiceAddition extends Spine.Controller
                     $(@).remove()
             else
                 el.removeData ['ct_id', 'obj_id']
-    
 
 window.controllers = {}
 window.controllers.Index = Index
