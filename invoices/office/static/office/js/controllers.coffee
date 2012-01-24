@@ -95,14 +95,8 @@ class InvoiceAddition extends Spine.Controller
                 buttonImage: "#{STATIC_URL}office/css/images/calendar.png"
                 buttonImageOnly: true
 
-            prod_addr = @PRODUCTS_SEARCH_ADDR
-            $('.commodity textarea').each ->
-                txta = $(@)
-                txta.autocomplete 'source': prod_addr, 'select': (e, ui) ->
-                    if ui.item
-                        txta.data('ct_id', ui.item.ct_id).data('obj_id', ui.item.obj_id)
-                    else
-                        txta.data('ct_id', None).data('obj_id', None)
+            $('.commodity textarea').each (i, e) =>
+                txta = @set_autocomplete $(e)
 		
             @refreshElements()
 
@@ -124,8 +118,9 @@ class InvoiceAddition extends Spine.Controller
 
     new_invoice_item: (e) =>
         e.preventDefault()
-        record_html = @empty_row.parent().html()
-        @invoice_items.append record_html.replace /__prefix__/g, @total_forms.val()
+        new_record = $(@empty_row.parent().html().replace(/__prefix__/g, @total_forms.val()))
+        @invoice_items.append new_record
+        @set_autocomplete new_record.find('.commodity textarea')
         @total_forms.val(1 + parseInt(@total_forms.val()))
 
     delete_invoice_item: (e) =>
@@ -134,7 +129,14 @@ class InvoiceAddition extends Spine.Controller
         el.hide()
         el.find('.delete_commodity input').attr('checked', 'checked')
         console.log "KROWA"
-            
+
+    set_autocomplete: (el) ->
+        el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
+            if ui.item
+                el.data('ct_id', ui.item.ct_id).data('obj_id', ui.item.obj_id)
+            else
+                el.data('ct_id', None).data('obj_id', None)
+    
 
 window.controllers = {}
 window.controllers.Index = Index
