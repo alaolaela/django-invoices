@@ -40,7 +40,7 @@ class Invoice(models.Model):
     payment_type = models.PositiveSmallIntegerField(u'sposób płatności', choices=settings.PAYMENTS, 
             default=settings.PAYMENTS[0][0])
     sale_type = models.PositiveSmallIntegerField(u'rodzaj sprzedaży', choices=SALE_TYPES,
-            default=SALE_TYPE_SERVICE)
+            default=SALE_TYPE_SERVICE, null=True, blank=True)
 
     customer_content_type = models.ForeignKey(ContentType)
     customer_object_id = models.PositiveIntegerField(db_index=True)

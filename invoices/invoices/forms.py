@@ -25,4 +25,4 @@ class InvoiceItemForm(forms.models.ModelForm):
     class Meta:
         model = InvoiceItem
 
-InvoiceItemFormset = inlineformset_factory(Invoice, InvoiceItem)
+InvoiceItemFormset = inlineformset_factory(Invoice, InvoiceItem, extra=1, can_delete=1)

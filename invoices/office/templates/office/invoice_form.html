@@ -6,8 +6,6 @@
     {{ inv_f.date_sale }}
     <br />
     <label for="id_date_payment">Termin zapłaty: (+21 dni)</label>
-    <br />
-    {{ inv_f.date_payment.label_tag }}
     {{ inv_f.date_payment }}
     <label class="bold" for="id_currency">Waluta:</label>
     {{ inv_f.currency }}
@@ -15,12 +13,6 @@
     {{ inv_f.payment_type.label_tag }}
     {{ inv_f.payment_type }}
     <br />
-    <label>Rodzaj sprzedaży:</label>
-    {% for radio in inv_f.sale_type %}
-        {{ radio.tag }}
-        <label class="radio_label">{{ radio.choice_label }}</label>
-        <br />
-    {% endfor %}
 </div>
 <div class="col two_cols fl">
     <label class="bold" for="id_key">Numer faktury VAT:</label>
@@ -39,7 +31,7 @@
     </table>
 </div>
 <div class="goods">
-    <table>
+    <table class="invoice-items">
         <thead>
             <tr>
                 <td class="commodity">
@@ -59,30 +51,28 @@
             </tr>
         </thead>
         <tbody>
+            {% for inv_formset_form in inv_formset.forms %}
             <tr>
                 <td class="commodity">
-                    <textarea rows="2" id="10" cols="20"></textarea>
+                    {{ inv_formset_form.name }}
                 </td>
                 <td class="medium">
-                    <input type="text" name="11" id="11" value="" class=""  />
+                    {{ inv_formset_form.class_code}}
                 </td>
                 <td class="small">
-                    <input type="text" name="12" id="12" value="" class=""  />
+                    {{ inv_formset_form.unit }}
                 </td>
                 <td class="very_small">
-                    <input type="text" name="13" id="13" value="" class=""  />
+                    {{ inv_formset_form.quantity }}
                 </td>
                 <td class="medium">
-                    <input type="text" name="14" id="14" value="" class=""  />
+                    {{ inv_formset_form.net_price }}
                 </td>
                 <td class="medium left_border">
                     <input type="text" name="15" id="15" value="" class=""  />
                 </td>
                 <td class="medium left_border">
-                    <select name="16" id="16" class="" style="">
-                        <option value="2">ZW.></option>
-                        <option value="1">23%</option>
-                    </select>
+                    {{ inv_formset_form.tax }}
                 </td>
                 <td class="medium left_border">
                     <input type="text" name="17" id="17" value="" class=""  />
@@ -92,8 +82,10 @@
                 </td>
                 <td class="very_small delete_commodity">
                     <a href="#" class="delete_commodity">X</a>
+                    {{ inv_formset_form.DELETE }}
                 </td>
             </tr>
+            {% endfor %}
         </tbody>
         <tfoot>
             <tr>
@@ -125,7 +117,7 @@
         </tfoot>
     </table>
     
-    
+    {{ inv_formset.management_form }} 
     <table class="empty">
         <tr>
             <td class="commodity">
@@ -157,6 +149,7 @@
             </td>
             <td class="very_small delete_commodity">
                 <a href="#" class="delete_commodity">X</a>
+                    {{ inv_formset.empty.DELETE }}
             </td>
         </tr>
     </table>

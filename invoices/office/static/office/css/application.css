@@ -4,13 +4,11 @@ body {
 	font-family: "Lucida Grande",verdana,arial,helvetica,sans-serif;
 	color:#222;
 	min-width:870px;
-        font-size: 12px;
+        /* font-size: 12px; */
 }
 body {
 	background:#eeeeee
 }
-
-body {margin: 10px !important;}
 
 .fl {float: left;}
 .fr {float: right;}
@@ -118,6 +116,7 @@ table.client_data td {vertical-align: bottom;}
     text-decoration: none
 }
 .goods table td.delete_commodity {text-align: left;}
+.goods table td.delete_commodity input {display: none;}
 .goods table td { padding: 5px 0; text-align: left;}
 .goods table td:first-child {text-align: left;}
    
@@ -128,4 +127,5 @@ table.client_data td {vertical-align: bottom;}
 .goods .total_cost td {text-align: right; border-top: solid 2px #808285; border-bottom: none;}
 .goods .total_cost td p {margin-right: 25px;}
 .goods td span.head {font-size: 14px; font-weight: bold;}
-    
+
+table.empty {display: none;}
