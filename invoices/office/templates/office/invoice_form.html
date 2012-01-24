@@ -59,25 +59,25 @@
                 <td class="medium">
                     {{ inv_formset_form.class_code}}
                 </td>
-                <td class="small">
+                <td class="small unit">
                     {{ inv_formset_form.unit }}
                 </td>
-                <td class="very_small">
+                <td class="very_small quantity">
                     {{ inv_formset_form.quantity }}
                 </td>
-                <td class="medium">
+                <td class="medium net_price">
                     {{ inv_formset_form.net_price }}
                 </td>
-                <td class="medium left_border">
+                <td class="medium left_border net_value">
                     <input type="text" name="15" id="15" value="" class=""  />
                 </td>
-                <td class="medium left_border">
+                <td class="medium left_border tax">
                     {{ inv_formset_form.tax }}
                 </td>
-                <td class="medium left_border">
+                <td class="medium left_border taxval">
                     <input type="text" name="17" id="17" value="" class=""  />
                 </td>
-                <td class="medium left_border">
+                <td class="medium left_border gross">
                     <input type="text" name="18" id="18" value="" class=""  />
                 </td>
                 <td class="very_small delete_commodity">
@@ -93,10 +93,10 @@
                 <td class="no_borders"></td>
                 <td class="no_borders"></td>
                 <td colspan="2"><span class="head">Razem:</span></td>
-                <td>3600</td>
+                <td class='net_sum'>3600</td>
                 <td>-</td>
-                <td>0,00</td>
-                <td colspan="2">3600</td>
+                <td class='tax_sum'>0,00</td>
+                <td class='gross_sum' colspan="2">3600</td>
             </tr>
             <tr>
                 <td class="no_borders"></td>
@@ -126,25 +126,25 @@
             <td class="medium">
                 {{ inv_formset.empty_form.class_code}}
             </td>
-            <td class="small">
+            <td class="small unit">
                 {{ inv_formset.empty_form.unit }}
             </td>
-            <td class="very_small">
+            <td class="very_small quantity">
                 {{ inv_formset.empty_form.quantity }}
             </td>
-            <td class="medium">
+            <td class="medium net_price">
                 {{ inv_formset.empty_form.net_price }}
             </td>
-            <td class="medium left_border">
+            <td class="medium left_border net_value">
                 <input type="text" name="15" id="15" value="" class=""  />
             </td>
-            <td class="medium left_border">
+            <td class="medium left_border tax">
                 {{ inv_formset.empty_form.tax }}
             </td>
-            <td class="medium left_border">
+            <td class="medium left_border taxval">
                 <input type="text" name="17" id="17" value="" class=""  />
             </td>
-            <td class="medium left_border">
+            <td class="medium left_border gross">
                 <input type="text" name="18" id="18" value="" class=""  />
             </td>
             <td class="very_small delete_commodity">

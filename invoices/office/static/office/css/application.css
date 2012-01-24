@@ -98,7 +98,7 @@ table.client_data td {vertical-align: bottom;}
 .goods table tfoot tr:nth-child(1) td {border-top: solid 2px #808285;}
 .goods table td {border-bottom: solid 1px #808285; vertical-align: top;}
 .goods table td.left_border {border-left: solid 1px #808285;}
-.goods table td.very_small input {width: 20px;}
+.goods table td.very_small input {width: 25px;}
 .goods table td.small input {width: 30px;}
 .goods table td.medium input {width: 60px;}
 .goods table td.large input {width: 90px;}
