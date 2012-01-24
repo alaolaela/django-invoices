@@ -24,5 +24,10 @@ class InvoiceForm(forms.models.ModelForm):
 class InvoiceItemForm(forms.models.ModelForm):
     class Meta:
         model = InvoiceItem
+        widgets = {
+            'product_object_id': forms.HiddenInput(),
+            'product_content_type': forms.HiddenInput(),
+        }
 
-InvoiceItemFormset = inlineformset_factory(Invoice, InvoiceItem, extra=1, can_delete=1)
+InvoiceItemFormset = inlineformset_factory(Invoice, InvoiceItem, form=InvoiceItemForm, extra=1,
+        can_delete=1)

@@ -55,6 +55,8 @@
             <tr>
                 <td class="commodity">
                     {{ inv_formset_form.name }}
+                    <div class="ct">{{ inv_formset_form.product_content_type }}</div>
+                    <div class="oid">{{ inv_formset_form.product_object_id }}</div>
                 </td>
                 <td class="medium">
                     {{ inv_formset_form.class_code}}
@@ -111,7 +113,7 @@
             <tr class="total_cost">
                 <td colspan="3" class="no_borders"></td>
                 <td colspan="7">
-                    <p>RAZEM DO ZAPŁATY: 1850,00 EURO</p>
+                    <p>RAZEM DO ZAPŁATY: 0,00 EURO</p>
                 </td>
             </tr>
         </tfoot>
@@ -122,6 +124,8 @@
         <tr>
             <td class="commodity">
                 {{ inv_formset.empty_form.name }}
+                <div class="ct">{{ inv_formset.empty_form.product_content_type }}</div>
+                <div class="oid">{{ inv_formset.empty_form.product_object_id }}</div>
             </td>
             <td class="medium">
                 {{ inv_formset.empty_form.class_code}}

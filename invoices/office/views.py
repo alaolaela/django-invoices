@@ -16,7 +16,7 @@ from ..invoices.models import InvoiceItem
 def index(request):
     a = InvoiceItemFormset(prefix="OKO")
     #print a.management_form
-    print a.empty_form
+    #print a.empty_form
     #for form in a:
     #    print form.as_table()
     

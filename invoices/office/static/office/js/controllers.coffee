@@ -181,16 +181,21 @@ class InvoiceAddition extends Spine.Controller
                         
     set_autocomplete: (el) ->
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
+            ct_input = el.siblings('.ct').children 'input'
+            oid_input = el.siblings('.oid').children 'input'
             if ui.item
                 clear_button = $('<a href="#"></a>').css({'display': 'block'}).text "X - " + ui.item.desc
-                el.data 'ct_id': ui.item.ct_id, 'obj_id': ui.item.obj_id
+                ct_input.val ui.item.ct_id
+                oid_input.val ui.item.obj_id
                 el.before clear_button
                 clear_button.bind 'click', (e) ->
                     e.preventDefault()
-                    el.removeData ['ct_id', 'obj_id']
+                    ct_input.val '' 
+                    oid_input.val '' 
                     $(@).remove()
             else
-                el.removeData ['ct_id', 'obj_id']
+                    ct_input.val '' 
+                    oid_input.val '' 
 
 window.controllers = {}
 window.controllers.Index = Index
