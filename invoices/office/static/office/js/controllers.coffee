@@ -68,6 +68,7 @@ class Index extends Spine.Controller
 class InvoiceAddition extends Spine.Controller
     INVOICES_TPL_ADDR: '/invoices/formtpl/'
     CHOICES_ADDR: '/invoices/choices/'
+    PRODUCTS_SEARCH_ADDR: '/invoices/products/'
 
     events:
         "change #id_customer_content_type": "customer_type_chosen"
@@ -85,6 +86,7 @@ class InvoiceAddition extends Spine.Controller
                 showOn: "button"
                 buttonImage: "#{STATIC_URL}office/css/images/calendar.png"
                 buttonImageOnly: true
+            $('.commodity textarea').autocomplete 'source': @PRODUCTS_SEARCH_ADDR 
             @refreshElements()
 
     customer_type_chosen: (e) =>

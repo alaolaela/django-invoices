@@ -4,11 +4,12 @@ from __future__ import absolute_import
 
 from django.conf.urls import url, patterns
 
-from .views import index, render_form, get_choices
+from .views import index, render_form, get_choices, products_search
 
 urlpatterns = patterns('',
     url('^$', index),
     url('^formtpl/$', render_form),
-    url('^choices/(?P<ct_id>\d+)/$', get_choices)
+    url('^choices/(?P<ct_id>\d+)/$', get_choices),
+    url('^products/$', products_search),
 )
 
