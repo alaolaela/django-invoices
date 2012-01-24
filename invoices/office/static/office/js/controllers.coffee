@@ -66,12 +66,43 @@ class Index extends Spine.Controller
 
 
 class InvoiceAddition extends Spine.Controller
-    
+    INVOICES_TPL_ADDR: '/invoices/formtpl/'
+    CHOICES_ADDR: '/invoices/choices/'
+
+    events:
+        "change #id_customer_content_type": "customer_type_chosen"
+
     constructor: ->
         super
         tpl.load OFFICE_APP_NAME, 'add', =>
             @el.find('.left').html tpl.render 'add', {}
+            @load_tpl()
 
+    load_tpl: =>
+        $.get @INVOICES_TPL_ADDR, (data) =>
+            @el.find('form.facture').html data
+            $("#id_date_sale, #id_date_created, #id_date_payment").datepicker
+                showOn: "button"
+                buttonImage: "#{STATIC_URL}office/css/images/calendar.png"
+                buttonImageOnly: true
+            @refreshElements()
+
+    customer_type_chosen: (e) =>
+        sel_el = $(e.target)
+        ct_id = sel_el.val()
+        $.get "#{@CHOICES_ADDR}#{ct_id}/", (data) =>
+            console.log data
+            sel_customer = $ '#id_customer_object_id'
+            sel_customer.html ''
+            for rec in data
+                new_opt = $('<option />',
+                    value: rec[1]
+                    text: rec[0]
+                )
+                sel_customer.append new_opt
+
+        , 'json'
+            
 
 window.controllers = {}
 window.controllers.Index = Index

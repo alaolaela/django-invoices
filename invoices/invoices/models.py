@@ -10,9 +10,12 @@ from .. import settings
 
 
 class Invoice(models.Model):
+    SALE_TYPE_SERVICE = 1
+    SALE_TYPE_COMMODITY = 2
+
     SALE_TYPES = (
-        (1, _('service')),
-        (2, _('commodity'))
+        (SALE_TYPE_SERVICE, _(u'usługa')),
+        (SALE_TYPE_COMMODITY, _(u'towar'))
     )
 
     STATUS_TOBEPAID = 1
@@ -29,12 +32,14 @@ class Invoice(models.Model):
     )
 
     key = models.CharField(max_length=20, unique=True)
-    date_created = models.DateField()
-    date_sale = models.DateField()
-    date_payment = models.DateField()
-    currency = models.PositiveSmallIntegerField(choices=settings.CURRENCIES)
-    payment_type = models.PositiveSmallIntegerField(choices=settings.PAYMENTS)
-    sale_type = models.PositiveSmallIntegerField(choices=SALE_TYPES)
+    date_created = models.DateField(u'data wystawienia')
+    date_sale = models.DateField(u'data sprzedaży')
+    date_payment = models.DateField(u'termin zapłaty')
+    currency = models.PositiveSmallIntegerField(u'waluta', choices=settings.CURRENCIES,
+            default=settings.PAYMENTS[0][0])
+    payment_type = models.PositiveSmallIntegerField(u'sposób płatności', choices=settings.PAYMENTS, 
+            default=settings.PAYMENTS[0][0])
+    sale_type = models.PositiveSmallIntegerField(u'rodzaj sprzedaży', choices=SALE_TYPES, default=SALE_TYPE_SERVICE)
 
     customer_content_type = models.ForeignKey(ContentType)
     customer_object_id = models.PositiveIntegerField(db_index=True)

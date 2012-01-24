@@ -87,8 +87,7 @@ form.facture select.long {width: 270px;}
 form.facture label {margin: 20px 0 5px 0; font-size: 12px; font-style: normal; text-decoration: none; color: #333;}
 form.facture label.bold {font-weight: bold;}
 form.facture .radio_label {clear: none; margin: 2px 0 5px 0;}
-form.facture a.calendar {float: left; margin: 0 5px;}
-form.facture a.calendar img {width: 20px;}
+form.facture img.ui-datepicker-trigger {float: left; margin: 0 5px; width: 20px;}
 textarea.chosen_data {width: 230px; height: 100px; text-align: left; font-family: 'Arial'; font-size: 13px; color: black; font-style: normal; font-weight: normal; text-decoration: none;}
 form.facture a.add_new_client {margin-left: 10px; line-height: 22px; font-size: 13px; font-weight: normal; font-style: normal; text-decoration: underline; color: #004080;}
 table.client_data {float: left; clear: both;}

@@ -1,0 +1,131 @@
+<div class="col two_cols fr">
+    {{ inv_f.date_created.label_tag }}
+    {{ inv_f.date_created }}
+    <br />
+    {{ inv_f.date_sale.label_tag }}
+    {{ inv_f.date_sale }}
+    <br />
+    <label for="id_date_payment">Termin zapłaty: (+21 dni)</label>
+    <br />
+    {{ inv_f.date_payment.label_tag }}
+    {{ inv_f.date_payment }}
+    <label class="bold" for="id_currency">Waluta:</label>
+    {{ inv_f.currency }}
+    <br />
+    {{ inv_f.payment_type.label_tag }}
+    {{ inv_f.payment_type }}
+    <br />
+    <label>Rodzaj sprzedaży:</label>
+    {% for radio in inv_f.sale_type %}
+        {{ radio.tag }}
+        <label class="radio_label">{{ radio.choice_label }}</label>
+        <br />
+    {% endfor %}
+</div>
+<div class="col two_cols fl">
+    <label class="bold" for="id_key">Numer faktury VAT:</label>
+    {{ inv_f.key }}
+    <br />
+    <label for="7">Rodzina/Klient:</label>
+    {{ inv_f.customer_content_type }}
+    {{ inv_f.customer_object_id }}
+    <br />
+    <label for="8">Wybrane dane:</label>
+    <table class="client_data">
+        <tr>
+            <td><textarea class="chosen_data" id="8" ></textarea></td>
+            <td><a class="add_new_client" href="#" >Dodaj rodzinę/klienta</a></td>
+        </tr>
+    </table>
+</div>
+<div class="goods">
+    <table>
+        <thead>
+            <tr>
+                <td class="commodity">
+                    <p>TOWAR/USŁUGA</p>
+                </td>
+                <td class="medium">
+                    <select name="9" id="9" class="" style="">
+                        <option value="2">PKWiU</option>
+                        <option value="1">PKOB</option>
+                    </select>
+                </td>
+                <td class="very"><p>J.M.</p></td>
+                <td class="very_small"><p>ILOŚĆ</p></td>
+                <td class="medium"><p>CENA NETTO</p></td>
+                <td class="medium"><p>WARTOŚĆ NETTO</p></td>
+                <td class="medium"><p>STAWKA VAT</p></td>
+                <td class="medium"><p>KWOTA VAT</p></td>
+                <td class="medium"><p>WARTOŚĆ BRUTTO</p></td>
+                <td class="very_small delete_commodity"><p></p></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="commodity">
+                    <textarea rows="2" id="10" cols="20"></textarea>
+                </td>
+                <td class="medium">
+                    <input type="text" name="11" id="11" value="" class=""  />
+                </td>
+                <td class="small">
+                    <input type="text" name="12" id="12" value="" class=""  />
+                </td>
+                <td class="very_small">
+                    <input type="text" name="13" id="13" value="" class=""  />
+                </td>
+                <td class="medium">
+                    <input type="text" name="14" id="14" value="" class=""  />
+                </td>
+                <td class="medium left_border">
+                    <input type="text" name="15" id="15" value="" class=""  />
+                </td>
+                <td class="medium left_border">
+                    <select name="16" id="16" class="" style="">
+                        <option value="2">ZW.></option>
+                        <option value="1">23%</option>
+                    </select>
+                </td>
+                <td class="medium left_border">
+                    <input type="text" name="17" id="17" value="" class=""  />
+                </td>
+                <td class="medium left_border">
+                    <input type="text" name="18" id="18" value="" class=""  />
+                </td>
+                <td class="very_small delete_commodity">
+                    <a href="#" class="delete_commodity">X</a>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="no_borders"><input id="" type="submit" class="fl" value="Dodaj nowe pole" /></td>
+                <td class="no_borders"></td>
+                <td class="no_borders"></td>
+                <td colspan="2"><span class="head">Razem:</span></td>
+                <td>3600</td>
+                <td>-</td>
+                <td>0,00</td>
+                <td colspan="2">3600</td>
+            </tr>
+            <tr>
+                <td class="no_borders"></td>
+                <td class="no_borders"></td>
+                <td class="no_borders"></td>
+                <td colspan="2">W tym:</td>
+                <td>3600</td>
+                <td><span class="head">ZW.</span></td>
+                <td>0,00</td>
+                <td colspan="2">3600</td>
+            </tr>
+            <tr class="total_cost">
+                <td colspan="3" class="no_borders"></td>
+                <td colspan="7">
+                    <p>RAZEM DO ZAPŁATY: 1850,00 EURO</p>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    
+</div>

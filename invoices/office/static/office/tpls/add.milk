@@ -3,62 +3,6 @@
         <h3>Faktura</h3>
     </div><!-- page_header -->
     <form class="facture">
-        <div class="goods">
-            <table>
-                <thead>
-                    <tr>
-                        <td class="commodity">
-                            <p>TOWAR/USŁUGA</p>
-                        </td>
-                        <td class="medium">
-                            <select name="9" id="9" class="" style="">
-                                <option value="2">PKWiU</option>
-                                <option value="1">PKOB</option>
-                            </select>
-                        </td>
-                        <td class="very"><p>J.M.</p></td>
-                        <td class="very_small"><p>ILOŚĆ</p></td>
-                        <td class="medium"><p>CENA NETTO</p></td>
-                        <td class="medium"><p>WARTOŚĆ NETTO</p></td>
-                        <td class="medium"><p>STAWKA VAT</p></td>
-                        <td class="medium"><p>KWOTA VAT</p></td>
-                        <td class="medium"><p>WARTOŚĆ BRUTTO</p></td>
-                        <td class="very_small delete_commodity"><p></p></td>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td class="no_borders"><input id="" type="submit" class="fl" value="Dodaj nowe pole"></td>
-                        <td class="no_borders"></td>
-                        <td class="no_borders"></td>
-                        <td colspan="2"><span class="head">Razem:</span></td>
-                        <td>3600</td>
-                        <td>-</td>
-                        <td>0,00</td>
-                        <td colspan="2">3600</td>
-                    </tr>
-                    <tr>
-                        <td class="no_borders"></td>
-                        <td class="no_borders"></td>
-                        <td class="no_borders"></td>
-                        <td colspan="2">W tym:</td>
-                        <td>3600</td>
-                        <td><span class="head">ZW.</span></td>
-                        <td>0,00</td>
-                        <td colspan="2">3600</td>
-                    </tr>
-                    <tr class="total_cost">
-                        <td colspan="3" class="no_borders"></td>
-                        <td colspan="7">
-                            <p>RAZEM DO ZAPŁATY: 1850,00 EURO</p>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-            
-        </div>
     </form>            
     <div class="clear"></div>
 </div>
