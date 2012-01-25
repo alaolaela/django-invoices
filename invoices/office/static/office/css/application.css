@@ -104,4 +104,5 @@ table.client_data td {vertical-align: bottom;}
 .goods .total_cost td p {margin-right: 25px;}
 .goods td span.head {font-size: 14px; font-weight: bold;}
 
-table.empty {display: none;}
+.empty {display: none;}
+td.label { visibility: hidden; }

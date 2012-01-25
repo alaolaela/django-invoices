@@ -88,30 +88,30 @@
             {% endfor %}
         </tbody>
         <tfoot>
-            <tr>
+            <tr class='whole_sum'>
                 <td class="no_borders"><a href="#" class="button fl add_new_product">Dodaj nowy produkt</a></td>
                 <td class="no_borders"></td>
                 <td class="no_borders"></td>
                 <td colspan="2"><span class="head">Razem:</span></td>
-                <td class='net_sum'>3600</td>
+                <td class='net_sum'>0</td>
                 <td>-</td>
                 <td class='tax_sum'>0,00</td>
                 <td class='gross_sum' colspan="2">3600</td>
             </tr>
-            <tr>
+            <tr class="tax_class_sum_tpl empty">
                 <td class="no_borders"></td>
                 <td class="no_borders"></td>
                 <td class="no_borders"></td>
-                <td colspan="2">W tym:</td>
-                <td>3600</td>
-                <td><span class="head">ZW.</span></td>
-                <td>0,00</td>
-                <td colspan="2">3600</td>
+                <td class="label" colspan="2">W tym:</td>
+                <td class='net_sum'>0</td>
+                <td class='tax_class'></td>
+                <td class='tax_sum'>0,00</td>
+                <td class='gross_sum' colspan="2">0</td>
             </tr>
             <tr class="total_cost">
                 <td colspan="3" class="no_borders"></td>
                 <td colspan="7">
-                    <p>RAZEM DO ZAPŁATY: 1850,00 EURO</p>
+                    <p>RAZEM DO ZAPŁATY: <span>0</span> EURO</p>
                 </td>
             </tr>
         </tfoot>
