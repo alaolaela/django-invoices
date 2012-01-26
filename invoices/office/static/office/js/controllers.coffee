@@ -75,10 +75,10 @@ class Index extends Spine.Controller
 
 
 class InvoiceAddition extends Spine.Controller
-    INVOICES_TPL_ADDR: '/invoices/formtpl/'
-    CHOICES_ADDR: '/invoices/choices/'
-    PRODUCTS_SEARCH_ADDR: '/invoices/products/'
-    INVOICES_SAVE_ADDR: '/invoices/formsave/'
+    INVOICES_TPL_ADDR: '/invoice/formtpl/'
+    CHOICES_ADDR: '/invoice/choices/'
+    PRODUCTS_SEARCH_ADDR: '/invoice/products/'
+    INVOICES_SAVE_ADDR: '/invoice/formsave/'
 
     events:
         "change #id_customer_content_type": "customer_type_chosen"

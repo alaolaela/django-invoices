@@ -1,6 +1,9 @@
 #coding: utf-8
 from __future__ import absolute_import
 
+import re
+from datetime import date
+
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -10,6 +13,8 @@ from .. import settings
 
 
 class Invoice(models.Model):
+    KEY_PATTERN = r'P?(\d+)/[01][1-9]/[0-9]{4}'
+    KEY_PATTERN_MONTH = r'P?(\d+)/%s'
     SALE_TYPE_SERVICE = 1
     SALE_TYPE_COMMODITY = 2
 
@@ -31,7 +36,7 @@ class Invoice(models.Model):
 
     )
 
-    key = models.CharField(max_length=20, unique=True)
+    key = models.CharField(u'numer faktury', max_length=20, unique=True)
     date_created = models.DateField(u'data wystawienia')
     date_sale = models.DateField(u'data sprzedaży')
     date_payment = models.DateField(u'termin zapłaty')
@@ -48,9 +53,36 @@ class Invoice(models.Model):
             'customer_object_id')
     status = models.PositiveSmallIntegerField(_('status'))
 
+    class Meta:
+        verbose_name = u'faktura'
+        verbose_name = u'faktury'
+
+    def __unicode__(self):
+        return self.key
+    
+    @classmethod
+    def generate_next_key(cls):
+        month_key_invs = cls.objects.filter(key__regex=cls.KEY_PATTERN_MONTH % (
+            date.today().strftime("%m/%Y")))
+        max_key = 0
+        for inv in month_key_invs:
+            key_index = re.match(cls.KEY_PATTERN, inv.key).group(1)
+            max_key = max(max_key, int(key_index))
+        return "%d/%s" % (max_key + 1, date.today().strftime("%m/%Y"))
+
+
+class ProformaInvoice(Invoice):
+    class Meta:
+        verbose_name = u'faktura proforma'
+        verbose_name = u'faktury proforma'
+
     def __unicode__(self):
         return self.key
 
+
+    @classmethod
+    def generate_next_key(cls):
+        return "P%s" % (super(cls, cls).generate_next_key())
 
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, verbose_name='items')
@@ -64,6 +96,10 @@ class InvoiceItem(models.Model):
             'product_object_id')
     net_price = models.FloatField(u'cena netto')
     tax = models.PositiveSmallIntegerField(choices=settings.TAXES, default=settings.TAXES[0][0])
+
+    class Meta:
+        verbose_name = u'pozycja faktury'
+        verbose_name = u'pozycje faktury'
 
     def __unicode__(self):
         return u'%s - %s' % (self.invoice, self.product)

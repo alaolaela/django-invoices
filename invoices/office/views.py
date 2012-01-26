@@ -48,6 +48,8 @@ def save_form(request, invoice_id=None):
         errors = True
 
     if not errors:
+        new_invoice = invoice_form.save()
+        InvoiceItemFormset(dat, instance=new_invoice).save()
         resp_dat[STATUS_KEY] = STATUS_OK
     else:
         resp_dat[STATUS_KEY] = STATUS_ERROR
