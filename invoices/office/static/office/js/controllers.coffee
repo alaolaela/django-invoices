@@ -168,17 +168,44 @@ class InvoiceAddition extends Spine.Controller
         net_sum = 0
         tax_sum = 0
         gross_sum = 0
+        tax_sum_tpl =
+            net_sum: 0
+            tax_sum: 0
+            gross_sum: 0
+        tax_sum_classes = {}
+
         f = @input_val
         for row in @invoice_items.find('tr:visible')
             row = $ row
             net_sum += f row, 'net_value'
             tax_sum += f row, 'taxval'
             gross_sum += f row, 'gross'
-        @el.find('.net_sum').text(net_sum)
-        @el.find('.tax_sum').text(tax_sum)
-        @el.find('.gross_sum').text(gross_sum)
+            tax = f row, 'tax'
+            
+            if not tax_sum_classes.hasOwnProperty tax
+                tax_sum_classes[tax] = _.clone(tax_sum_tpl)
+            tax_sum_classes[tax].net_sum += f row, 'net_value'
+            tax_sum_classes[tax].tax_sum += f row, 'taxval'
+            tax_sum_classes[tax].gross_sum += f row, 'gross'
+        tf = (a) -> a.toFixed 2
+        @el.find('.whole_sum .net_sum').text(tf net_sum)
+        @el.find('.whole_sum .tax_sum').text(tf tax_sum)
+        @el.find('.whole_sum .gross_sum').text(tf gross_sum)
+        @el.find('tr.tax_class_sum').remove()
+        for own tax, sum of tax_sum_classes
+            new_tr = $ '<tr />',
+                class: 'tax_class_sum'
+            new_tr.html $('.tax_class_sum_tpl').html()
+            new_tr.find('.tax_class').text(tax)
+            new_tr.find('.net_sum').text(tf sum.net_sum)
+            new_tr.find('.tax_sum').text(tf sum.tax_sum)
+            new_tr.find('.gross_sum').text(tf sum.gross_sum)
+            $('.total_cost').before new_tr
+        @el.find('.tax_class_sum').eq(0).find('.label').css 'visibility', 'visible'
+        $('.total_cost p span').text(tf gross_sum)
 
-                        
+
+        
     set_autocomplete: (el) ->
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
             ct_input = el.siblings('.ct').children 'input'
