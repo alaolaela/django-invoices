@@ -106,3 +106,4 @@ table.client_data td {vertical-align: bottom;}
 
 .empty {display: none;}
 td.label { visibility: hidden; }
+input.error, select.error, textarea.error { background-color: #EDACA4; }

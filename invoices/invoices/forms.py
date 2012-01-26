@@ -18,6 +18,7 @@ class InvoiceForm(forms.models.ModelForm):
             'sale_type': forms.RadioSelect(),
             'customer_object_id': forms.Select(choices=()),
         }
+        exclude = ('status',)
     customer_content_type = forms.ModelChoiceField(queryset=ContentType.\
                 objects.filter(id__in=ct_ids))
 

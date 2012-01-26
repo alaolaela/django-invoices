@@ -6,8 +6,6 @@ class App extends Spine.Controller
         @routes
             "/add-invoice": (params) ->
                 new controllers.InvoiceAddition el: $('#content')
-            "/users": ->
-                console.log("users")
             "/": ->
                 ind = new controllers.Index el: $('#content')
         Spine.Route.setup()

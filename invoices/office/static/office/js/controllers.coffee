@@ -1,3 +1,12 @@
+STATUS_OK = 'ok'
+STATUS_ERROR = 'error'
+STATUS_KEY = 'status'
+
+quick_msg = (title, msg) ->
+    $.gritter.add
+        title: title
+        text: msg
+
 class Invoice extends Spine.Controller
     tag: 'tr'
 
@@ -69,6 +78,7 @@ class InvoiceAddition extends Spine.Controller
     INVOICES_TPL_ADDR: '/invoices/formtpl/'
     CHOICES_ADDR: '/invoices/choices/'
     PRODUCTS_SEARCH_ADDR: '/invoices/products/'
+    INVOICES_SAVE_ADDR: '/invoices/formsave/'
 
     events:
         "change #id_customer_content_type": "customer_type_chosen"
@@ -78,6 +88,7 @@ class InvoiceAddition extends Spine.Controller
         "change .net_price input": "compute_values"
         "change .net_value input": "compute_values"
         "change .tax select": "compute_values"
+        "click #save-invoice": "save_invoice"
 
     elements:
         '.add_new_product': 'new_prod_button'
@@ -89,6 +100,9 @@ class InvoiceAddition extends Spine.Controller
         super
         tpl.load OFFICE_APP_NAME, 'add', =>
             @el.find('.left').html tpl.render 'add', {}
+            @load_tpl()
+        tpl.load OFFICE_APP_NAME, 'add_right', =>
+            @el.find('.right').html tpl.render 'add_right', {}
             @load_tpl()
 
     load_tpl: =>
@@ -204,6 +218,31 @@ class InvoiceAddition extends Spine.Controller
         @el.find('.tax_class_sum').eq(0).find('.label').css 'visibility', 'visible'
         $('.total_cost p span').text(tf gross_sum)
 
+    save_invoice: (e) =>
+        e.preventDefault()
+        data = $('form').serialize()
+        $.post @INVOICES_SAVE_ADDR, data, (resp_data) =>
+            for old_error_el in $ 'input.error, select.error, textarea.error'
+                $(old_error_el).qtip "destroy"
+                $(old_error_el).removeClass 'error'
+            if resp_data[STATUS_KEY] == STATUS_OK
+                quick_msg 'Zapis', 'Faktura zapisana poprawnie'
+            else
+                for own input_name, error_msg of resp_data['main_form_errors']
+                    input_el = @el.find("#id_#{input_name}").addClass 'error'
+                    input_el.qtip
+                        content: error_msg[0]
+                if resp_data.hasOwnProperty 'items_form_errors'
+                    for item_form in resp_data['items_form_errors']
+                        form_index = 0
+                        for own input_name, error_msg of item_form
+                            input_el = @el.find("#id_invoiceitem_set-#{form_index}-#{input_name}").addClass 'error'
+                            input_el.qtip
+                                content: error_msg[0]
+                        form_index += 1
+                    
+                console.log resp_data
+
 
         
     set_autocomplete: (el) ->
@@ -217,12 +256,12 @@ class InvoiceAddition extends Spine.Controller
                 el.before clear_button
                 clear_button.bind 'click', (e) ->
                     e.preventDefault()
-                    ct_input.val '' 
-                    oid_input.val '' 
+                    ct_input.val ''
+                    oid_input.val ''
                     $(@).remove()
             else
-                    ct_input.val '' 
-                    oid_input.val '' 
+                    ct_input.val ''
+                    oid_input.val ''
 
 window.controllers = {}
 window.controllers.Index = Index
