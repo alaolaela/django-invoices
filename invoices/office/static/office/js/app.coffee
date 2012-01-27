@@ -4,8 +4,10 @@ window.OFFICE_APP_NAME = OFFICE_APP_NAME
 class App extends Spine.Controller
     constructor: ->
         @routes
-            "/add-invoice": (params) ->
-                new controllers.InvoiceAddition el: $('#content')
+            "/add-invoice/:inv_type": (params) ->
+                if not params.inv_type
+                    return
+                new controllers.InvoiceAddition inv_type: params.inv_type, el: $('#content')
             "/": ->
                 ind = new controllers.Index el: $('#content')
         Spine.Route.setup()

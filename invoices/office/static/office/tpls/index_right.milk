@@ -1,1 +1,2 @@
-<a href="#/add-invoice" class="right-button">Dodaj fakturę</a>
+<a href="#/add-invoice/vat" class="right-button">Dodaj fakturę VAT</a>
+<a href="#/add-invoice/proforma" class="right-button">Dodaj fakturę proforma</a>
