@@ -13,8 +13,6 @@ from .. import settings
 
 
 class Invoice(models.Model):
-    KEY_PATTERN = r'P?(\d+)/[01][1-9]/[0-9]{4}'
-    KEY_PATTERN_MONTH = r'P?(\d+)/%s'
     SALE_TYPE_SERVICE = 1
     SALE_TYPE_COMMODITY = 2
 
@@ -71,14 +69,24 @@ class Invoice(models.Model):
         return "%d/%s" % (max_key + 1, date.today().strftime("%m/%Y"))
 
 
+class VatInvoice(Invoice):
+    KEY_PATTERN = r'^(\d+)/[01][1-9]/[0-9]{4}'
+    KEY_PATTERN_MONTH = r'^(\d+)/%s'
+
+    class Meta:
+        verbose_name  = u'faktura VAT'
+        verbose_name_plural  = u'faktury VAT'
+
 class ProformaInvoice(Invoice):
+    KEY_PATTERN = r'^P(\d+)/[01][1-9]/[0-9]{4}'
+    KEY_PATTERN_MONTH = r'^P(\d+)/%s'
+
     class Meta:
         verbose_name = u'faktura proforma'
         verbose_name = u'faktury proforma'
 
     def __unicode__(self):
         return self.key
-
 
     @classmethod
     def generate_next_key(cls):
