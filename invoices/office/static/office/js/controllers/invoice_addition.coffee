@@ -1,79 +1,3 @@
-STATUS_OK = 'ok'
-STATUS_ERROR = 'error'
-STATUS_KEY = 'status'
-
-quick_msg = (title, msg) ->
-    $.gritter.add
-        title: title
-        text: msg
-
-class Invoice extends Spine.Controller
-    tag: 'tr'
-
-    constructor: ->
-        super
-        @item.bind("destroy", @remove)
-    
-    render: (item) =>
-        if (item)
-            @item = item
-        tpl.load OFFICE_APP_NAME, 'inv_t', =>
-            @html tpl.render('inv_t', @item)
-        @
-
-    remove: =>
-        @el.remove()
-
-class Invoices extends Spine.Controller
-    constructor: ->
-        super
-        models.Invoice.fetch data: "status=#{@inv_status}"
-        models.Invoice.bind("refresh",  @add_invoice)
-
-    add_invoice: (items) =>
-        filterted_items = ((new Invoice(item: item)).render() for item in items when item.status == @inv_status)
-        if filterted_items.length
-            @html ''
-            (@append a for a in filterted_items)
-
-    delete: =>
-        for check in @el.find("input:checked")
-            $(check).parent().item().destroy()
-
-
-class Index extends Spine.Controller
-    #elements:
-    
-    events:
-        "click input.delete": "delete_invoice"
-
-    constructor: ->
-        super
-        tpl.load OFFICE_APP_NAME, 'index', =>
-            controller_names = [
-                [models.Invoice.STATUS_DRAFT, 'drafts', 'Szkice'],
-                [models.Invoice.STATUS_TOBEPAID, 'tobepaid', 'Do zapłacenia'],
-                [models.Invoice.STATUS_PAID, 'paid', 'Zapłacone'],
-                [models.Invoice.STATUS_OVERDUE, 'overdue', 'Przeterminowane']
-            ]
-            paid_action = (invoice_status, text) ->
-                if invoice_status == models.Invoice.STATUS_PAID
-                    ''
-                else
-                    text
-            @el.find('.left').html tpl.render 'index', {blocks: ({type: c[0], id: c[1], name: c[2], 'paid_action': (text) -> paid_action(c[0], text)} for c in controller_names)}
-            @controllers = {}
-            (@controllers[record[0]] = (new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
-
-        tpl.load OFFICE_APP_NAME, 'index_right', =>
-            @el.find('.right').html tpl.render 'index_right', {}
-
-
-    delete_invoice: (e) =>
-        console.log e
-        @controllers[$(e.target).data('ref')].delete()
-
-
 class InvoiceAddition extends Spine.Controller
     INVOICES_TPL_ADDR: '/invoice/formtpl/'
     CHOICES_ADDR: '/invoice/choices/'
@@ -106,7 +30,8 @@ class InvoiceAddition extends Spine.Controller
             @load_tpl()
 
     load_tpl: =>
-        $.get @INVOICES_TPL_ADDR, (data) =>
+        tpl_addr = "#{@INVOICES_TPL_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
+        $.get tpl_addr, (data) =>
             @el.find('form.facture').html data
             $("#id_date_sale, #id_date_created, #id_date_payment").datepicker
                 showOn: "button"
@@ -221,29 +146,28 @@ class InvoiceAddition extends Spine.Controller
     save_invoice: (e) =>
         e.preventDefault()
         data = $('form').serialize()
-        $.post @INVOICES_SAVE_ADDR, data, (resp_data) =>
+        save_addr = "#{@INVOICES_SAVE_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
+        $.post save_addr, data, (resp_data) =>
             for old_error_el in $ 'input.error, select.error, textarea.error'
                 $(old_error_el).qtip "destroy"
                 $(old_error_el).removeClass 'error'
             if resp_data[STATUS_KEY] == STATUS_OK
                 quick_msg 'Zapis', 'Faktura zapisana poprawnie'
-            else
-                for own input_name, error_msg of resp_data['main_form_errors']
-                    input_el = @el.find("#id_#{input_name}").addClass 'error'
-                    input_el.qtip
-                        content: error_msg[0]
-                if resp_data.hasOwnProperty 'items_form_errors'
-                    for item_form in resp_data['items_form_errors']
-                        form_index = 0
-                        for own input_name, error_msg of item_form
-                            input_el = @el.find("#id_invoiceitem_set-#{form_index}-#{input_name}").addClass 'error'
-                            input_el.qtip
-                                content: error_msg[0]
-                        form_index += 1
+                return
+
+            for own input_name, error_msg of resp_data['main_form_errors']
+                input_el = @el.find("#id_#{input_name}").addClass 'error'
+                input_el.qtip
+                    content: error_msg[0]
+            if resp_data.hasOwnProperty 'items_form_errors'
+                form_index = 0
+                for item_form in resp_data['items_form_errors']
+                    for own input_name, error_msg of item_form
+                        input_el = @el.find("#id_invoiceitem_set-#{form_index}-#{input_name}").addClass 'error'
+                        input_el.qtip
+                            content: error_msg[0]
+                    form_index += 1
                     
-                console.log resp_data
-
-
         
     set_autocomplete: (el) ->
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
@@ -263,6 +187,4 @@ class InvoiceAddition extends Spine.Controller
                     ct_input.val ''
                     oid_input.val ''
 
-window.controllers = {}
-window.controllers.Index = Index
 window.controllers.InvoiceAddition = InvoiceAddition

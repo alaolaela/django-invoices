@@ -7,11 +7,12 @@ from django.conf.urls import url, patterns
 from .views import index, render_form, get_choices, products_search,\
         save_form
 
+base_invoice = '^formsave/(?P<invoice_type>\d)/'
 urlpatterns = patterns('',
     url('^$', index),
-    url('^formtpl/$', render_form),
-    url('^formsave/$', save_form),
-    url('^formsave/(?P<invoice_id>\d+)$/', save_form),
+    url('^formtpl/(?P<invoice_type>\d)/$', render_form),
+    url('%s$' % base_invoice, save_form),
+    url('%s/(?P<invoice_id>\d+)$/' % base_invoice, save_form),
     url('^choices/(?P<ct_id>\d+)/$', get_choices),
     url('^products/$', products_search),
 )

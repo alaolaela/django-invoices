@@ -9,7 +9,7 @@ from django.http import Http404
 from invoices import settings
 from seautils.views.decorators import render_with, json_response
 
-from ..invoices.forms import InvoiceItemFormset,InvoiceForm
+from ..invoices.forms import InvoiceItemFormset, InvoiceForm, INVOICE_TYPES_FORMS
 from ..invoices.models import InvoiceItem
 
 STATUS_OK = 'ok'
@@ -21,23 +21,24 @@ def index(request):
     return {}
 
 @render_with('office/invoice_form.html')
-def render_form(request):
-    invoice_form = InvoiceForm()
+def render_form(request, invoice_type):
+    invoice_type = int(invoice_type)
+    invoice_form = INVOICE_TYPES_FORMS[invoice_type]()
     invoice_item_formset = InvoiceItemFormset()
     return {'inv_f': invoice_form, 'inv_formset': invoice_item_formset}
 
 @json_response
-def save_form(request, invoice_id=None):
+def save_form(request, invoice_type, invoice_id=None):
     if not request.method == 'POST':
         raise Http404
+    invoice_type = int(invoice_type)
     resp_dat = {}
     dat = request.POST
     if invoice_id:
         pass
     else:
-        invoice_form = InvoiceForm(dat)
+        invoice_form = INVOICE_TYPES_FORMS[invoice_type](dat)
         invoice_item_formset = InvoiceItemFormset(dat)
-
 
     errors = False
     if not invoice_form.is_valid():
@@ -49,6 +50,9 @@ def save_form(request, invoice_id=None):
 
     if not errors:
         new_invoice = invoice_form.save()
+        new_invoice.status = new_invoice.DEFAULT_STATUS
+        new_invoice.save()
+        
         InvoiceItemFormset(dat, instance=new_invoice).save()
         resp_dat[STATUS_KEY] = STATUS_OK
     else:

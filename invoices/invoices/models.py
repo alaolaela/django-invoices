@@ -34,6 +34,9 @@ class Invoice(models.Model):
 
     )
 
+    # the field may be changed by children-classes
+    DEFAULT_STATUS = STATUS_DRAFT
+
     key = models.CharField(u'numer faktury', max_length=20, unique=True)
     date_created = models.DateField(u'data wystawienia')
     date_sale = models.DateField(u'data sprzedaży')
@@ -91,6 +94,14 @@ class ProformaInvoice(Invoice):
     @classmethod
     def generate_next_key(cls):
         return "P%s" % (super(cls, cls).generate_next_key())
+
+INVOICE_TYPE_VAT = 1
+INVOICE_TYPE_PROFORMA = 2
+
+INVOICE_TYPES = {
+    INVOICE_TYPE_VAT: VatInvoice,
+    INVOICE_TYPE_PROFORMA: ProformaInvoice
+}
 
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, verbose_name='items')

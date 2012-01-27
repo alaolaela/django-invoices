@@ -6,7 +6,8 @@ from django import forms
 from django.forms.models import inlineformset_factory 
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Invoice, InvoiceItem
+from .models import Invoice, InvoiceItem, VatInvoice, ProformaInvoice, INVOICE_TYPE_VAT,\
+        INVOICE_TYPE_PROFORMA
 from .. import settings
 
 class InvoiceForm(forms.models.ModelForm):
@@ -21,6 +22,19 @@ class InvoiceForm(forms.models.ModelForm):
         exclude = ('status',)
     customer_content_type = forms.ModelChoiceField(queryset=ContentType.\
                 objects.filter(id__in=ct_ids))
+
+class VatInvoiceForm(InvoiceForm):
+    class Meta(InvoiceForm.Meta):
+        model = VatInvoice
+
+class ProformaInvoiceForm(InvoiceForm):
+    class Meta(InvoiceForm.Meta):
+        model = ProformaInvoice
+
+INVOICE_TYPES_FORMS = {
+    INVOICE_TYPE_VAT: VatInvoiceForm,
+    INVOICE_TYPE_PROFORMA: ProformaInvoiceForm
+}
 
 class InvoiceItemForm(forms.models.ModelForm):
     class Meta:
