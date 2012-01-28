@@ -7,9 +7,10 @@ from django.db.models import get_model
 from django.http import Http404
 
 from invoices import settings
-from seautils.views.decorators import render_with, json_response
+from seautils.views.decorators import render_with, json_response, render_with_formats
+from apps.documents.views import PDF_ATTACHMENT_DOCUMENT_CONFIG, PDF_PREVIEW_DOCUMENT_CONFIG
 
-from ..invoices.forms import InvoiceItemFormset, InvoiceForm, INVOICE_TYPES_FORMS
+from ..invoices.forms import InvoiceItemFormset, INVOICE_TYPES_FORMS
 from ..invoices.models import InvoiceItem
 
 STATUS_OK = 'ok'
@@ -61,11 +62,13 @@ def save_form(request, invoice_type, invoice_id=None):
     
     return resp_dat
 
+
 @json_response
 def get_choices(request, ct_id):
     ct = ContentType.objects.get(id=ct_id)
     m_cls = ct.model_class()
     return [(unicode(m), m.id) for m in m_cls.objects.all()]
+
 
 @json_response
 def products_search(request):
@@ -79,3 +82,8 @@ def products_search(request):
             filter(name__icontains=request.GET['term']).values_list('name', flat=True)]
 
     return items
+
+
+@render_with_formats(pdf=PDF_ATTACHMENT_DOCUMENT_CONFIG, pdfh=PDF_PREVIEW_DOCUMENT_CONFIG)
+def invoice_print(request, format):
+    return {}

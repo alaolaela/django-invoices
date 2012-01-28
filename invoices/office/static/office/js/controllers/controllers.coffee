@@ -38,10 +38,18 @@ class Invoices extends Spine.Controller
         for check in @el.find("input:checked")
             $(check).parent().item().destroy()
 
+    print: =>
+        ids = ""
+        for check in @el.find("input:checked")
+            id = $(check).parent().item().item.id
+            ids = "#{ids}&id=#{id}"
+        document.location = "/invoice/print/.pdf?doc_codename=INVOICE#{ids}"
+
 
 class Index extends Spine.Controller
     events:
         "click input.delete": "delete_invoice"
+        "click input.print": "print_invoice"
 
     constructor: ->
         super
@@ -68,6 +76,10 @@ class Index extends Spine.Controller
     delete_invoice: (e) =>
         @controllers[$(e.target).data('ref')].delete()
 
+    
+    print_invoice: (e) =>
+        @controllers[$(e.target).data('ref')].print()
+    
 
 class InvoicePreview extends Spine.Controller
     constructor: ->
