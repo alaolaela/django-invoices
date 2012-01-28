@@ -10,7 +10,7 @@ except ImportError:
     from django.contrib.admin import ModelAdmin
 
 from invoices import settings
-from .models import Invoice, InvoiceItem
+from .models import Invoice, ProformaInvoice, VatInvoice, InvoiceItem
 
 
 class InvoiceProductInlineAdmin(admin.StackedInline):
@@ -40,3 +40,5 @@ class InvoiceAdmin(ModelAdmin):
             self.content_type_whitelist.append(model.replace('.','/').lower())
 
 admin.site.register(Invoice, InvoiceAdmin)
+admin.site.register(VatInvoice, InvoiceAdmin)
+admin.site.register(ProformaInvoice, InvoiceAdmin)

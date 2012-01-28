@@ -52,7 +52,7 @@ class Invoice(models.Model):
     customer_object_id = models.PositiveIntegerField(db_index=True)
     customer = generic.GenericForeignKey('customer_content_type',
             'customer_object_id')
-    status = models.PositiveSmallIntegerField(_('status'))
+    status = models.PositiveSmallIntegerField(_('status'), choices=STATUS_CHOICES)
 
     class Meta:
         verbose_name = u'faktura'
@@ -72,9 +72,13 @@ class Invoice(models.Model):
         return "%d/%s" % (max_key + 1, date.today().strftime("%m/%Y"))
 
 
+INVOICE_TYPE_VAT = 1
+INVOICE_TYPE_PROFORMA = 2
+
 class VatInvoice(Invoice):
     KEY_PATTERN = r'^(\d+)/[01][1-9]/[0-9]{4}'
     KEY_PATTERN_MONTH = r'^(\d+)/%s'
+    TYPE = INVOICE_TYPE_VAT
 
     class Meta:
         verbose_name  = u'faktura VAT'
@@ -83,10 +87,11 @@ class VatInvoice(Invoice):
 class ProformaInvoice(Invoice):
     KEY_PATTERN = r'^P(\d+)/[01][1-9]/[0-9]{4}'
     KEY_PATTERN_MONTH = r'^P(\d+)/%s'
+    TYPE = INVOICE_TYPE_PROFORMA
 
     class Meta:
         verbose_name = u'faktura proforma'
-        verbose_name = u'faktury proforma'
+        verbose_name_plural = u'faktury proforma'
 
     def __unicode__(self):
         return self.key
@@ -95,8 +100,6 @@ class ProformaInvoice(Invoice):
     def generate_next_key(cls):
         return "P%s" % (super(cls, cls).generate_next_key())
 
-INVOICE_TYPE_VAT = 1
-INVOICE_TYPE_PROFORMA = 2
 
 INVOICE_TYPES = {
     INVOICE_TYPE_VAT: VatInvoice,

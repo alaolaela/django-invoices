@@ -9,7 +9,10 @@ class Invoice extends Spine.Controller
         if (item)
             @item = item
         tpl.load OFFICE_APP_NAME, 'inv_t', =>
-            @html tpl.render('inv_t', @item)
+            @html tpl.render 'inv_t', 
+                item: @item
+                type: @item.constructor.TYPE
+                verbose_name: @item.constructor.VERBOSE_NAME
         @
 
     remove: =>
@@ -18,14 +21,18 @@ class Invoice extends Spine.Controller
 class Invoices extends Spine.Controller
     constructor: ->
         super
-        models.Invoice.fetch data: "status=#{@inv_status}"
-        models.Invoice.bind("refresh",  @add_invoice)
+        models.VatInvoice.fetch data: "status=#{@inv_status}"
+        models.ProformaInvoice.fetch data: "status=#{@inv_status}"
+        models.VatInvoice.bind("refresh",  @add_invoice)
+        models.ProformaInvoice.bind("refresh",  @add_invoice)
 
     add_invoice: (items) =>
         filterted_items = ((new Invoice(item: item)).render() for item in items when item.status == @inv_status)
         if filterted_items.length
-            @html ''
-            (@append a for a in filterted_items)
+            for a in filterted_items
+                if @el.find("#invoice-#{a.item.constructor.TYPE}-#{a.item.id}").length
+                    continue
+                @append a
 
     delete: =>
         for check in @el.find("input:checked")
@@ -59,9 +66,18 @@ class Index extends Spine.Controller
 
 
     delete_invoice: (e) =>
-        console.log e
         @controllers[$(e.target).data('ref')].delete()
+
+
+class InvoicePreview extends Spine.Controller
+    constructor: ->
+        super
+        tpl.load OFFICE_APP_NAME, 'preview', =>
+            @el.find('.left').html tpl.render 'preview', {}
+        tpl.load OFFICE_APP_NAME, 'preview_right', =>
+            @el.find('.right').html tpl.render 'preview_right', {}
 
 
 window.controllers = {}
 window.controllers.Index = Index
+window.controllers.InvoicePreview = InvoicePreview

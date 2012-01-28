@@ -8,6 +8,13 @@ class App extends Spine.Controller
                 if not params.inv_type
                     return
                 new controllers.InvoiceAddition inv_type: params.inv_type, el: $('#content')
+            "/show-invoice/:inv_type/:inv_id": (params) ->
+                if not (params.inv_type and params.inv_id)
+                    return
+                new controllers.InvoicePreview
+                    inv_type: params.inv_type
+                    inv_id: params.inv_id
+                    el: $('#content')
             "/": ->
                 ind = new controllers.Index el: $('#content')
         Spine.Route.setup()
