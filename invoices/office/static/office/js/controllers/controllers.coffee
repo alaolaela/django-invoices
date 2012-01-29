@@ -40,10 +40,13 @@ class Invoices extends Spine.Controller
 
     print: =>
         ids = ""
-        for check in @el.find("input:checked")
+        checks = @el.find("input:checked")
+        ext = if checks.length > 1 then 'zip' else 'pdf'
+        for check in checks 
             id = $(check).parent().item().item.id
             ids = "#{ids}&id=#{id}"
-        document.location = "/invoice/print/.pdf?doc_codename=INVOICE#{ids}"
+        # It is possible to open multiple tabs instead of zip, just call x times window.open with _blank
+        window.open "/invoice/print/.#{ext}?doc_codename=INVOICE#{ids}", "_blank"
 
 
 class Index extends Spine.Controller

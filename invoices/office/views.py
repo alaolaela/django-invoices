@@ -1,17 +1,24 @@
 #coding: utf-8
-
 from __future__ import absolute_import
+
+import StringIO
+from os import fdopen, remove
+from tempfile import mkstemp
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import get_model
-from django.http import Http404
+from django.http import Http404, HttpResponse
+from django.utils.encoding import smart_str
+from django.core.servers.basehttp import FileWrapper
 
 from invoices import settings
 from seautils.views.decorators import render_with, json_response, render_with_formats
-from apps.documents.views import PDF_ATTACHMENT_DOCUMENT_CONFIG, PDF_PREVIEW_DOCUMENT_CONFIG
+from apps.documents.views import PDF_DOCUMENT_CONFIG, PDF_PREVIEW_DOCUMENT_CONFIG,\
+        renderer_document_pdf
 
 from ..invoices.forms import InvoiceItemFormset, INVOICE_TYPES_FORMS
-from ..invoices.models import InvoiceItem
+from ..invoices.models import InvoiceItem, Invoice
 
 STATUS_OK = 'ok'
 STATUS_ERROR = 'error'
@@ -84,6 +91,39 @@ def products_search(request):
     return items
 
 
-@render_with_formats(pdf=PDF_ATTACHMENT_DOCUMENT_CONFIG, pdfh=PDF_PREVIEW_DOCUMENT_CONFIG)
-def invoice_print(request, format):
-    return {}
+def renderer_documents_zipped(request, view_output, **kwargs):
+    view_output.update({'document': request.document})
+    files = []
+    for invoice in view_output.get('invoices', []):
+        view_output['invoice'] = invoice
+        invoice_resp = renderer_document_pdf(request, view_output, **kwargs)
+        fd, tmppath = mkstemp(suffix='.pdf')
+        with fdopen(fd, 'wt') as f:
+            f.write(smart_str(invoice_resp))
+        files.append((tmppath, '%s.pdf' % invoice.key))
+
+    buff= StringIO.StringIO()
+    with ZipFile(buff, 'w') as invzip:
+        [invzip.write(f[0], f[1]) for f in files]
+    [remove(f[0]) for f in files]
+    response = HttpResponse(mimetype='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=faktury.zip'
+    buff.seek(0)
+    response.write(buff.read())
+    return response
+
+ZIPPED_DOCUMENTS_CONFIG = PDF_PREVIEW_DOCUMENT_CONFIG.copy()
+ZIPPED_DOCUMENTS_CONFIG['renderer'] = renderer_documents_zipped
+
+@render_with_formats(pdf=PDF_DOCUMENT_CONFIG, zip=ZIPPED_DOCUMENTS_CONFIG)
+def invoice_print(request, *args, **kwargs):
+    ids = request.GET.getlist('id')
+    if len(ids) > 1:
+        invoices = Invoice.objects.filter(id__in=ids)
+        return {'invoices': invoices}
+    
+    invoice = Invoice.objects.get(id=ids[0])
+    return {
+        #'headers': {'Content-Disposition': 'attachment; filename=%s.pdf' % invoice.key},
+        'invoice': invoice,
+    }
