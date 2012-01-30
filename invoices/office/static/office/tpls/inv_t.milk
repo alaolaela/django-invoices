@@ -1,6 +1,6 @@
 <td id="invoice-{{ type }}-{{ item.id }}" class="check-column"><input id="" type="checkbox" value="checkbox"></td>
 <td class="doc_name-column"><a href="#/show-invoice/{{ type }}/{{ item.id }}">{{ item.key }}</a></td>
-<td class="family_name-column"><a href="#">#{{ item.id }} Chlothilde Peter</a></td>
+<td class="family_name-column"><a href="#/show-invoice/{{ type }}/{{ item.id }}">#{{ item.id }} Chlothilde Peter</a></td>
 <td class="issue_date-column">{{ item.date_created }}</td>
 <td class="doc_type-column">{{ verbose_name }}</td>
 <td class="gross_value-column">{{ item.gross_price }} €</td>

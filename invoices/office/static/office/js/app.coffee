@@ -13,6 +13,11 @@ class App extends Spine.Controller
                     return
                 rc()
                 current_controller = new controllers.InvoiceAddition inv_type: params.inv_type, el: $('#content')
+            "/edit-invoice/:inv_type/:inv_id": (params) ->
+                if not params.inv_type
+                    return
+                rc()
+                current_controller = new controllers.InvoiceAddition inv_id: params.inv_id, inv_type: params.inv_type, el: $('#content')
             "/show-invoice/:inv_type/:inv_id": (params) ->
                 if not (params.inv_type and params.inv_id)
                     return

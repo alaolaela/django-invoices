@@ -31,6 +31,7 @@ class InvoiceAddition extends Spine.Controller
             @load_tpl()
 
     load_tpl: =>
+        console.log @
         tpl_addr = "#{@INVOICES_TPL_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
         $.get tpl_addr, (data) =>
             @el.find('form.facture').html data
@@ -84,7 +85,11 @@ class InvoiceAddition extends Spine.Controller
     save_invoice: (e) =>
         e.preventDefault()
         data = $('form').serialize()
-        save_addr = "#{@INVOICES_SAVE_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
+        base_addr = save_addr = "#{@INVOICES_SAVE_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
+        if not @inv_id
+            save_addr = base_addr
+        else
+            save_addr = "#{base_addr}#{@inv_id}/"
         $.post save_addr, data, (resp_data) =>
             for old_error_el in $ 'input.error, select.error, textarea.error'
                 $(old_error_el).qtip "destroy"
