@@ -25,16 +25,21 @@ class InvoiceAddition extends Spine.Controller
         super
         tpl.load OFFICE_APP_NAME, 'add', =>
             @el.find('.left').html tpl.render 'add', {}
+            @refreshElements()
             @load_tpl()
         tpl.load OFFICE_APP_NAME, 'add_right', =>
             @el.find('.right').html tpl.render 'add_right', {}
-            @load_tpl()
 
     load_tpl: =>
-        console.log @
-        tpl_addr = "#{@INVOICES_TPL_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
+        base_addr = "#{@INVOICES_TPL_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
+        if not @inv_id
+            tpl_addr = base_addr
+        else
+            tpl_addr = "#{base_addr}#{@inv_id}/"
+        tpl_addr = tpl_addr
         $.get tpl_addr, (data) =>
             @el.find('form.facture').html data
+            @refreshElements()
             $("#id_date_sale, #id_date_created, #id_date_payment").datepicker
                 showOn: "button"
                 buttonImage: "#{STATIC_URL}office/css/images/calendar.png"
@@ -43,13 +48,14 @@ class InvoiceAddition extends Spine.Controller
             $('.commodity textarea').each (i, e) =>
                 txta = @set_autocomplete $(e)
 		
-            @refreshElements()
+            for item in @invoice_items.find 'tr'
+                @compute_values target: $(item).find('.net_price input')
+            $('#id_customer_content_type').change()
 
     customer_type_chosen: (e) =>
         sel_el = $(e.target)
         ct_id = sel_el.val()
         $.get "#{@CHOICES_ADDR}#{ct_id}/", (data) =>
-            console.log data
             sel_customer = $ '#id_customer_object_id'
             sel_customer.html ''
             for rec in data

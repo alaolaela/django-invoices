@@ -31,10 +31,16 @@ def index(request):
     return {}
 
 @render_with('office/invoice_form.html')
-def render_form(request, invoice_type):
+def render_form(request, invoice_type, invoice_id=None):
     invoice_type = int(invoice_type)
-    invoice_form = INVOICE_TYPES_FORMS[invoice_type]()
-    invoice_item_formset = InvoiceItemFormset()
+    if not invoice_id:
+        invoice_form = INVOICE_TYPES_FORMS[invoice_type]()
+        invoice_item_formset = InvoiceItemFormset()
+    else:
+        instance = INVOICE_TYPES[invoice_type].objects.get(id=invoice_id)
+        invoice_form = INVOICE_TYPES_FORMS[invoice_type](instance=instance)
+        invoice_item_formset = InvoiceItemFormset(instance=instance)
+
     return {'inv_f': invoice_form, 'inv_formset': invoice_item_formset}
 
 @json_response

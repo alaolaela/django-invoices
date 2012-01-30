@@ -15,6 +15,8 @@ class ComputeValue
 
     compute_values: (e) =>
         el = $(e.target)
+        if not (el.val() or el.text())
+            return
         p = el.parent()
         row = el.parents('tr').eq(0)
         f = (a) => @input_val(row, a)
