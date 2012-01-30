@@ -154,11 +154,16 @@ class InvoiceAddition extends Spine.Controller
             if resp_data[STATUS_KEY] == STATUS_OK
                 quick_msg 'Zapis', 'Faktura zapisana poprawnie'
                 return
+            
+            if resp_data['key']?
+                $('#id_key').val resp_data['key']
+            
+            for own input_name, msg of resp_data['main_form_info']
+                @input_tip input_name, msg, 'info'
 
-            for own input_name, error_msg of resp_data['main_form_errors']
-                input_el = @el.find("#id_#{input_name}").addClass 'error'
-                input_el.qtip
-                    content: error_msg[0]
+            for own input_name, msg of resp_data['main_form_errors']
+                @input_tip input_name, msg, 'error'
+
             if resp_data.hasOwnProperty 'items_form_errors'
                 form_index = 0
                 for item_form in resp_data['items_form_errors']
@@ -167,7 +172,11 @@ class InvoiceAddition extends Spine.Controller
                         input_el.qtip
                             content: error_msg[0]
                     form_index += 1
-                    
+    
+    input_tip: (input_name, msg, cls) ->
+        input_el = @el.find("#id_#{input_name}").addClass cls
+        input_el.qtip
+            content: msg[0]
         
     set_autocomplete: (el) ->
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->

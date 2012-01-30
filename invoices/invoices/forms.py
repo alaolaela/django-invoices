@@ -23,6 +23,11 @@ class InvoiceForm(forms.models.ModelForm):
     customer_content_type = forms.ModelChoiceField(queryset=ContentType.\
                 objects.filter(id__in=ct_ids))
 
+    def __init__(self, *args, **kwargs):
+        super(InvoiceForm, self).__init__(*args, **kwargs)
+        self.fields['key'].initial = self._meta.model.generate_next_key()
+
+
 class VatInvoiceForm(InvoiceForm):
     class Meta(InvoiceForm.Meta):
         model = VatInvoice

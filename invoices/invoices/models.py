@@ -63,21 +63,28 @@ class Invoice(models.Model):
     
     @classmethod
     def generate_next_key(cls):
-        month_key_invs = cls.objects.filter(key__regex=cls.KEY_PATTERN_MONTH % (
-            date.today().strftime("%m/%Y")))
+        month_key_invs = cls.objects.filter(key__regex=cls.KEY_PATTERN % {'num': '\d+',
+            'month': date.today().strftime("%m"), 'year': date.today().strftime("%Y")})
         max_key = 0
         for inv in month_key_invs:
-            key_index = re.match(cls.KEY_PATTERN, inv.key).group(1)
+            key_index = re.match(cls.KEY_PATTERN_REGEX, inv.key).group(1)
             max_key = max(max_key, int(key_index))
-        return "%d/%s" % (max_key + 1, date.today().strftime("%m/%Y"))
+        return cls.KEY_PATTERN % {'num': max_key + 1, 'month': date.today().strftime("%m"),
+                'year': date.today().strftime("%Y")}
+
+    @classmethod
+    def validate_key(cls, key):
+        return re.match(cls.KEY_PATTERN_REGEX, key) and \
+                not cls.objects.filter(key__iexact=key).exists()
 
 
 INVOICE_TYPE_VAT = 1
 INVOICE_TYPE_PROFORMA = 2
 
 class VatInvoice(Invoice):
-    KEY_PATTERN = r'^(\d+)/[01][1-9]/[0-9]{4}'
-    KEY_PATTERN_MONTH = r'^(\d+)/%s'
+    KEY_PATTERN = r'%(num)s/FV/%(month)s/%(year)s'
+    KEY_PATTERN_REGEX = r'^%s$' % (KEY_PATTERN % {'num': '(\d+)', 'month': '[01][1-9]',
+                                                  'year': '[0-9]{4}'})
     TYPE = INVOICE_TYPE_VAT
 
     class Meta:
@@ -85,8 +92,9 @@ class VatInvoice(Invoice):
         verbose_name_plural  = u'faktury VAT'
 
 class ProformaInvoice(Invoice):
-    KEY_PATTERN = r'^P(\d+)/[01][1-9]/[0-9]{4}'
-    KEY_PATTERN_MONTH = r'^P(\d+)/%s'
+    KEY_PATTERN = r'%(num)s/PROF/%(month)s/%(year)s'
+    KEY_PATTERN_REGEX = r'^%s$' % (KEY_PATTERN % {'num': '(\d+)', 'month': '[01][1-9]',
+                                                  'year': '[0-9]{4}'})
     TYPE = INVOICE_TYPE_PROFORMA
 
     class Meta:
