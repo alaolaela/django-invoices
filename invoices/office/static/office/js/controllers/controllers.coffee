@@ -48,29 +48,36 @@ class Invoices extends Spine.Controller
             @append a
 
     delete: =>
-        for check in @el.find("input:checked")
-            $(check).parent().item().destroy()
+        @iterate_checked (item) =>
+            item.item.destroy()
 
     print: =>
-        checks = @el.find("input:checked")
-        for check in checks
-            item = $(check).parent().item().item
-            item.status = models.Invoice.STATUS_TOBEPAID
-            item.save()
-            window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{item.id}", "_blank"
+        @iterate_checked (item) =>
+            item.item.status = models.Invoice.STATUS_TOBEPAID
+            item.item.save()
+            window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{item.item.id}", "_blank"
 
     download: =>
         ids = ""
-        checks = @el.find("input:checked")
-        for check in checks
-            id = $(check).parent().item().item.id
-            ids = "#{ids}&id=#{id}"
+        @iterate_checked (item) =>
+            ids = "#{ids}&id=#{item.item.id}"
         window.open "/invoice/render/.zip?doc_codename=INVOICE#{ids}"
+
+    mark_as_paid: =>
+        @iterate_checked (item) =>
+            item.item.status = models.Invoice.STATUS_PAID
+            item.item.save()
+
+    iterate_checked: (func) =>
+        checks = @el.find('input:checked')
+        for check in checks
+            func $(check).parent().item()
 
 class Index extends Spine.Controller
     events:
         "click input.delete": "delete_invoice"
         "click input.print": "print_invoice"
+        "click input.mark_as_paid": "mark_invoice_as_paid"
         "click input.download": "download_invoice"
 
     constructor: ->
@@ -102,6 +109,9 @@ class Index extends Spine.Controller
 
     download_invoice: (e) =>
         @controllers[$(e.target).data('ref')].download()
+
+    mark_invoice_as_paid: (e) =>
+        @controllers[$(e.target).data('ref')].mark_as_paid()
     
 
 class InvoicePreview extends Spine.Controller
