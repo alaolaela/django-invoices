@@ -95,10 +95,7 @@ def products_search(request):
         model_cls = get_model(*model.split('.'))
         if hasattr(model_cls, 'get_for_autocomplete'):
             items += model_cls.get_for_autocomplete(request.GET['term'])
-    
-    items += [{'label': i, 'value': 1} for i in InvoiceItem.objects.\
-            filter(name__icontains=request.GET['term']).values_list('name', flat=True)]
-
+    items += InvoiceItem.get_for_autocomplete(request.GET['term'])
     return items
 
 @json_response

@@ -133,3 +133,15 @@ class InvoiceItem(models.Model):
 
     def __unicode__(self):
         return u'%s - %s' % (self.invoice, self.product)
+
+    @classmethod
+    def get_for_autocomplete(cls, query):
+        items = []
+        for item in cls.objects.filter(name__icontains=query):
+            items.append({
+                'obj_id': item.product_object_id,
+                'ct_id': item.product_content_type,
+                'label': item.name,
+                'desc': item.product.name if item.product else item.name,
+            })
+        return items
