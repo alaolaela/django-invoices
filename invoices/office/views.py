@@ -11,6 +11,8 @@ from django.db.models import get_model
 from django.http import Http404, HttpResponse
 from django.utils.encoding import smart_str
 from django.core.servers.basehttp import FileWrapper
+from django.db import connection, transaction
+
 
 from invoices import settings
 from seautils.views.decorators import render_with, json_response, render_with_formats
@@ -90,6 +92,20 @@ def products_search(request):
 
     return items
 
+@json_response
+def invoice_additional_info(request, invoice_ids):
+    """ gross_price and others
+    """
+    try:
+        invoice_ids_int = [int(a) for a in invoice_ids.split(',')]
+    except ValueError:
+        raise Http404('Incorrect ids')
+    cursor = connection.cursor()
+    tab = InvoiceItem._meta.db_table
+    res = cursor.execute("SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price), invoice_id  from %(tab)s"\
+            " WHERE invoice_id in (%(ids)s) GROUP BY invoice_id" % {'tab': tab,
+                'ids': ','.join(map(str, invoice_ids_int))}).fetchall()
+    return {inv_id: val / 100 for val, inv_id in res}
 
 def renderer_documents_zipped(request, view_output, **kwargs):
     view_output.update({'document': request.document})

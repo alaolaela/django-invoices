@@ -3,4 +3,4 @@
 <td class="family_name-column"><a href="#">#{{ item.id }} Chlothilde Peter</a></td>
 <td class="issue_date-column">{{ item.date_created }}</td>
 <td class="doc_type-column">{{ verbose_name }}</td>
-<td class="gross_value-column">{{ item.net_price }} €</td>
+<td class="gross_value-column">{{ item.gross_price }} €</td>

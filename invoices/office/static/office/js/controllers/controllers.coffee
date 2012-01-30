@@ -4,6 +4,8 @@ class Invoice extends Spine.Controller
     constructor: ->
         super
         @item.bind("destroy", @remove)
+        @item.bind("change", @change)
+        @item.bind("change-local", @change)
     
     render: (item) =>
         if (item)
@@ -18,21 +20,32 @@ class Invoice extends Spine.Controller
     remove: =>
         @el.remove()
 
+    change: (inv) =>
+        @render(inv)
+
 class Invoices extends Spine.Controller
     constructor: ->
         super
         models.VatInvoice.fetch data: "status=#{@inv_status}"
         models.ProformaInvoice.fetch data: "status=#{@inv_status}"
-        models.VatInvoice.bind("refresh",  @add_invoice)
-        models.ProformaInvoice.bind("refresh",  @add_invoice)
+        models.VatInvoice.bind("refresh", (items) => @add_invoice(items, models.VatInvoice))
+        models.ProformaInvoice.bind("refresh", (items) => @add_invoice(items, models.ProformaInvoice))
 
-    add_invoice: (items) =>
+    add_invoice: (items, model_cls) =>
         filterted_items = ((new Invoice(item: item)).render() for item in items when item.status == @inv_status)
-        if filterted_items.length
-            for a in filterted_items
-                if @el.find("#invoice-#{a.item.constructor.TYPE}-#{a.item.id}").length
-                    continue
-                @append a
+        if not filterted_items.length
+            return
+        items_ids = (item.id for item in items  when item.status == @inv_status)
+        $.get conf.INVOICE_ADD_INFO_ADDR + items_ids.join(','), (data) =>
+                for inv_id, gross_price of data
+                    inv = model_cls.find(inv_id)
+                    inv.gross_price = gross_price.toFixed 2
+                    inv.trigger('change-local', inv)
+            ,'json'
+        for a in filterted_items
+            if @el.find("#invoice-#{a.item.constructor.TYPE}-#{a.item.id}").length
+                continue
+            @append a
 
     delete: =>
         for check in @el.find("input:checked")
@@ -42,7 +55,7 @@ class Invoices extends Spine.Controller
         ids = ""
         checks = @el.find("input:checked")
         ext = if checks.length > 1 then 'zip' else 'pdf'
-        for check in checks 
+        for check in checks
             id = $(check).parent().item().item.id
             ids = "#{ids}&id=#{id}"
         # It is possible to open multiple tabs instead of zip, just call x times window.open with _blank
