@@ -54,8 +54,10 @@ class Invoices extends Spine.Controller
     print: =>
         checks = @el.find("input:checked")
         for check in checks
-            id = $(check).parent().item().item.id
-            window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{id}", "_blank"
+            item = $(check).parent().item().item
+            item.status = models.Invoice.STATUS_TOBEPAID
+            item.save()
+            window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{item.id}", "_blank"
 
     download: =>
         ids = ""

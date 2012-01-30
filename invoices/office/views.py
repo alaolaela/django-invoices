@@ -141,13 +141,10 @@ ZIPPED_DOCUMENTS_CONFIG = PDF_PREVIEW_DOCUMENT_CONFIG.copy()
 ZIPPED_DOCUMENTS_CONFIG['renderer'] = renderer_documents_zipped
 
 @render_with_formats(pdf=PDF_DOCUMENT_CONFIG, zip=ZIPPED_DOCUMENTS_CONFIG)
-def render_invoice(request, *args, **kwargs):
+def render_invoice(request, format):
     ids = request.GET.getlist('id')
-    if len(ids) > 1:
-        invoices = Invoice.objects.filter(id__in=ids)
+    invoices = Invoice.objects.filter(id__in=ids)
+    if format == 'pdf':
+        return {'invoice': invoices[0]}
+    else:
         return {'invoices': invoices}
-    
-    invoice = Invoice.objects.get(id=ids[0])
-    return {
-        'invoice': invoice,
-    }
