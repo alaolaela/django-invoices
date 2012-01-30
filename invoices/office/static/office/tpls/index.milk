@@ -28,6 +28,7 @@
                 <img src="{{STATIC_URL}}office/css/images/overview-bottom-arrow.png" class="fl" />
                 {{#paid_action}}<input id="" type="submit" class="fl paid_action" value="Oznacz jako zapłacone" />{{/paid_action}}
                 <input id="" type="submit" class="fl print" value="Drukuj" data-ref="{{type}}" />
+                <input id="" type="submit" class="fl download" value="Pobierz" data-ref="{{type}}" />
                 <input id="" type="submit" class="fl delete" value="Usuń" data-ref="{{type}}" />
             </div><!-- overview_footer -->
             <div class="clear"></div>

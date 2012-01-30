@@ -43,14 +43,24 @@ def save_form(request, invoice_type, invoice_id=None):
         raise Http404
     invoice_type = int(invoice_type)
     resp_dat = {}
-    dat = request.POST
+    dat = request.POST.copy()
     if invoice_id:
         pass
     else:
         invoice_form = INVOICE_TYPES_FORMS[invoice_type](dat)
         invoice_item_formset = InvoiceItemFormset(dat)
-
+    
     errors = False
+    resp_dat['main_form_info'] = {}
+    if 'key' in dat and not invoice_form._meta.model.validate_key(dat['key']):
+        resp_dat['key'] = invoice_form._meta.model.generate_next_key()
+        dat['key'] = resp_dat['key']
+        resp_dat['main_form_info']['key'] = (u'Wygenerowano nowy numer faktury',)
+        errors = True
+    elif 'key' not in dat:
+        resp_dat['key'] = invoice_form._meta.model.generate_next_key()
+        dat['key'] = resp_dat['key']
+
     if not invoice_form.is_valid():
         resp_dat['main_form_errors'] = dict(invoice_form.errors)
         errors = True
@@ -68,7 +78,6 @@ def save_form(request, invoice_type, invoice_id=None):
     else:
         resp_dat[STATUS_KEY] = STATUS_ERROR
 
-    
     return resp_dat
 
 
@@ -142,14 +151,10 @@ ZIPPED_DOCUMENTS_CONFIG = PDF_PREVIEW_DOCUMENT_CONFIG.copy()
 ZIPPED_DOCUMENTS_CONFIG['renderer'] = renderer_documents_zipped
 
 @render_with_formats(pdf=PDF_DOCUMENT_CONFIG, zip=ZIPPED_DOCUMENTS_CONFIG)
-def invoice_print(request, *args, **kwargs):
+def render_invoice(request, format):
     ids = request.GET.getlist('id')
-    if len(ids) > 1:
-        invoices = Invoice.objects.filter(id__in=ids)
+    invoices = Invoice.objects.filter(id__in=ids)
+    if format == 'pdf':
+        return {'invoice': invoices[0]}
+    else:
         return {'invoices': invoices}
-    
-    invoice = Invoice.objects.get(id=ids[0])
-    return {
-        #'headers': {'Content-Disposition': 'attachment; filename=%s.pdf' % invoice.key},
-        'invoice': invoice,
-    }
