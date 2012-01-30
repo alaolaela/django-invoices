@@ -1,3 +1,4 @@
+
 class InvoiceAddition extends Spine.Controller
     INVOICES_TPL_ADDR: '/invoice/formtpl/'
     CHOICES_ADDR: '/invoice/choices/'
@@ -73,75 +74,12 @@ class InvoiceAddition extends Spine.Controller
         el.find('.delete_commodity input').attr('checked', 'checked')
         @compute_summary()
     
-    input_val: (row, a) ->
-        pf = parseFloat
-        inp_val = row.find(".#{a} input, .#{a} select").val()
-        if inp_val
-            pf(inp_val)
-        else
-            0
 
     compute_values: (e) =>
-        el = $(e.target)
-        p = el.parent()
-        row = el.parents('tr').eq(0)
-        f = (a) => @input_val(row, a)
-        quantity = f 'quantity'
-        net_price = f 'net_price'
-        net_value = f 'net_value'
-        tax = f 'tax'
-        if p.hasClass 'net_value'
-            if quantity
-                net_price = (net_value / quantity)
-        sf = (a, b) ->
-            row.find(".#{a} input").val b
-        net_value = quantity * net_price
-        sf 'net_value', net_value.toFixed 2
-        sf 'net_price', net_price.toFixed 2
-        sf 'quantity', quantity.toFixed 2
-        sf 'taxval', (tax / 100 * net_value).toFixed 2
-        sf 'gross', ((1 + tax / 100) * net_value).toFixed 2
-        @compute_summary()
+        (new ComputeValue(@el, @invoice_items)).compute_values(e)
 
     compute_summary: (e) =>
-        net_sum = 0
-        tax_sum = 0
-        gross_sum = 0
-        tax_sum_tpl =
-            net_sum: 0
-            tax_sum: 0
-            gross_sum: 0
-        tax_sum_classes = {}
-
-        f = @input_val
-        for row in @invoice_items.find('tr:visible')
-            row = $ row
-            net_sum += f row, 'net_value'
-            tax_sum += f row, 'taxval'
-            gross_sum += f row, 'gross'
-            tax = f row, 'tax'
-            
-            if not tax_sum_classes.hasOwnProperty tax
-                tax_sum_classes[tax] = _.clone(tax_sum_tpl)
-            tax_sum_classes[tax].net_sum += f row, 'net_value'
-            tax_sum_classes[tax].tax_sum += f row, 'taxval'
-            tax_sum_classes[tax].gross_sum += f row, 'gross'
-        tf = (a) -> a.toFixed 2
-        @el.find('.whole_sum .net_sum').text(tf net_sum)
-        @el.find('.whole_sum .tax_sum').text(tf tax_sum)
-        @el.find('.whole_sum .gross_sum').text(tf gross_sum)
-        @el.find('tr.tax_class_sum').remove()
-        for own tax, sum of tax_sum_classes
-            new_tr = $ '<tr />',
-                class: 'tax_class_sum'
-            new_tr.html $('.tax_class_sum_tpl').html()
-            new_tr.find('.tax_class').text(tax)
-            new_tr.find('.net_sum').text(tf sum.net_sum)
-            new_tr.find('.tax_sum').text(tf sum.tax_sum)
-            new_tr.find('.gross_sum').text(tf sum.gross_sum)
-            $('.total_cost').before new_tr
-        @el.find('.tax_class_sum').eq(0).find('.label').css 'visibility', 'visible'
-        $('.total_cost p span').text(tf gross_sum)
+        (new ComputeValue(@el, @invoice_items)).compute_summary(e)
 
     save_invoice: (e) =>
         e.preventDefault()

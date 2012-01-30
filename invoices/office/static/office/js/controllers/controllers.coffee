@@ -1,3 +1,83 @@
+class ComputeValue
+    constructor: (@el, @invoice_items) ->
+
+    input_val: (row, a) ->
+        pf = parseFloat
+        inp_val = row.find(".#{a} input, .#{a} select").val()
+        if inp_val
+            pf(inp_val)
+        else
+            span_el = row.find(".#{a} span")
+            if span_el.length
+                pf span_el.text()
+            else
+                0
+
+    compute_values: (e) =>
+        el = $(e.target)
+        p = el.parent()
+        row = el.parents('tr').eq(0)
+        f = (a) => @input_val(row, a)
+        quantity = f 'quantity'
+        net_price = f 'net_price'
+        net_value = f 'net_value'
+        tax = f 'tax'
+        if p.hasClass 'net_value'
+            if quantity
+                net_price = (net_value / quantity)
+        sf = (a, b) ->
+            if row.find(".#{a} input").length
+                row.find(".#{a} input").val b
+            else
+                row.find(".#{a} span").text b
+        net_value = quantity * net_price
+        sf 'net_value', net_value.toFixed 2
+        sf 'net_price', net_price.toFixed 2
+        sf 'quantity', quantity.toFixed 2
+        sf 'taxval', (tax / 100 * net_value).toFixed 2
+        sf 'gross', ((1 + tax / 100) * net_value).toFixed 2
+        @compute_summary()
+
+    compute_summary: (e) =>
+        net_sum = 0
+        tax_sum = 0
+        gross_sum = 0
+        tax_sum_tpl =
+            net_sum: 0
+            tax_sum: 0
+            gross_sum: 0
+        tax_sum_classes = {}
+
+        f = @input_val
+        for row in @invoice_items.find('tr:visible')
+            row = $ row
+            net_sum += f row, 'net_value'
+            tax_sum += f row, 'taxval'
+            gross_sum += f row, 'gross'
+            tax = f row, 'tax'
+            
+            if not tax_sum_classes.hasOwnProperty tax
+                tax_sum_classes[tax] = _.clone(tax_sum_tpl)
+            tax_sum_classes[tax].net_sum += f row, 'net_value'
+            tax_sum_classes[tax].tax_sum += f row, 'taxval'
+            tax_sum_classes[tax].gross_sum += f row, 'gross'
+        tf = (a) -> a.toFixed 2
+        @el.find('.whole_sum .net_sum').text(tf net_sum)
+        @el.find('.whole_sum .tax_sum').text(tf tax_sum)
+        @el.find('.whole_sum .gross_sum').text(tf gross_sum)
+        @el.find('tr.tax_class_sum').remove()
+        for own tax, sum of tax_sum_classes
+            new_tr = $ '<tr />',
+                class: 'tax_class_sum'
+            new_tr.html $('.tax_class_sum_tpl').html()
+            new_tr.find('.tax_class').text(tax)
+            new_tr.find('.net_sum').text(tf sum.net_sum)
+            new_tr.find('.tax_sum').text(tf sum.tax_sum)
+            new_tr.find('.gross_sum').text(tf sum.gross_sum)
+            $('.total_cost').before new_tr
+        @el.find('.tax_class_sum').eq(0).find('.label').css 'visibility', 'visible'
+        $('.total_cost p span').text(tf gross_sum)
+
 class Invoice extends Spine.Controller
     tag: 'tr'
 
@@ -138,8 +218,12 @@ class InvoicePreview extends Spine.Controller
             item: @item
             type: @item.constructor.TYPE
             verbose_name: @item.constructor.VERBOSE_NAME
+            inv_items: inv_items
+
         tpl.load OFFICE_APP_NAME, 'preview', =>
             @el.find('.left').html tpl.render 'preview', ctx
+            for item_row in @el.find('.goods table tbody tr')
+                (new ComputeValue(@el, @el.find('.goods table tbody'))).compute_values(target: $(item_row).find('td.net_price span'))
         tpl.load OFFICE_APP_NAME, 'preview_right', =>
             @el.find('.right').html tpl.render 'preview_right', {}
 
@@ -147,3 +231,4 @@ class InvoicePreview extends Spine.Controller
 window.controllers = {}
 window.controllers.Index = Index
 window.controllers.InvoicePreview = InvoicePreview
+window.ComputeValue = ComputeValue

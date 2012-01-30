@@ -13,7 +13,6 @@
 <div class="col fl">
     <p class="title">Terminy:</p>
     <p>Data wystawienia:</p>
-
     <p>{{ item.date_created }}</p>
     <p>Data sprzedaży:</p>
     <p>{{ item.date_sale }}</p>
@@ -50,29 +49,29 @@
             </tr>
         </thead>
         <tbody>
+            {{#inv_items}}
             <tr>
-                <td class="commodity">Usługa pomocy domowej/Haushaltshilfeleistungen
-                                    Imię Nazwisko opiekunki
-                                    W okresie/Einsatzdauer:
-                                    08/05/2012 - 09/06/2012
-                                    ilość dni/Arbeitstag:
-                                    31
+                <td class="commodity">
+                {{ name }}
                 </td>
 
                 <td class="medium">
+                {{ class_code }}
                     
                 </td>
                 <td class="small">
-                    
+                    {{ unit }}
                 </td>
-                <td class="very_small">1</td>
-                <td class="medium">1800</td>
-                <td class="medium left_border">1800</td>
-
-                <td class="medium left_border">ZW.</td>
-                <td class="medium left_border">0,00</td>
-                <td class="medium left_border">1800</td>
+                <td class="very_small quantity"><span>{{ quantity }}</span>
+                </td>
+                <td class="medium net_price"><span>{{ net_price }}</span>
+                </td>
+                <td class="medium left_border net_value"><span> 1800</span></td>
+                <td class="medium left_border tax"><span>{{ tax }}</span></td>
+                <td class="medium left_border taxval"><span>0,00</span></td>
+                <td class="medium left_border gross"><span>{{gross_price}}</span></td>
             </tr>
+            {{/inv_items}}
         </tbody>
         <tfoot>
             <tr class='whole_sum'>
@@ -98,7 +97,7 @@
             <tr class="total_cost">
                 <td colspan="3" class="no_borders"></td>
                 <td colspan="7">
-                    <p>RAZEM DO ZAPŁATY: <span>0</span> EURO</p>
+                    <p>RAZEM DO ZAPŁATY: <span>0</span> {{ item.get_currency_display }}</p>
                 </td>
             </tr>
         </tfoot>
