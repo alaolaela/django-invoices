@@ -1,1 +1,6 @@
-<a href="#/" class="right-button">Lista</a>
+<a href="#" class="button mark_as_paid">Oznacz jako zapłaconą</a>
+<a href="#" class="button intovat">Zmień na fakturę VAT</a>
+<a href="#" class="button print">Drukuj</a>
+<a href="#" class="button download">Pobierz</a>
+<a href="#" class="button edit">Edytuj</a>
+<a href="#" class="button delete">Usuń</a>

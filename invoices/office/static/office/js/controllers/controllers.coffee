@@ -62,20 +62,17 @@ class Invoices extends Spine.Controller
 
     print: =>
         @iterate_checked (item) =>
-            item.item.status = models.Invoice.STATUS_TOBEPAID
-            item.item.save()
-            window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{item.item.id}", "_blank"
+            item.item.print()
 
     download: =>
-        ids = ""
+        ids = []
         @iterate_checked (item) =>
-            ids = "#{ids}&id=#{item.item.id}"
-        window.open "/invoice/render/.zip?doc_codename=INVOICE#{ids}"
+            ids.push item.item.id
+        window.open "/invoices/render/.zip?doc_codename=INVOICE&id=#{ids.join('&id=')}"
 
     mark_as_paid: =>
         @iterate_checked (item) =>
-            item.item.status = models.Invoice.STATUS_PAID
-            item.item.save()
+            item.item.mark_paid
 
     iterate_checked: (func) =>
         checks = @el.find('input:checked')
@@ -124,6 +121,11 @@ class Index extends Spine.Controller
     
 
 class InvoicePreview extends Spine.Controller
+    events:
+        "click .button.delete": "delete"
+        "click .button.print": "print"
+        "click .button.mark_as_paid": "mark_as_paid"
+        "click .button.download": "download"
     constructor: ->
         super
         @model_cls = models[conf.INVOICE_MODELS[parseInt @inv_type]]
@@ -152,6 +154,18 @@ class InvoicePreview extends Spine.Controller
             @el.find('.left').html tpl.render 'preview', ctx
         tpl.load OFFICE_APP_NAME, 'preview_right', =>
             @el.find('.right').html tpl.render 'preview_right', {}
+
+    print: (e) =>
+        @item.print()
+        
+    download: (e) =>
+        @item.download()
+
+    mark_as_paid: (e) =>
+        @item.mark_paid()
+
+    delete: (e) =>
+        @item.delete()
 
 
 window.controllers = {}
