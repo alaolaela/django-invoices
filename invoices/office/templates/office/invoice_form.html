@@ -1,4 +1,5 @@
 <div class="col two_cols fr">
+    {{ inv_f.id }}
     {{ inv_f.date_created.label_tag }}
     {{ inv_f.date_created }}
     <br />
@@ -54,6 +55,7 @@
             {% for inv_formset_form in inv_formset.forms %}
             <tr>
                 <td class="commodity">
+                    {{ inv_formset_form.id }}
                     {{ inv_formset_form.name }}
                     <div class="ct">{{ inv_formset_form.product_content_type }}</div>
                     <div class="oid">{{ inv_formset_form.product_object_id }}</div>
