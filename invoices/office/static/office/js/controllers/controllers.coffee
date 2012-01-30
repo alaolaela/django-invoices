@@ -52,20 +52,24 @@ class Invoices extends Spine.Controller
             $(check).parent().item().destroy()
 
     print: =>
+        checks = @el.find("input:checked")
+        for check in checks
+            id = $(check).parent().item().item.id
+            window.open "/invoice/print/.pdf?doc_codename=INVOICE&id=#{id}", "_blank"
+
+    download: =>
         ids = ""
         checks = @el.find("input:checked")
-        ext = if checks.length > 1 then 'zip' else 'pdf'
         for check in checks
             id = $(check).parent().item().item.id
             ids = "#{ids}&id=#{id}"
-        # It is possible to open multiple tabs instead of zip, just call x times window.open with _blank
-        window.open "/invoice/print/.#{ext}?doc_codename=INVOICE#{ids}", "_blank"
-
+        window.open "/invoice/download/.zip?doc_codename=INVOICE#{ids}"
 
 class Index extends Spine.Controller
     events:
         "click input.delete": "delete_invoice"
         "click input.print": "print_invoice"
+        "click input.download": "download_invoice"
 
     constructor: ->
         super
@@ -88,13 +92,14 @@ class Index extends Spine.Controller
         tpl.load OFFICE_APP_NAME, 'index_right', =>
             @el.find('.right').html tpl.render 'index_right', {}
 
-
     delete_invoice: (e) =>
         @controllers[$(e.target).data('ref')].delete()
 
-    
     print_invoice: (e) =>
         @controllers[$(e.target).data('ref')].print()
+
+    download_invoice: (e) =>
+        @controllers[$(e.target).data('ref')].download()
     
 
 class InvoicePreview extends Spine.Controller
