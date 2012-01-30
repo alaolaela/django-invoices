@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url('%s/(?P<invoice_id>\d+)$/' % base_invoice, save_form),
     url('^choices/(?P<ct_id>\d+)/$', get_choices),
     url('^products/$', products_search),
-    url('^print/\.(?P<format>\w{2,4})$', render_invoice),
+    url('^render/\.(?P<format>\w{2,4})$', render_invoice),
     url('^additionalinfo/(?P<invoice_ids>[0-9,]+)$', invoice_additional_info),
 )
 

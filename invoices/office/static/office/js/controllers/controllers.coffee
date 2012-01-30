@@ -55,7 +55,7 @@ class Invoices extends Spine.Controller
         checks = @el.find("input:checked")
         for check in checks
             id = $(check).parent().item().item.id
-            window.open "/invoice/print/.pdf?doc_codename=INVOICE&id=#{id}", "_blank"
+            window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{id}", "_blank"
 
     download: =>
         ids = ""
@@ -63,7 +63,7 @@ class Invoices extends Spine.Controller
         for check in checks
             id = $(check).parent().item().item.id
             ids = "#{ids}&id=#{id}"
-        window.open "/invoice/download/.zip?doc_codename=INVOICE#{ids}"
+        window.open "/invoice/render/.zip?doc_codename=INVOICE#{ids}"
 
 class Index extends Spine.Controller
     events:
