@@ -1,32 +1,31 @@
 <div class="page_header clearfix facture_preview">
-    <h3>Faktura VAT 5/11/2012</h3>
+    <h3>{{ verbose_name }} {{ item.key }}</h3>
 </div><!-- page_header -->
 <div class="facture_details">
 <div class="col fl">
     <p class="title">Rodzina/Klient:</p>
-    <p>Chlothilde Peter</p>
+    <p>{{ item.customer_invoice_data.name }}</p>
 
-    <p>Tripitzstr 6, 59075</p>
-    <p>Hamm</p>
-    <p>Niemcy</p>
+    <p>{{ item.customer_invoice_data.address }}</p>
+    <p>{{ item.customer_invoice_data.city }}</p>
+    <p>{{ item.customer_invoice_data.country }}</p>
 </div>
 <div class="col fl">
     <p class="title">Terminy:</p>
     <p>Data wystawienia:</p>
 
-    <p>2012-01-18</p>
+    <p>{{ item.date_created }}</p>
     <p>Data sprzedaży:</p>
-    <p>2012-01-18</p>
+    <p>{{ item.date_sale }}</p>
     <p>Termin zapłaty:</p>
-    <p>2012-02-01</p>
+    <p>{{ item.date_payment }}</p>
 </div>
 
 <div class="col fl">
     <p class="title">Płatności:</p>
-    <p>Waluta: EURO</p>
-    <p>Razem do zapłaty: 1850.00 PLN</p>
-    <p>Sposób płatności: Przelew</p>
-    <p>Rodzaj sprzedaży: Usługa</p>
+    <p>Waluta: {{ item.get_currency_display }}</p>
+    <p>Razem do zapłaty: {{ item.gross_price }}</p>
+    <p>Sposób płatności: {{ item.get_payment_type_display }}</p>
 
 </div>                
 </div>     
@@ -73,39 +72,33 @@
                 <td class="medium left_border">ZW.</td>
                 <td class="medium left_border">0,00</td>
                 <td class="medium left_border">1800</td>
-                <td class="very_small delete_commodity">
-                    <a href="#" class="delete_commodity">X</a>
-                </td>
             </tr>
         </tbody>
         <tfoot>
-            <tr>
-                <td class="no_borders"><input id="" type="submit" class="fl" value="Dodaj nowe pole" /></td>
+            <tr class='whole_sum'>
+                <td class="no_borders"></td>
                 <td class="no_borders"></td>
                 <td class="no_borders"></td>
                 <td colspan="2"><span class="head">Razem:</span></td>
-
-                <td>3600</td>
+                <td class='net_sum'>0</td>
                 <td>-</td>
-                <td>0,00</td>
-                <td colspan="2">3600</td>
+                <td class='tax_sum'>0,00</td>
+                <td class='gross_sum' colspan="2">3600</td>
             </tr>
-            <tr>
-                <td class="no_borders"></td>
-
+            <tr class="tax_class_sum_tpl empty">
                 <td class="no_borders"></td>
                 <td class="no_borders"></td>
-                <td colspan="2">W tym:</td>
-                <td>3600</td>
-                <td><span class="head">ZW.</span></td>
-                <td>0,00</td>
-                <td colspan="2">3600</td>
-
+                <td class="no_borders"></td>
+                <td class="label" colspan="2">W tym:</td>
+                <td class='net_sum'>0</td>
+                <td class='tax_class'></td>
+                <td class='tax_sum'>0,00</td>
+                <td class='gross_sum' colspan="2">0</td>
             </tr>
             <tr class="total_cost">
                 <td colspan="3" class="no_borders"></td>
                 <td colspan="7">
-                    <p>RAZEM DO ZAPŁATY: 1850,00 EURO</p>
+                    <p>RAZEM DO ZAPŁATY: <span>0</span> EURO</p>
                 </td>
             </tr>
         </tfoot>

@@ -105,7 +105,17 @@ def invoice_additional_info(request, invoice_ids):
     res = cursor.execute("SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price), invoice_id  from %(tab)s"\
             " WHERE invoice_id in (%(ids)s) GROUP BY invoice_id" % {'tab': tab,
                 'ids': ','.join(map(str, invoice_ids_int))}).fetchall()
-    return {inv_id: val / 100 for val, inv_id in res}
+    
+    info = {inv_id: {'gross_price': val / 100} for val, inv_id in res}
+    for invoice in Invoice.objects.filter(id__in=invoice_ids_int):
+        if not invoice.id in info:
+            info[invoice.id] = {'gross_price': 0}
+        key = info[invoice.id]
+        key['get_currency_display'] = invoice.get_currency_display()
+        key['customer_invoice_data'] = invoice.customer.get_invoice_data()
+        key['get_payment_type_display'] = invoice.get_payment_type_display()
+    
+    return info
 
 def renderer_documents_zipped(request, view_output, **kwargs):
     view_output.update({'document': request.document})

@@ -37,7 +37,8 @@ class Invoices extends Spine.Controller
             return
         items_ids = (item.id for item in items  when item.status == @inv_status)
         $.get conf.INVOICE_ADD_INFO_ADDR + items_ids.join(','), (data) =>
-                for inv_id, gross_price of data
+                for inv_id, add_info of data
+                    gross_price = add_info.gross_price
                     inv = model_cls.find(inv_id)
                     inv.gross_price = gross_price.toFixed 2
                     inv.trigger('change-local', inv)
@@ -100,8 +101,30 @@ class Index extends Spine.Controller
 class InvoicePreview extends Spine.Controller
     constructor: ->
         super
+        @model_cls = models[conf.INVOICE_MODELS[parseInt @inv_type]]
+        try
+            @get_item()
+        catch error
+            @model_cls.bind 'refresh', @get_item
+            @model_cls.fetch data: "id=#{@inv_id}"
+
+    get_item: =>
+        @item = @model_cls.find @inv_id
+        models.InvoiceItem.fetch data: "invoice_id=#{@item.id}"
+        models.InvoiceItem.bind "refresh", =>
+            $.get conf.INVOICE_ADD_INFO_ADDR + @item.id, (data) =>
+                for key, val of data[@item.id]
+                    @item[key] = val
+                @render()
+
+    render: =>
+        inv_items = models.InvoiceItem.select (inv_item) => inv_item.invoice == @item.id
+        ctx =
+            item: @item
+            type: @item.constructor.TYPE
+            verbose_name: @item.constructor.VERBOSE_NAME
         tpl.load OFFICE_APP_NAME, 'preview', =>
-            @el.find('.left').html tpl.render 'preview', {}
+            @el.find('.left').html tpl.render 'preview', ctx
         tpl.load OFFICE_APP_NAME, 'preview_right', =>
             @el.find('.right').html tpl.render 'preview_right', {}
 
