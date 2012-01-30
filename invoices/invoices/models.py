@@ -16,7 +16,7 @@ class Invoice(models.Model):
     SALE_TYPE_SERVICE = 1
     SALE_TYPE_COMMODITY = 2
 
-    SALE_TYPES = (
+    SALE_TYPE_CHOICES = (
         (SALE_TYPE_SERVICE, _(u'usługa')),
         (SALE_TYPE_COMMODITY, _(u'towar'))
     )
@@ -27,10 +27,10 @@ class Invoice(models.Model):
     STATUS_PAID = 4
 
     STATUS_CHOICES = (
-        (STATUS_TOBEPAID, _('to be paid')),
-        (STATUS_OVERDUE, _('overdue')),
-        (STATUS_DRAFT, _('draft')),
-        (STATUS_PAID, _('paid')),
+        (STATUS_TOBEPAID, u'do zapłaty'),#_('to be paid')),
+        (STATUS_OVERDUE, u'przeterminowane'),#_('overdue')),
+        (STATUS_DRAFT, u'szkic'), #_('draft')),
+        (STATUS_PAID, u'zapłacone') #_('paid')),
 
     )
 
@@ -45,7 +45,7 @@ class Invoice(models.Model):
             default=settings.PAYMENTS[0][0])
     payment_type = models.PositiveSmallIntegerField(u'sposób płatności', choices=settings.PAYMENTS, 
             default=settings.PAYMENTS[0][0])
-    sale_type = models.PositiveSmallIntegerField(u'rodzaj sprzedaży', choices=SALE_TYPES,
+    sale_type = models.PositiveSmallIntegerField(u'rodzaj sprzedaży', choices=SALE_TYPE_CHOICES,
             default=SALE_TYPE_SERVICE, null=True, blank=True)
 
     customer_content_type = models.ForeignKey(ContentType)

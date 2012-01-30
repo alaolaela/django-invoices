@@ -1,6 +1,9 @@
-class GrossComputation
+class InvoiceItem extends models.InvoiceItem
+    construct: ->
+        super
+        @gross_price = @compute_gross()
+
     compute_gross: =>
-        @net_price * (1 + @tax  / 100)
+        @net_price * (100 + @tax) / 100
     
-mixin_include models.VatInvoice, GrossComputation
-mixin_include models.ProformaInvoice, GrossComputation
+models.InvoiceItem = InvoiceItem
