@@ -30,6 +30,8 @@ class Invoices extends Spine.Controller
         models.ProformaInvoice.fetch data: "status=#{@inv_status}"
         models.VatInvoice.bind("refresh", (items) => @add_invoice(items, models.VatInvoice))
         models.ProformaInvoice.bind("refresh", (items) => @add_invoice(items, models.ProformaInvoice))
+        models.VatInvoice.bind("change", (item) => @invoice_changed(item, models.VatInvoice))
+        models.ProformaInvoice.bind("change", (item) => @invoice_changed(item, models.ProformaInvoice))
 
     add_invoice: (items, model_cls) =>
         filterted_items = ((new Invoice(item: item)).render() for item in items when item.status == @inv_status)
@@ -47,7 +49,13 @@ class Invoices extends Spine.Controller
             if @el.find("#invoice-#{a.item.constructor.TYPE}-#{a.item.id}").length
                 continue
             @append a
-
+    
+    invoice_changed: (item, model_cls) =>
+        if item.status != @inv_status
+            @el.find("#invoice-#{item.constructor.TYPE}-#{item.id}").parent().remove()
+        else
+            @add_invoice([item], model_cls)
+    
     delete: =>
         for check in @el.find("input:checked")
             $(check).parent().item().destroy()
