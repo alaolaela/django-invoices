@@ -154,7 +154,7 @@ class Invoices extends Spine.Controller
 
     mark_as_paid: =>
         @iterate_checked (item) =>
-            item.item.mark_paid
+            item.item.mark_paid()
 
     iterate_checked: (func) =>
         checks = @el.find('input:checked')
