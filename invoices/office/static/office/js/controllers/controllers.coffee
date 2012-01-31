@@ -294,10 +294,9 @@ class InvoicePreview extends Spine.Controller
                 (new ComputeValue(@el, @el.find('.goods table tbody'))).compute_values(target: $(item_row).find('td.net_price span'))
         tpl.load OFFICE_APP_NAME, 'preview_right', =>
             @el.find('.right').html tpl.render 'preview_right', {}
-            console.log parseInt(@inv_type), conf.INVOICE_TYPE_VAT
-            if parseInt(@inv_type) is conf.INVOICE_TYPE_VAT
+            if parseInt(@inv_type) == conf.INVOICE_TYPE_VAT
                 @el.find('.right .intovat').hide()
-            else:
+            else
                 @el.find('.right .intovat').show()
 
     print: (e) =>
