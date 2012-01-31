@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import re
 from datetime import date
 
-from django.db import models
+from django.db import models, connection
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext_lazy as _
@@ -81,6 +81,24 @@ class Invoice(models.Model):
     def validate_key(cls, key):
         return re.match(cls.KEY_PATTERN_REGEX, key) and \
                 not cls.objects.filter(key__iexact=key).exists()
+
+    @classmethod
+    def get_total_income(cls):
+        cursor = connection.cursor()
+        tab = InvoiceItem._meta.db_table
+        tab_inv = Invoice._meta.db_table
+        tab_inv_t = VatInvoice._meta.db_table
+        res = cursor.execute('SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price) from %(tab)s'\
+                ' INNER JOIN %(tab_inv_t)s ON "%(tab_inv_t)s".invoice_ptr_id="%(tab)s"."invoice_id"'\
+                ' INNER JOIN %(tab_inv)s ON "%(tab_inv)s".id="%(tab)s"."invoice_id"'\
+                ' WHERE status!=%(status_draft)d'\
+                % {'tab': tab, 'tab_inv': tab_inv, 'tab_inv_t': tab_inv_t,
+                   'status_draft': cls.STATUS_DRAFT}).fetchall()
+        return res[0][0]/100
+
+    @classmethod
+    def get_total_debt(cls):
+        return 0
 
 
 INVOICE_TYPE_VAT = 1
