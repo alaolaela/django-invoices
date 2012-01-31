@@ -101,6 +101,9 @@ class Invoice extends Spine.Controller
         @
 
     remove: =>
+        @item.unbind("destroy", @remove)
+        @item.unbind("change", @change)
+        @item.unbind("change-local", @change)
         @el.remove()
 
     change: (inv) =>
@@ -140,7 +143,7 @@ class Invoices extends Spine.Controller
     add_invoice: (items, model_cls) =>
         if not items.length
             return
-        filterted_items = ((new Invoice(item: item, inv_tpl: @inv_tpl)).render() for item in items when @filter_function(item, @inv_param))
+        filterted_items = ((new Invoice(item: item, inv_tpl: @inv_tpl)).render() for item in items when @filter_function(item, @inv_param) and not item.destroyed)
         if not filterted_items.length
             return
         items_ids = (item.id for item in items  when  @filter_function(item, @inv_param))
@@ -189,7 +192,7 @@ class Invoices extends Spine.Controller
 
     delete: =>
         @iterate_checked (item) =>
-            item.item.destroy()
+            item.item.constructor.find(item.item.id).destroy()
 
     print: =>
         @iterate_checked (item) =>
