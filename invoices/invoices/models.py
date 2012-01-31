@@ -104,6 +104,9 @@ class Invoice(models.Model):
                 % {'tab': tab, 'tab_inv': tab_inv, 'tab_inv_t': tab_inv_t,
                    'status_draft': cls.STATUS_DRAFT})
         res = cursor.fetchall()
+        val = res[0][0]
+        if not val:
+            return 0
         return res[0][0]/100
 
     @classmethod
