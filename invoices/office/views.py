@@ -76,7 +76,7 @@ def save_form(request, invoice_type, invoice_id=None):
         errors = True
 
     if not errors:
-        new_invoice = invoice_form.save()
+        new_invoice = invoice_form.save(commit=False)
         new_invoice.status = new_invoice.DEFAULT_STATUS
         new_invoice.save()
         
