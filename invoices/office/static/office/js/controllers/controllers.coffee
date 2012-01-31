@@ -301,7 +301,9 @@ class InvoicePreview extends Spine.Controller
         "click .button.print": "print"
         "click .button.mark_as_paid": "mark_as_paid"
         "click .button.download": "download"
+        "click .button.edit": "edit"
         "click .button.intovat": "into_vat"
+
     constructor: ->
         super
         @model_cls = models[conf.INVOICE_MODELS[parseInt @inv_type]]
@@ -361,6 +363,9 @@ class InvoicePreview extends Spine.Controller
         document.location.hash = "/"
         window.quick_msg "#{@item.key}", "Faktura o numerze #{@item.key} usunięta."
         @item.destroy()
+
+    edit: (e) =>
+        document.location.hash = "/edit-invoice/#{conf.INVOICE_TYPES_REV[@item.constructor.TYPE]}/#{@item.id}"
 
     into_vat: (e) =>
         @item.into_vat (data) =>
