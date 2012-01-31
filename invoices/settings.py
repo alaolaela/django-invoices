@@ -16,7 +16,7 @@ CURRENCY_EUR = 1
 CURRENCY_PLN = 2
 CURRENCIES = getattr(settings, 'INVOICES_CURRENCIES', (
     (CURRENCY_EUR, _(u'EUR')),
-    (CURRENCY_PLN, _(u'PLN')),
+    #(CURRENCY_PLN, _(u'PLN')),
     ))
 
 CUSTOMER_MODELS = getattr(settings, 'INVOICES_CUSTOMER_MODELS', ())

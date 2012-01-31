@@ -347,7 +347,7 @@ class InvoicePreview extends Spine.Controller
             @el.find('.right').html tpl.render 'preview_right', {}
             if parseInt(@inv_type) is conf.INVOICE_TYPE_VAT
                 @el.find('.right .intovat').hide()
-            else:
+            else
                 @el.find('.right .intovat').show()
 
     print: (e) =>
@@ -360,7 +360,9 @@ class InvoicePreview extends Spine.Controller
         @item.mark_paid()
 
     delete: (e) =>
-        @item.delete()
+        document.location.hash = "/"
+        window.quick_msg "#{@item.key}", "Faktura o numerze #{@item.key} usunięta."
+        @item.destroy()
 
     into_vat: (e) =>
         @item.into_vat (data) =>

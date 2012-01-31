@@ -2,11 +2,13 @@
 class InvoiceAddition extends Spine.Controller
     INVOICES_TPL_ADDR: '/invoice/formtpl/'
     CHOICES_ADDR: '/invoice/choices/'
+    CUSTOMER_DATA_ADDR: '/invoice/customerdata/'
     PRODUCTS_SEARCH_ADDR: '/invoice/products/'
     INVOICES_SAVE_ADDR: '/invoice/formsave/'
 
     events:
         "change #id_customer_content_type": "customer_type_chosen"
+        "change #id_customer_object_id": "customer_chosen"
         "click .add_new_product": "new_invoice_item"
         "click a.delete_commodity": "delete_invoice_item"
         "change .quantity input": "compute_values"
@@ -64,7 +66,19 @@ class InvoiceAddition extends Spine.Controller
                     text: rec[0]
                 )
                 sel_customer.append new_opt
+            sel_customer.change()
+        , 'json'
 
+    customer_chosen: (e) =>
+        customer_id = $(e.target).val()
+        ct_id = $('#id_customer_content_type').val()
+        $.get "#{@CUSTOMER_DATA_ADDR}#{ct_id}/#{customer_id}/", (data) =>
+            cd = data.customer_data
+            invoice_name = if cd.name then cd.name else cd.name
+            invoice_addr = if cd.invoice_address then cd.invoice_address else cd.address
+            invoice_addr2 = if cd.invoice_postal_code and cd.invoice_city then "#{cd.invoice_postal_code} #{cd.invoice_city}" else "#{cd.postal_code} #{cd.city}"
+            
+            $('#customer-data').html "#{invoice_name}<br />#{invoice_addr}<br />#{invoice_addr2}"
         , 'json'
 
     new_invoice_item: (e) =>

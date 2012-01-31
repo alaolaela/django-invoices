@@ -108,3 +108,10 @@ table.client_data td {vertical-align: bottom;}
 td.label { visibility: hidden; }
 input.error, select.error, textarea.error { background-color: #EDACA4; }
 input.info, select.info, textarea.info { border-color: #00d500; }
+
+
+#customer-data {
+    clear: left;
+    padding: 50px 0 0;
+    font-size: 12px;
+}

@@ -6,7 +6,7 @@ from django.conf.urls import url, patterns
 
 from .views import index, render_form, get_choices, products_search,\
         save_form, render_invoice, invoice_additional_info, total_sum_by_status,\
-        total_sum_by_type, prof_into_vat
+        total_sum_by_type, prof_into_vat, get_customerdata
 
 base_invoice = '^formsave/(?P<invoice_type>\d)/'
 urlpatterns = patterns('',
@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url('%s$' % base_invoice, save_form),
     url('%s(?P<invoice_id>\d+)/$' % base_invoice, save_form),
     url('^choices/(?P<ct_id>\d+)/$', get_choices),
+    url('^customerdata/(?P<ct_id>\d+)/(?P<customer_id>\d+)/$', get_customerdata),
     url('^profintovat/(?P<inv_id>\d+)/$', prof_into_vat),
     url('^products/$', products_search),
     url('^render/\.(?P<format>\w{2,4})$', render_invoice),
