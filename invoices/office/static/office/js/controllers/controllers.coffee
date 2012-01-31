@@ -308,7 +308,9 @@ class InvoicePreview extends Spine.Controller
         @item.delete()
 
     into_vat: (e) =>
-        @item.into_vat()
+        @item.into_vat (data) =>
+            document.location.hash = "/"
+            window.quick_msg "#{@item.key}", "Faktura VAT o numerze #{data.key} utworzna."
 
 
 window.controllers = {}
