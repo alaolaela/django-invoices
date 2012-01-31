@@ -66,6 +66,18 @@ class Invoice(models.Model):
             self.key = self.generate_next_key()
         return super(Invoice, self).save(*args, **kwargs)
 
+    @property
+    def total_net_price(self):
+        return sum((i.net_price for i in self.items.all()))
+
+    @property
+    def total_gross_price(self):
+        return sum((i.gross_price for i in self.items.all()))
+
+    @property
+    def total_tax_value(self):
+        return sum((i.tax_value for i in self.items.all()))
+
     @classmethod
     def generate_next_key(cls):
         month_key_invs = cls.objects.filter(key__regex=cls.KEY_PATTERN % {'num': '\d+',
@@ -158,7 +170,7 @@ INVOICE_TYPES = {
 }
 
 class InvoiceItem(models.Model):
-    invoice = models.ForeignKey(Invoice, verbose_name='items')
+    invoice = models.ForeignKey(Invoice, verbose_name='items', related_name='items')
     name = models.TextField(u'nazwa')
     class_code = models.CharField(u'pkwiu', max_length=100)
     unit = models.CharField(u'jednostka miary', max_length=10)
@@ -176,6 +188,18 @@ class InvoiceItem(models.Model):
 
     def __unicode__(self):
         return u'%s - %s' % (self.invoice, self.product)
+
+    @property
+    def total_net_price(self):
+        return float(self.quantity) * self.net_price
+
+    @property
+    def tax_value(self):
+        return self.total_net_price * (self.tax / 100)
+
+    @property
+    def gross_price(self):
+        return self.total_net_price * ((self.tax / 100) + 1)
 
     @classmethod
     def get_for_autocomplete(cls, query):
