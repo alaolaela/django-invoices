@@ -1,2 +1,2 @@
-<a href="#" id="save-invoice" class="right-button">Zapisz</a>
-<a href="#/" class="right-button">Lista</a>
+<a href="#/" class="button">Powrót</a><br /><br />
+<button id="save-invoice" class="button">Zapisz</button>
