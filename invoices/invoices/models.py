@@ -97,12 +97,13 @@ class Invoice(models.Model):
         tab = InvoiceItem._meta.db_table
         tab_inv = Invoice._meta.db_table
         tab_inv_t = VatInvoice._meta.db_table
-        res = cursor.execute('SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price) from %(tab)s'\
+        cursor.execute('SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price) from %(tab)s'\
                 ' INNER JOIN %(tab_inv_t)s ON "%(tab_inv_t)s".invoice_ptr_id="%(tab)s"."invoice_id"'\
                 ' INNER JOIN %(tab_inv)s ON "%(tab_inv)s".id="%(tab)s"."invoice_id"'\
                 ' WHERE status!=%(status_draft)d'\
                 % {'tab': tab, 'tab_inv': tab_inv, 'tab_inv_t': tab_inv_t,
-                   'status_draft': cls.STATUS_DRAFT}).fetchall()
+                   'status_draft': cls.STATUS_DRAFT})
+        res = cursor.fetchall()
         return res[0][0]/100
 
     @classmethod
