@@ -19,7 +19,7 @@ from apps.documents.views import PDF_DOCUMENT_CONFIG, PDF_PREVIEW_DOCUMENT_CONFI
         renderer_document_pdf
 
 from ..invoices.forms import InvoiceItemFormset, INVOICE_TYPES_FORMS
-from ..invoices.models import InvoiceItem, Invoice, ProformaInvoice, INVOICE_TYPES
+from ..invoices.models import InvoiceItem, Invoice, VatInvoice, ProformaInvoice, INVOICE_TYPES
 
 STATUS_OK = 'ok'
 STATUS_ERROR = 'error'
@@ -195,9 +195,13 @@ ZIPPED_DOCUMENTS_CONFIG['renderer'] = renderer_documents_zipped
 
 @render_with_formats(pdf=PDF_DOCUMENT_CONFIG, zip=ZIPPED_DOCUMENTS_CONFIG)
 def render_invoice(request, format):
-    ids = request.GET.getlist('id')
-    invoices = Invoice.objects.filter(id__in=ids)
     if format == 'pdf':
-        return {'invoice': invoices[0]}
+        try:
+            invoice = VatInvoice.objects.get(id=request.GET.getlist('id')[0])
+        except VatInvoice.DoesNotExist:
+            invoice = ProformaInvoice.objects.get(id=request.GET.getlist('id')[0])
+        return {'invoice': invoice}
     else:
+        ids = request.GET.getlist('id')
+        invoices = Invoice.objects.filter(id__in=ids)
         return {'invoices': invoices}
