@@ -132,6 +132,30 @@ def invoice_additional_info(request, invoice_ids):
     
     return info
 
+@json_response
+def total_sum_by_status(request, status):
+    cursor = connection.cursor()
+    status = int(status)
+    tab = InvoiceItem._meta.db_table
+    tab_inv = Invoice._meta.db_table
+    res = cursor.execute("SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price)  from %(tab)s"\
+            " LEFT JOIN %(tab_inv)s ON \"%(tab_inv)s\".id=\"%(tab)s\".\"invoice_id\""\
+            "WHERE status=%(status)d" \
+            % {'tab': tab, 'tab_inv': tab_inv, 'status': status}).fetchall()
+    return res[0][0]/100
+
+@json_response
+def total_sum_by_type(request, inv_type):
+    cursor = connection.cursor()
+    inv_type = int(inv_type)
+    tab = InvoiceItem._meta.db_table
+    inv_cls = INVOICE_TYPES[inv_type]
+    tab_inv_t = inv_cls._meta.db_table
+    res = cursor.execute('SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price) from %(tab)s'\
+            ' INNER JOIN %(tab_inv_t)s ON "%(tab_inv_t)s".invoice_ptr_id="%(tab)s"."invoice_id"'\
+            % {'tab': tab, 'tab_inv_t': tab_inv_t}).fetchall()
+    return res[0][0]/100
+
 def renderer_documents_zipped(request, view_output, **kwargs):
     view_output.update({'document': request.document})
     files = []
