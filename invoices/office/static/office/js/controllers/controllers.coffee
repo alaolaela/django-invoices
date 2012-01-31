@@ -97,6 +97,7 @@ class Invoice extends Spine.Controller
                 item: @item
                 type: @item.constructor.TYPE
                 verbose_name: @item.constructor.VERBOSE_NAME
+            @item.constructor.trigger('item-rendered')
         @
 
     remove: =>
@@ -120,6 +121,8 @@ class Invoices extends Spine.Controller
         models.ProformaInvoice.bind("refresh", (items) => @add_invoice(items, models.ProformaInvoice))
         models.VatInvoice.bind("change", (items) => @invoice_changed(items, models.VatInvoice))
         models.ProformaInvoice.bind("change", (items) => @invoice_changed(items, models.ProformaInvoice))
+        models.VatInvoice.bind("item-rendered", @compute_total)
+        models.ProformaInvoice.bind("item-rendered", @compute_total)
         @invoiceids = []
 
     add_invoice: (items, model_cls) =>
@@ -152,6 +155,16 @@ class Invoices extends Spine.Controller
         else
             @add_invoice([item], model_cls)
     
+    compute_total: =>
+        sum = 0
+        for row in @el.find('tr')
+            val = $(row).find('.gross_value-column span').text()
+            if not val
+                continue
+            sum += parseFloat val
+        @el.parents('.overview').next().find('.total_gross_value').text sum.toFixed 2
+            
+
     delete: =>
         @iterate_checked (item) =>
             item.item.destroy()
