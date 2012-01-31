@@ -5,7 +5,7 @@
             {{#blocks}} 
             <div class="overview_header">
                 <h4 class="overview_type invoice{{type}}">{{ name }}</h4>
-                <a class="fl" href="#" >Pokaż wszystkie</a>
+                <!-- <a class="fl" href="#" >Pokaż wszystkie</a> -->
             </div><!-- overview_header -->
             <div id="{{ id }}" class="overview">
                 <table class="overview">
@@ -24,7 +24,7 @@
                 </table>
             </div><!-- overview -->
             <div class="overview_footer">
-                <p class="fr total_gross">Suma brutto:  <span class="total_gross_value">23 450</span>€</p>
+                <p class="fr total_gross">Suma brutto:  <span class="total_gross_value">0</span>€</p>
                 <img src="{{STATIC_URL}}office/css/images/overview-bottom-arrow.png" class="fl" />
                 {{#paid_action}}<input id="" type="submit" class="fl mark_as_paid" data-ref="{{type}}" value="Oznacz jako zapłacone" />{{/paid_action}}
                 <input id="" type="submit" class="fl print" value="Drukuj" data-ref="{{type}}" />
