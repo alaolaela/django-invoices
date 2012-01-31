@@ -126,9 +126,10 @@ def invoice_additional_info(request, invoice_ids):
         raise Http404('Incorrect ids')
     cursor = connection.cursor()
     tab = InvoiceItem._meta.db_table
-    res = cursor.execute("SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price), invoice_id  from %(tab)s"\
+    cursor.execute("SELECT SUM((100 + %(tab)s.tax) * %(tab)s.net_price), invoice_id  from %(tab)s"\
             " WHERE invoice_id in (%(ids)s) GROUP BY invoice_id" % {'tab': tab,
-                'ids': ','.join(map(str, invoice_ids_int))}).fetchall()
+                'ids': ','.join(map(str, invoice_ids_int))})
+    res = cursor.fetchall()
     
     info = {inv_id: {'gross_price': val / 100} for val, inv_id in res}
     for invoice in Invoice.objects.filter(id__in=invoice_ids_int):
