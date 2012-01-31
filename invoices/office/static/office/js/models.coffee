@@ -1,8 +1,8 @@
 InvoiceMixIn = {
 
     mark_paid: ->
-        item.item.status = models.Invoice.STATUS_PAID
-        item.item.save()
+        @status = @STATUS_PAID
+        @save()
 
     print: ->
         @status = @STATUS_TOBEPAID
@@ -10,7 +10,7 @@ InvoiceMixIn = {
         window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{@id}", "_blank"
 
     download: ->
-        window.open "/invoice/render/.zip?doc_codename=INVOICEid=#{@item.id}"
+        window.open "/invoice/render/.zip?doc_codename=INVOICEid=#{@id}"
 
 }
 
