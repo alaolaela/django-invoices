@@ -26,9 +26,13 @@ class App extends Spine.Controller
                     inv_type: params.inv_type
                     inv_id: params.inv_id
                     el: $('#content')
+            "/type/": ->
+                rc()
+                current_controller = new controllers.TypeInvoices el: $('#content')
             "/": ->
                 rc()
                 current_controller = new controllers.Index el: $('#content')
+                current_controller.init_controller()
         Spine.Route.setup()
 
         
