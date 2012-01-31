@@ -92,6 +92,7 @@ class Invoice extends Spine.Controller
     render: (item) =>
         if (item)
             @item = item
+        console.log @item
         tpl.load OFFICE_APP_NAME, @inv_tpl, =>
             @html tpl.render @inv_tpl,
                 item: @item
@@ -138,6 +139,7 @@ class Invoices extends Spine.Controller
                     inv = model_cls.find(inv_id)
                     inv.gross_price = gross_price.toFixed 2
                     inv.get_status_display = add_info.get_status_display
+                    inv.customer_name = add_info.customer_name
                     inv.trigger('change-local', inv)
             ,'json'
         for a in filterted_items

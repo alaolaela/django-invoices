@@ -139,6 +139,7 @@ def invoice_additional_info(request, invoice_ids):
         key['customer_invoice_data'] = invoice.customer.get_invoice_data()
         key['get_payment_type_display'] = invoice.get_payment_type_display()
         key['get_status_display'] = invoice.get_status_display()
+        key['customer_name'] = invoice.customer.name
     
     return info
 
