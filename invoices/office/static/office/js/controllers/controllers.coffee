@@ -322,7 +322,9 @@ class InvoicePreview extends Spine.Controller
         @item.mark_paid()
 
     delete: (e) =>
-        @item.delete()
+        document.location.hash = "/"
+        window.quick_msg "#{@item.key}", "Faktura o numerze #{@item.key} usunięta."
+        @item.destroy()
 
     into_vat: (e) =>
         @item.into_vat (data) =>

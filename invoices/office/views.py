@@ -99,6 +99,12 @@ def get_choices(request, ct_id):
     m_cls = ct.model_class()
     return [(unicode(m), m.id) for m in m_cls.objects.all()]
 
+@json_response
+def get_customerdata(request, ct_id, customer_id):
+    ct = ContentType.objects.get(id=ct_id)
+    m_cls = ct.model_class()
+    customer = m_cls.objects.get(id=customer_id)
+    return {'customer_data': customer.get_data()}
 
 @json_response
 def products_search(request):
