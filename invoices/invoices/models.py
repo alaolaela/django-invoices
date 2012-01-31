@@ -61,6 +61,12 @@ class Invoice(models.Model):
     def __unicode__(self):
         return self.key
     
+    def save(self, *args, **kwargs):
+        if self.id and not self.key:
+            self.key = self.generate_next_key()
+            print self.key
+        return super(Invoice, self).save(*args, **kwargs)
+
     @classmethod
     def generate_next_key(cls):
         month_key_invs = cls.objects.filter(key__regex=cls.KEY_PATTERN % {'num': '\d+',

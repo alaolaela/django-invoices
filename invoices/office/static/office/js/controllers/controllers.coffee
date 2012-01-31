@@ -208,6 +208,7 @@ class InvoicePreview extends Spine.Controller
         "click .button.print": "print"
         "click .button.mark_as_paid": "mark_as_paid"
         "click .button.download": "download"
+        "click .button.intovat": "into_vat"
     constructor: ->
         super
         @model_cls = models[conf.INVOICE_MODELS[parseInt @inv_type]]
@@ -252,6 +253,9 @@ class InvoicePreview extends Spine.Controller
 
     delete: (e) =>
         @item.delete()
+
+    into_vat: (e) =>
+        @item.into_vat()
 
 
 window.controllers = {}
