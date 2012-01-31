@@ -4,8 +4,9 @@ InvoiceMixIn =
         @save()
 
     print: ->
-        @status = @.constructor.STATUS_TOBEPAID
-        @save()
+        if @status not in [@.constructor.STATUS_PAID, @.constructor.STATUS_TOBEPAID]
+            @status = @.constructor.STATUS_TOBEPAID
+            @save()
         window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{@id}", "_blank"
 
     download: ->
