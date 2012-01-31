@@ -92,8 +92,8 @@ class Invoice extends Spine.Controller
     render: (item) =>
         if (item)
             @item = item
-        tpl.load OFFICE_APP_NAME, 'inv_t', =>
-            @html tpl.render 'inv_t', 
+        tpl.load OFFICE_APP_NAME, @inv_tpl, =>
+            @html tpl.render @inv_tpl,
                 item: @item
                 type: @item.constructor.TYPE
                 verbose_name: @item.constructor.VERBOSE_NAME
@@ -108,32 +108,46 @@ class Invoice extends Spine.Controller
 class Invoices extends Spine.Controller
     constructor: ->
         super
-        models.VatInvoice.fetch data: "status=#{@inv_status}"
-        models.ProformaInvoice.fetch data: "status=#{@inv_status}"
+        if @inv_query
+            inv_filter = "#{@inv_query}=#{@inv_param}"
+            models.VatInvoice.fetch data: inv_filter
+            models.ProformaInvoice.fetch data: inv_filter
+        else
+            models.VatInvoice.fetch()
+            models.ProformaInvoice.fetch()
+
         models.VatInvoice.bind("refresh", (items) => @add_invoice(items, models.VatInvoice))
         models.ProformaInvoice.bind("refresh", (items) => @add_invoice(items, models.ProformaInvoice))
-        models.VatInvoice.bind("change", (item) => @invoice_changed(item, models.VatInvoice))
-        models.ProformaInvoice.bind("change", (item) => @invoice_changed(item, models.ProformaInvoice))
+        models.VatInvoice.bind("change", (items) => @invoice_changed(items, models.VatInvoice))
+        models.ProformaInvoice.bind("change", (items) => @invoice_changed(items, models.ProformaInvoice))
+        @invoiceids = []
 
     add_invoice: (items, model_cls) =>
-        filterted_items = ((new Invoice(item: item)).render() for item in items when item.status == @inv_status)
+        if not items.length
+            return
+        filterted_items = ((new Invoice(item: item, inv_tpl: @inv_tpl)).render() for item in items when @filter_function(item, @inv_param))
         if not filterted_items.length
             return
-        items_ids = (item.id for item in items  when item.status == @inv_status)
+        items_ids = (item.id for item in items  when  @filter_function(item, @inv_param))
         $.get conf.INVOICE_ADD_INFO_ADDR + items_ids.join(','), (data) =>
                 for inv_id, add_info of data
                     gross_price = add_info.gross_price
                     inv = model_cls.find(inv_id)
                     inv.gross_price = gross_price.toFixed 2
+                    inv.get_status_display = add_info.get_status_display
                     inv.trigger('change-local', inv)
             ,'json'
         for a in filterted_items
+            if a.item.id in @invoiceids
+                continue
+            @invoiceids.push a.item.id
             if @el.find("#invoice-#{a.item.constructor.TYPE}-#{a.item.id}").length
                 continue
             @append a
     
     invoice_changed: (item, model_cls) =>
-        if item.status != @inv_status
+        @invoiceids = []
+        if item.status != @inv_param
             @el.find("#invoice-#{item.constructor.TYPE}-#{item.id}").parent().remove()
         else
             @add_invoice([item], model_cls)
@@ -168,8 +182,7 @@ class Index extends Spine.Controller
         "click input.mark_as_paid": "mark_invoice_as_paid"
         "click input.download": "download_invoice"
 
-    constructor: ->
-        super
+    init_controller: =>
         tpl.load OFFICE_APP_NAME, 'index', =>
             controller_names = [
                 [models.Invoice.STATUS_DRAFT, 'drafts', 'Szkice'],
@@ -184,7 +197,16 @@ class Index extends Spine.Controller
                     text
             @el.find('.left').html tpl.render 'index', {blocks: ({type: c[0], id: c[1], name: c[2], 'paid_action': (text) -> paid_action(c[0], text)} for c in controller_names)}
             @controllers = {}
-            (@controllers[record[0]] = (new Invoices inv_status: record[0], el: $("##{record[1]} table tbody")) for record in controller_names)
+            filter_items = (item, param) -> item.status == param
+            for record in controller_names
+                inv_con = new Invoices
+                    filter_function: filter_items
+                    inv_param: record[0]
+                    el: $("##{record[1]} table tbody")
+                    inv_query: 'status'
+                    inv_tpl: 'inv_t'
+                @controllers[record[0]] = inv_con
+
 
         tpl.load OFFICE_APP_NAME, 'index_right', =>
             @el.find('.right').html tpl.render 'index_right', {}
@@ -201,6 +223,37 @@ class Index extends Spine.Controller
     mark_invoice_as_paid: (e) =>
         @controllers[$(e.target).data('ref')].mark_as_paid()
     
+class AllInvoices extends Spine.Controller
+    constructor: ->
+        super
+
+class TypeInvoices extends Index
+    constructor: ->
+        super
+        tpl.load OFFICE_APP_NAME, 'index', =>
+            controller_names = [
+                [conf.INVOICE_TYPE_VAT, 'vat', 'Faktury VAT'],
+                [conf.INVOICE_TYPE_PROFORMA, 'proforma', 'Faktury proforma'],
+            ]
+            paid_action = (invoice_status, text) ->
+                if invoice_status == models.Invoice.STATUS_PAID
+                    ''
+                else
+                    text
+            @el.find('.left').html tpl.render 'index', {blocks: ({type: c[0], id: c[1], name: c[2], 'paid_action': (text) -> paid_action(c[0], text)} for c in controller_names)}
+            @controllers = {}
+            filter_items = (item, param) -> item.constructor.TYPE == param
+            for record in controller_names
+                inv_con = new Invoices
+                    filter_function: filter_items
+                    inv_param: record[0]
+                    el: $("##{record[1]} table tbody")
+                    inv_tpl: 'inv_t_t'
+                @controllers[record[0]] = inv_con
+
+
+        tpl.load OFFICE_APP_NAME, 'index_right', =>
+            @el.find('.right').html tpl.render 'index_right', {}
 
 class InvoicePreview extends Spine.Controller
     events:
@@ -261,4 +314,5 @@ class InvoicePreview extends Spine.Controller
 window.controllers = {}
 window.controllers.Index = Index
 window.controllers.InvoicePreview = InvoicePreview
+window.controllers.TypeInvoices = TypeInvoices
 window.ComputeValue = ComputeValue

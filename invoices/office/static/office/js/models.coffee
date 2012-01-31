@@ -1,10 +1,10 @@
 InvoiceMixIn =
     mark_paid: =>
-        @status = @STATUS_PAID
+        @status = @.constructor.STATUS_PAID
         @save()
 
     print: =>
-        @status = @STATUS_TOBEPAID
+        @status = @.constructor.STATUS_TOBEPAID
         @save()
         window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{@id}", "_blank"
 
