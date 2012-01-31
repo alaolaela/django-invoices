@@ -92,7 +92,6 @@ class Invoice extends Spine.Controller
     render: (item) =>
         if (item)
             @item = item
-        console.log @item
         tpl.load OFFICE_APP_NAME, @inv_tpl, =>
             @html tpl.render @inv_tpl,
                 item: @item
@@ -171,13 +170,12 @@ class Invoices extends Spine.Controller
     
     release: (fun) =>
         super
-        console.log "W KONCY"
         models.VatInvoice.unbind("refresh", @vat_callback)
         models.ProformaInvoice.unbind("refresh", @prof_callback)
         models.VatInvoice.unbind("change", @vat_callback_c)
         models.ProformaInvoice.unbind("change", @prof_callback_c)
-        models.VatInvoice.unbind "item-rendered"
-        models.ProformaInvoice.unbind "item-rendered"
+        models.VatInvoice.unbind "item-rendered", @compute_total
+        models.ProformaInvoice.unbind "item-rendered", @compute_total
 
     compute_total: =>
         sum = 0
@@ -251,7 +249,6 @@ class Index extends Spine.Controller
     release: (fun) =>
         super
         for id, controller of @controllers
-            console.log controller
             controller.release()
 
     delete_invoice: (e) =>
@@ -340,7 +337,6 @@ class InvoicePreview extends Spine.Controller
             verbose_name: @item.constructor.VERBOSE_NAME
             inv_items: inv_items
 
-        console.log "MELE"
         tpl.load OFFICE_APP_NAME, 'preview', =>
             @el.find('.left').html tpl.render 'preview', ctx
             for item_row in @el.find('.goods table tbody tr')
