@@ -117,13 +117,25 @@ class Invoices extends Spine.Controller
             models.VatInvoice.fetch()
             models.ProformaInvoice.fetch()
 
-        models.VatInvoice.bind("refresh", (items) => @add_invoice(items, models.VatInvoice))
-        models.ProformaInvoice.bind("refresh", (items) => @add_invoice(items, models.ProformaInvoice))
-        models.VatInvoice.bind("change", (items) => @invoice_changed(items, models.VatInvoice))
-        models.ProformaInvoice.bind("change", (items) => @invoice_changed(items, models.ProformaInvoice))
+        models.VatInvoice.bind("refresh", @vat_callback)
+        models.ProformaInvoice.bind("refresh", @prof_callback)
+        models.VatInvoice.bind("change", @vat_callback_c)
+        models.ProformaInvoice.bind("change", @prof_callback_c)
         models.VatInvoice.bind("item-rendered", @compute_total)
         models.ProformaInvoice.bind("item-rendered", @compute_total)
         @invoiceids = []
+
+    prof_callback: (items) =>
+        @add_invoice(items, models.ProformaInvoice)
+
+    vat_callback: (items) =>
+        @add_invoice(items, models.VatInvoice)
+
+    prof_callback_c: (items) =>
+        @invoice_changed(items, models.ProformaInvoice)
+
+    vat_callback_c: (items) =>
+        @invoice_changed(items, models.VatInvoice)
 
     add_invoice: (items, model_cls) =>
         if not items.length
@@ -155,6 +167,16 @@ class Invoices extends Spine.Controller
         else
             @add_invoice([item], model_cls)
     
+    release: (fun) =>
+        super
+        console.log "W KONCY"
+        models.VatInvoice.unbind("refresh", @vat_callback)
+        models.ProformaInvoice.unbind("refresh", @prof_callback)
+        models.VatInvoice.unbind("change", @vat_callback_c)
+        models.ProformaInvoice.unbind("change", @prof_callback_c)
+        models.VatInvoice.unbind "item-rendered"
+        models.ProformaInvoice.unbind "item-rendered"
+
     compute_total: =>
         sum = 0
         for row in @el.find('tr')
@@ -224,6 +246,12 @@ class Index extends Spine.Controller
         tpl.load OFFICE_APP_NAME, 'index_right', =>
             @el.find('.right').html tpl.render 'index_right', {}
 
+    release: (fun) =>
+        super
+        for id, controller of @controllers
+            console.log controller
+            controller.release()
+
     delete_invoice: (e) =>
         @controllers[$(e.target).data('ref')].delete()
 
@@ -287,11 +315,20 @@ class InvoicePreview extends Spine.Controller
     get_item: =>
         @item = @model_cls.find @inv_id
         models.InvoiceItem.fetch data: "invoice_id=#{@item.id}"
-        models.InvoiceItem.bind "refresh", =>
-            $.get conf.INVOICE_ADD_INFO_ADDR + @item.id, (data) =>
-                for key, val of data[@item.id]
-                    @item[key] = val
-                @render()
+        models.InvoiceItem.bind "refresh", @get_item_ai
+
+    get_item_ai: =>
+        $.get conf.INVOICE_ADD_INFO_ADDR + @item.id, (data) =>
+            for key, val of data[@item.id]
+                @item[key] = val
+            @render()
+
+    release: (fun) =>
+        super
+        models.InvoiceItem.unbind "refresh", @get_item_ai
+        if @model_cls
+            @model_cls.unbind 'refresh', @get_item
+
 
     render: =>
         inv_items = models.InvoiceItem.select (inv_item) => inv_item.invoice == @item.id
@@ -301,13 +338,13 @@ class InvoicePreview extends Spine.Controller
             verbose_name: @item.constructor.VERBOSE_NAME
             inv_items: inv_items
 
+        console.log "MELE"
         tpl.load OFFICE_APP_NAME, 'preview', =>
             @el.find('.left').html tpl.render 'preview', ctx
             for item_row in @el.find('.goods table tbody tr')
                 (new ComputeValue(@el, @el.find('.goods table tbody'))).compute_values(target: $(item_row).find('td.net_price span'))
         tpl.load OFFICE_APP_NAME, 'preview_right', =>
             @el.find('.right').html tpl.render 'preview_right', {}
-            console.log parseInt(@inv_type), conf.INVOICE_TYPE_VAT
             if parseInt(@inv_type) is conf.INVOICE_TYPE_VAT
                 @el.find('.right .intovat').hide()
             else:
