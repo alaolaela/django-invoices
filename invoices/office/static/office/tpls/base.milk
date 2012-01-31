@@ -1,0 +1,15 @@
+<div id="content" class="colM">
+    <div id="content-main">
+        <table id="double-column-layout">
+            <tr>
+                <td class="left">
+                    
+                </td>
+                <td class="right">
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br class="clear" />
+</div>
