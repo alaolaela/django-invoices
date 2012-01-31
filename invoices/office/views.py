@@ -4,14 +4,13 @@ from __future__ import absolute_import
 import StringIO
 from os import fdopen, remove
 from tempfile import mkstemp
-from zipfile import ZipFile, ZIP_DEFLATED
+from zipfile import ZipFile
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import get_model
 from django.http import Http404, HttpResponse
 from django.utils.encoding import smart_str
-from django.core.servers.basehttp import FileWrapper
-from django.db import connection, transaction
+from django.db import connection
 
 
 from invoices import settings
@@ -20,7 +19,7 @@ from apps.documents.views import PDF_DOCUMENT_CONFIG, PDF_PREVIEW_DOCUMENT_CONFI
         renderer_document_pdf
 
 from ..invoices.forms import InvoiceItemFormset, INVOICE_TYPES_FORMS
-from ..invoices.models import InvoiceItem, Invoice, INVOICE_TYPES
+from ..invoices.models import InvoiceItem, Invoice, ProformaInvoice, INVOICE_TYPES
 
 STATUS_OK = 'ok'
 STATUS_ERROR = 'error'
@@ -88,6 +87,11 @@ def save_form(request, invoice_type, invoice_id=None):
 
     return resp_dat
 
+@json_response
+def prof_into_vat(request, inv_id):
+    inv = ProformaInvoice.objects.get(id=inv_id)
+    inv_v = inv.clone_as_vat()
+    return {'status': 'OK', 'key': inv_v.key}
 
 @json_response
 def get_choices(request, ct_id):

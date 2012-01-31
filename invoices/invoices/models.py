@@ -61,6 +61,11 @@ class Invoice(models.Model):
     def __unicode__(self):
         return self.key
     
+    def save(self, *args, **kwargs):
+        if self.id and not self.key:
+            self.key = self.generate_next_key()
+        return super(Invoice, self).save(*args, **kwargs)
+
     @classmethod
     def generate_next_key(cls):
         month_key_invs = cls.objects.filter(key__regex=cls.KEY_PATTERN % {'num': '\d+',
@@ -104,9 +109,16 @@ class ProformaInvoice(Invoice):
     def __unicode__(self):
         return self.key
 
-    @classmethod
-    def generate_next_key(cls):
-        return "P%s" % (super(cls, cls).generate_next_key())
+    def clone_as_vat(self):
+        attrs = dict([(f.name, getattr(self, f.name))
+                        for f in self._meta.fields
+                            if not isinstance(f, models.AutoField) and \
+                                not f in self._meta.parents.values()])
+        inv_v = VatInvoice(**attrs)
+        inv_v.key = inv_v.generate_next_key()
+        inv_v.save()
+        return inv_v
+
 
 
 INVOICE_TYPES = {

@@ -274,6 +274,7 @@ class InvoicePreview extends Spine.Controller
         "click .button.print": "print"
         "click .button.mark_as_paid": "mark_as_paid"
         "click .button.download": "download"
+        "click .button.intovat": "into_vat"
     constructor: ->
         super
         @model_cls = models[conf.INVOICE_MODELS[parseInt @inv_type]]
@@ -306,6 +307,11 @@ class InvoicePreview extends Spine.Controller
                 (new ComputeValue(@el, @el.find('.goods table tbody'))).compute_values(target: $(item_row).find('td.net_price span'))
         tpl.load OFFICE_APP_NAME, 'preview_right', =>
             @el.find('.right').html tpl.render 'preview_right', {}
+            console.log parseInt(@inv_type), conf.INVOICE_TYPE_VAT
+            if parseInt(@inv_type) is conf.INVOICE_TYPE_VAT
+                @el.find('.right .intovat').hide()
+            else:
+                @el.find('.right .intovat').show()
 
     print: (e) =>
         @item.print()
@@ -318,6 +324,11 @@ class InvoicePreview extends Spine.Controller
 
     delete: (e) =>
         @item.delete()
+
+    into_vat: (e) =>
+        @item.into_vat (data) =>
+            document.location.hash = "/"
+            window.quick_msg "#{@item.key}", "Faktura VAT o numerze #{data.key} utworzna."
 
 
 window.controllers = {}
