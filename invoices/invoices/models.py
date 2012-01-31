@@ -68,7 +68,7 @@ class Invoice(models.Model):
 
     @property
     def total_net_price(self):
-        return sum((i.net_price for i in self.items.all()))
+        return sum((i.total_net_price for i in self.items.all()))
 
     @property
     def total_gross_price(self):
@@ -195,11 +195,11 @@ class InvoiceItem(models.Model):
 
     @property
     def tax_value(self):
-        return self.total_net_price * (self.tax / 100)
+        return self.total_net_price * (float(self.tax) / 100)
 
     @property
     def gross_price(self):
-        return self.total_net_price * ((self.tax / 100) + 1)
+        return self.total_net_price * ((float(self.tax) / 100) + 1)
 
     @classmethod
     def get_for_autocomplete(cls, query):
