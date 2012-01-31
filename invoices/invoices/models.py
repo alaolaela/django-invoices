@@ -78,9 +78,18 @@ class Invoice(models.Model):
                 'year': date.today().strftime("%Y")}
 
     @classmethod
-    def validate_key(cls, key):
-        return re.match(cls.KEY_PATTERN_REGEX, key) and \
-                not cls.objects.filter(key__iexact=key).exists()
+    def validate_key_pattern(cls, key):
+        return re.match(cls.KEY_PATTERN_REGEX, key)
+
+    @classmethod
+    def validate_key(cls, key, inv_id=None):
+        exists = False
+        if inv_id:
+            exists = cls.objects.filter(key__iexact=key).exclude(id=inv_id).exists()
+        else:
+            exists = cls.objects.filter(key__iexact=key).exists()
+
+        return cls.validate_key_pattern(key) and not exists
 
 
 INVOICE_TYPE_VAT = 1

@@ -59,10 +59,11 @@ def save_form(request, invoice_type, invoice_id=None):
     
     errors = False
     resp_dat['main_form_info'] = {}
-    if 'key' in dat and not invoice_form._meta.model.validate_key(dat['key']):
+    if 'key' in dat and not invoice_form._meta.model.validate_key(dat['key'], invoice_id):
         resp_dat['key'] = invoice_form._meta.model.generate_next_key()
         dat['key'] = resp_dat['key']
-        resp_dat['main_form_info']['key'] = (u'Wygenerowano nowy numer faktury',)
+        resp_dat['main_form_info']['key'] = (u'Numer niepoprawny lub zajęty. '\
+                u'Wygenerowano nowy numer faktury',)
         errors = True
     elif 'key' not in dat:
         resp_dat['key'] = invoice_form._meta.model.generate_next_key()
