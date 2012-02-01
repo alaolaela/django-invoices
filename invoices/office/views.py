@@ -200,11 +200,13 @@ ZIPPED_DOCUMENTS_CONFIG['renderer'] = renderer_documents_zipped
 def render_invoice(request, format):
     if format == 'pdf':
         try:
-            invoice = VatInvoice.objects.get(id=request.GET.getlist('id')[0])
+            invoice = VatInvoice.objects.get(id=request.GET.get('id'))
         except VatInvoice.DoesNotExist:
-            invoice = ProformaInvoice.objects.get(id=request.GET.getlist('id')[0])
-        return {'invoice': invoice}
+            invoice = ProformaInvoice.objects.get(id=request.GET.get('id'))
+        types = (settings.PRINT_TYPE_ORIGINAL, settings.PRINT_TYPE_COPY)
+        return {'invoice': invoice, 'types': (t for t in settings.PRINT_DOCUMENT_TYPES if t[0] in types)}
     else:
         ids = request.GET.getlist('id')
         invoices = Invoice.objects.filter(id__in=ids)
-        return {'invoices': invoices}
+        types = (settings.PRINT_TYPE_ORIGINAL,)
+        return {'invoices': invoices, 'types': (t for t in settings.PRINT_DOCUMENT_TYPES if t[0] in types)}
