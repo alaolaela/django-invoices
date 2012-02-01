@@ -8,8 +8,8 @@ TAXES = getattr(settings, 'INVOICES_TAXES', ())
 PAYMENT_TRANSFER = 1
 PAYMENT_CASH = 2
 PAYMENTS = getattr(settings, 'INVOICES_PAYMENTS', (
-    (PAYMENT_TRANSFER, _(u'przelew bankowy')),
-    (PAYMENT_CASH, _(u'gotówka')),
+    (PAYMENT_TRANSFER, _('bank transfer')),
+    (PAYMENT_CASH, _('cash')),
 ))
 
 CURRENCY_EUR = 1
@@ -29,8 +29,8 @@ PRINT_TYPE_COPY = 2
 PRINT_TYPE_DUPLICATED_ORIGINAL = 3
 PRINT_TYPE_DUPLICATED_COPY = 4
 PRINT_DOCUMENT_TYPES = (
-    (PRINT_TYPE_ORIGINAL, u'Oryginał'),
-    (PRINT_TYPE_COPY, u'Kopia'),
-    (PRINT_TYPE_DUPLICATED_ORIGINAL, u'Duplikat oryginału'),
-    (PRINT_TYPE_DUPLICATED_COPY, u'Duplikat kopii'),
+    (PRINT_TYPE_ORIGINAL, _('original')),
+    (PRINT_TYPE_COPY, _('copy')),
+    (PRINT_TYPE_DUPLICATED_ORIGINAL, _('duplicated original')),
+    (PRINT_TYPE_DUPLICATED_COPY, _('duplicated copy')),
 )
