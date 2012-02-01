@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 import re
-from datetime import date
+from datetime import date, timedelta
 
 from django.db import models, connection
 from django.contrib.contenttypes.models import ContentType
@@ -38,9 +38,10 @@ class Invoice(models.Model):
     DEFAULT_STATUS = STATUS_DRAFT
 
     key = models.CharField(u'numer faktury', max_length=20, unique=True)
-    date_created = models.DateField(u'data wystawienia')
-    date_sale = models.DateField(u'data sprzedaży')
-    date_payment = models.DateField(u'termin zapłaty')
+    date_created = models.DateField(u'data wystawienia', default=date.today)
+    date_sale = models.DateField(u'data sprzedaży', default=date.today)
+    date_payment = models.DateField(u'termin zapłaty', 
+            default=lambda: date.today() + timedelta(days=21))
     currency = models.PositiveSmallIntegerField(u'waluta', choices=settings.CURRENCIES,
             default=settings.PAYMENTS[0][0])
     payment_type = models.PositiveSmallIntegerField(u'sposób płatności', choices=settings.PAYMENTS, 
@@ -174,8 +175,8 @@ INVOICE_TYPES = {
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, verbose_name='items', related_name='items')
     name = models.TextField(u'nazwa')
-    class_code = models.CharField(u'pkwiu', max_length=100)
-    unit = models.CharField(u'jednostka miary', max_length=10)
+    class_code = models.CharField(u'pkwiu', max_length=100, blank=True)
+    unit = models.CharField(u'jednostka miary', max_length=10, blank=True)
     quantity = models.DecimalField(u'liczba/ilość', max_digits=8, decimal_places=2)
     product_content_type = models.ForeignKey(ContentType, null=True, blank=True)
     product_object_id =  models.PositiveIntegerField(db_index=True, null=True, blank=True)

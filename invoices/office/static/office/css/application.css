@@ -104,6 +104,8 @@ table.client_data td {vertical-align: bottom;}
 .goods .total_cost td p {margin-right: 25px;}
 .goods td span.head {font-size: 14px; font-weight: bold;}
 
+p.help-text { clear: both; color: #aaa; }
+
 .empty {display: none;}
 td.label { visibility: hidden; }
 input.error, select.error, textarea.error { background-color: #EDACA4; }

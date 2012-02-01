@@ -11,7 +11,7 @@ from django.db.models import get_model
 from django.http import Http404, HttpResponse
 from django.utils.encoding import smart_str
 from django.db import connection
-
+from django.contrib.auth.decorators import login_required
 
 from invoices import settings
 from seautils.views.decorators import render_with, json_response, render_with_formats
@@ -25,10 +25,12 @@ STATUS_OK = 'ok'
 STATUS_ERROR = 'error'
 STATUS_KEY = 'status'
 
+@login_required
 @render_with('office/index.html')
 def index(request):
     return {}
 
+@login_required
 @render_with('office/invoice_form.html')
 def render_form(request, invoice_type, invoice_id=None):
     invoice_type = int(invoice_type)
@@ -42,6 +44,7 @@ def render_form(request, invoice_type, invoice_id=None):
 
     return {'inv_f': invoice_form, 'inv_formset': invoice_item_formset}
 
+@login_required
 @json_response
 def save_form(request, invoice_type, invoice_id=None):
     if not request.method == 'POST':

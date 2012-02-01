@@ -131,7 +131,7 @@ class InvoiceAddition extends Spine.Controller
                 form_index = 0
                 for item_form in resp_data['items_form_errors']
                     for own input_name, error_msg of item_form
-                        input_el = @el.find("#id_invoiceitem_set-#{form_index}-#{input_name}").addClass 'error'
+                        input_el = @el.find("#id_items-#{form_index}-#{input_name}").addClass 'error'
                         input_el.qtip
                             content: error_msg[0]
                     form_index += 1
