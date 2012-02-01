@@ -12,6 +12,8 @@ register = template.Library()
 def trans_in(ln, text):
     cur_language = translation.get_language()
     translation.activate(ln)
+    print unicode(text), translation.get_language()
     text = translation.ugettext(unicode(text))
+    print ln, text
     translation.activate(cur_language)
     return text
