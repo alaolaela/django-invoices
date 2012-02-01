@@ -166,7 +166,7 @@ class Invoices extends Spine.Controller
     
     invoice_changed: (item, model_cls) =>
         @invoiceids = []
-        if item.status != @inv_param
+        if not @filter_function(item, @inv_param)
             @el.find("#invoice-#{item.constructor.TYPE}-#{item.id}").parent().remove()
         else
             @add_invoice([item], model_cls)
