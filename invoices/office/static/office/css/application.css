@@ -117,3 +117,11 @@ input.info, select.info, textarea.info { border-color: #00d500; }
     padding: 50px 0 0;
     font-size: 12px;
 }
+
+.print_choice header {
+    display: block;
+}
+.print_choice .field {
+    display: block;
+    margin-left: 100px;
+}

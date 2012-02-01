@@ -204,19 +204,22 @@ def render_invoice(request, format):
     }
     types = ((int(t), dict(settings.PRINT_DOCUMENT_TYPES)[int(t)]) \
                 for t in request.GET.getlist('types', DEFAULT_DOCUMENT_TYPES[format]))
+    output = {
+        'types': types,
+        'lang_tpl': 'documents/invoices/_invoice_%s.html' % request.GET.get('lang', ''),
+    }
     if format == 'pdf':
         try:
             invoice = VatInvoice.objects.get(id=request.GET.get('id'))
         except VatInvoice.DoesNotExist:
             invoice = ProformaInvoice.objects.get(id=request.GET.get('id'))
-        return {
+        output.update({
             'invoice': invoice,
-            'types': types,
-        }
+        })
     else:
         ids = request.GET.getlist('id')
         invoices = Invoice.objects.filter(id__in=ids)
-        return {
+        output.update({
             'invoices': invoices,
-            'types': types,
-        }
+        })
+    return output

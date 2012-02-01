@@ -1,0 +1,12 @@
+<div id="print_lang_choice" class="print_choice">
+    <header>Wybierz język:</header>
+    <div class="field"><input checked="checked" type="radio" id="id_lang_pl_de" name="lang" value="pl_de" /> <label for="id_lang_pl_de">polsko-niemiecka</label></div>
+    <div class="field"><input type="radio" id="id_lang_pl" name="lang" value="pl" /> <label for="id_lang_pl">polska</label></div>
+</div>
+<div id="print_types_choice" class="print_choice">
+    <header>Rodzaj dokumentu:</header>
+    <div class="field"><input checked="checked" type="radio" id="id_types_1" name="types" value="1,2" /> <label for="id_types_1">oryginał i kopia</label></div>
+    <div class="field"><input type="radio" id="id_types_2" name="types" value="1" /> <label for="id_types_2">oryginał</label></div>
+    <div class="field"><input type="radio" id="id_types_3" name="types" value="3" /> <label for="id_types_3">duplikat oryginału</label></div>
+    <div class="field"><input type="radio" id="id_types_4" name="types" value="4" /> <label for="id_types_4">duplikat kopii</label></div>
+</div>

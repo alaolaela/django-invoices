@@ -7,7 +7,22 @@ InvoiceMixIn =
         if @status not in [@.constructor.STATUS_PAID, @.constructor.STATUS_TOBEPAID]
             @status = @.constructor.STATUS_TOBEPAID
             @save()
-        window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{@id}", "_blank"
+        inv = @
+        tpl.load OFFICE_APP_NAME, 'print_dialog', =>
+            $('<div />').html(tpl.render 'print_dialog', {}).dialog
+                'title': 'Drukuj fakturę',
+                'draggable': false,
+                'modal': true,
+                'resizable': false,
+                'buttons':
+                    'Zamknij': ->
+                        $(@).dialog 'close'
+                    'Drukuj': ->
+                        types = $('#print_types_choice input[type=radio]:checked').val()
+                        types = types.split(',').join('&types=')
+                        lang = $('#print_lang_choice input[type=radio]:checked').val()
+                        window.open "/invoice/render/.pdf?doc_codename=INVOICE&id=#{inv.id}&types=#{types}&lang=#{lang}", "_blank"
+                        $(@).dialog 'close'
 
     download: ->
         window.open "/invoice/render/.zip?doc_codename=INVOICE&id=#{@id}"
