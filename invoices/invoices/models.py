@@ -66,6 +66,9 @@ class Invoice(models.Model):
         if self.id and not self.key:
             self.key = self.generate_next_key()
         return super(Invoice, self).save(*args, **kwargs)
+    
+    def get_t_payment_type_display(self):
+        return dict(settings.PAYMENTS)[self.payment_type]
 
     @property
     def total_net_price(self):
