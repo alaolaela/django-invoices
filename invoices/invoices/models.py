@@ -131,7 +131,7 @@ INVOICE_TYPE_VAT = 1
 INVOICE_TYPE_PROFORMA = 2
 
 class VatInvoice(Invoice):
-    KEY_PATTERN = r'%(num)s/FV/%(month)s/%(year)s'
+    KEY_PATTERN = r'%(num)s/%(month)s/%(year)s'
     KEY_PATTERN_REGEX = r'^%s$' % (KEY_PATTERN % {'num': '(\d+)', 'month': '[01][1-9]',
                                                   'year': '[0-9]{4}'})
     TYPE = INVOICE_TYPE_VAT
@@ -142,7 +142,7 @@ class VatInvoice(Invoice):
         verbose_name_plural  = u'faktury VAT'
 
 class ProformaInvoice(Invoice):
-    KEY_PATTERN = r'%(num)s/PROF/%(month)s/%(year)s'
+    KEY_PATTERN = r'%(num)s/PRO/%(month)s/%(year)s'
     KEY_PATTERN_REGEX = r'^%s$' % (KEY_PATTERN % {'num': '(\d+)', 'month': '[01][1-9]',
                                                   'year': '[0-9]{4}'})
     TYPE = INVOICE_TYPE_PROFORMA
