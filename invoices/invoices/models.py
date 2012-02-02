@@ -135,7 +135,7 @@ class VatInvoice(Invoice):
     KEY_PATTERN_REGEX = r'^%s$' % (KEY_PATTERN % {'num': '(\d+)', 'month': '[01][1-9]',
                                                   'year': '[0-9]{4}'})
     TYPE = INVOICE_TYPE_VAT
-    TYPE_NAME = u'VAT'
+    TYPE_NAME = _('TAX invoice')
 
     class Meta:
         verbose_name  = u'faktura VAT'
@@ -146,7 +146,7 @@ class ProformaInvoice(Invoice):
     KEY_PATTERN_REGEX = r'^%s$' % (KEY_PATTERN % {'num': '(\d+)', 'month': '[01][1-9]',
                                                   'year': '[0-9]{4}'})
     TYPE = INVOICE_TYPE_PROFORMA
-    TYPE_NAME = u'Proforma'
+    TYPE_NAME = _('proforma invoice')
 
     class Meta:
         verbose_name = u'faktura proforma'

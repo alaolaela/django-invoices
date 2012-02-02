@@ -2,82 +2,90 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-01 23:50+0100\n"
+"POT-Creation-Date: 2012-02-02 20:22+0100\n"
 "PO-Revision-Date: 2012-02-02 19:09\n"
 "Last-Translator:   <m@m.pl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Translated-Using: django-rosetta 0.6.5\n"
 
-#: invoices/settings.py:11
+#: settings.py:11
 msgid "bank transfer"
 msgstr "przelew"
 
-#: invoices/settings.py:12
+#: settings.py:12
 msgid "cash"
 msgstr "gotówka"
 
-#: invoices/settings.py:18
+#: settings.py:18
 msgid "EUR"
 msgstr ""
 
-#: invoices/settings.py:32
+#: settings.py:32
 msgid "original"
 msgstr "oryginał"
 
-#: invoices/settings.py:33
+#: settings.py:33
 msgid "copy"
 msgstr "kopia"
 
-#: invoices/settings.py:34
+#: settings.py:34
 msgid "duplicated original"
 msgstr "duplikat oryginału"
 
-#: invoices/settings.py:35
+#: settings.py:35
 msgid "duplicated copy"
 msgstr "duplikat kopii"
 
-#: invoices/customers/models.py:13
+#: customers/models.py:13
 msgid "name"
 msgstr ""
 
-#: invoices/customers/models.py:14
+#: customers/models.py:14
 msgid "street"
 msgstr ""
 
-#: invoices/customers/models.py:15
+#: customers/models.py:15
 msgid "post code"
 msgstr ""
 
-#: invoices/customers/models.py:16
+#: customers/models.py:16
 msgid "city"
 msgstr ""
 
-#: invoices/customers/models.py:17
+#: customers/models.py:17
 msgid "tax identification number"
 msgstr ""
 
-#: invoices/customers/models.py:19
+#: customers/models.py:19
 msgid "phone number"
 msgstr ""
 
-#: invoices/invoices/models.py:20
+#: invoices/models.py:20
 msgid "usługa"
 msgstr ""
 
-#: invoices/invoices/models.py:21
+#: invoices/models.py:21
 msgid "towar"
 msgstr ""
 
-#: invoices/invoices/models.py:56
+#: invoices/models.py:56
 msgid "status"
 msgstr ""
+
+#: invoices/models.py:138
+msgid "TAX invoice"
+msgstr "Faktura VAT"
+
+#: invoices/models.py:149
+msgid "proforma invoice"
+msgstr "Faktura Proforma"
