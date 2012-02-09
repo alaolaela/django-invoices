@@ -15,6 +15,7 @@ class InvoiceAddition extends Spine.Controller
         "change .net_price input": "compute_values"
         "change .net_value input": "compute_values"
         "change .tax select": "compute_values"
+        "change #id_date_created": "recalculate_dates"
         "click #save-invoice": "save_invoice"
 
     elements:
@@ -52,18 +53,23 @@ class InvoiceAddition extends Spine.Controller
 		
             for item in @invoice_items.find 'tr'
                 @compute_values target: $(item).find('.net_price input')
-            $('#id_customer_content_type').change()
-
+            if not @inv_id
+                $('#id_customer_content_type').change()
+            else
+                $('#id_customer_object_id').change()
+            
     customer_type_chosen: (e) =>
         sel_el = $(e.target)
         ct_id = sel_el.val()
+        if not ct_id
+            return
         $.get "#{@CHOICES_ADDR}#{ct_id}/", (data) =>
             sel_customer = $ '#id_customer_object_id'
             sel_customer.html ''
             for rec in data
                 new_opt = $('<option />',
-                    value: rec[1]
-                    text: rec[0]
+                    value: rec[0]
+                    text: rec[1]
                 )
                 sel_customer.append new_opt
             sel_customer.change()
@@ -95,6 +101,12 @@ class InvoiceAddition extends Spine.Controller
         el.find('.delete_commodity input').attr('checked', 'checked')
         @compute_summary()
     
+    recalculate_dates: (e) =>
+        date = new Date($(e.target).val())
+        format_date_str = (date) -> "#{date.getFullYear()}-#{date.getMonth()+1}-#{date.getDate()}"
+        $('#id_date_sale').val format_date_str(date)
+        date.setDate date.getDate() + 21
+        $('#id_date_payment').val format_date_str(date)
 
     compute_values: (e) =>
         (new ComputeValue(@el, @invoice_items)).compute_values(e)
@@ -116,6 +128,7 @@ class InvoiceAddition extends Spine.Controller
                 $(old_error_el).removeClass 'error'
             if resp_data[STATUS_KEY] == STATUS_OK
                 quick_msg 'Zapis', 'Faktura zapisana poprawnie'
+                document.location.hash = "/show-invoice/#{conf.INVOICE_TYPES[@inv_type]}/#{resp_data['id']}"
                 return
             
             if resp_data['key']?
@@ -142,11 +155,12 @@ class InvoiceAddition extends Spine.Controller
             content: msg[0]
         
     set_autocomplete: (el) ->
+        clear_button = $('<a href="#"></a>').css {'display': 'block'}
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
             ct_input = el.siblings('.ct').children 'input'
             oid_input = el.siblings('.oid').children 'input'
             if ui.item
-                clear_button = $('<a href="#"></a>').css({'display': 'block'}).text "X - " + ui.item.desc
+                clear_button.text "X - " + ui.item.desc
                 ct_input.val ui.item.ct_id
                 oid_input.val ui.item.obj_id
                 el.before clear_button

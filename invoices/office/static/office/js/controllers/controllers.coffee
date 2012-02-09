@@ -372,7 +372,7 @@ class InvoicePreview extends Spine.Controller
 
     into_vat: (e) =>
         @item.into_vat (data) =>
-            document.location.hash = "/"
+            document.location.hash = "/show-invoice/#{conf.INVOICE_TYPE_VAT}/#{data.id}"
             window.quick_msg "#{@item.key}", "Faktura VAT o numerze #{data.key} utworzna."
 
 

@@ -86,6 +86,7 @@ def save_form(request, invoice_type, invoice_id=None):
         
         InvoiceItemFormset(dat, instance=new_invoice).save()
         resp_dat[STATUS_KEY] = STATUS_OK
+        resp_dat['id'] = new_invoice.id
     else:
         resp_dat[STATUS_KEY] = STATUS_ERROR
 
@@ -95,13 +96,16 @@ def save_form(request, invoice_type, invoice_id=None):
 def prof_into_vat(request, inv_id):
     inv = ProformaInvoice.objects.get(id=inv_id)
     inv_v = inv.clone_as_vat()
-    return {'status': 'OK', 'key': inv_v.key}
+    return {'status': 'OK', 'id': inv_v.id, 'key': inv_v.key}
+
+def _get_customer_choices(ct_id):
+    ct = ContentType.objects.get(id=ct_id)
+    m_cls = ct.model_class()
+    return [(m.id, '#%d %s' % (m.id, unicode(m))) for m in m_cls.objects.all()]
 
 @json_response
 def get_choices(request, ct_id):
-    ct = ContentType.objects.get(id=ct_id)
-    m_cls = ct.model_class()
-    return [(unicode(m), m.id) for m in m_cls.objects.all()]
+    return _get_customer_choices(ct_id)
 
 @json_response
 def get_customerdata(request, ct_id, customer_id):

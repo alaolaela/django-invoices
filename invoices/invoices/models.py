@@ -166,6 +166,10 @@ class ProformaInvoice(Invoice):
         inv_v = VatInvoice(**attrs)
         inv_v.key = inv_v.generate_next_key()
         inv_v.save()
+        for item in self.items.all():
+            item.pk = None
+            item.save()
+            inv_v.items.add(item)
         return inv_v
 
 
@@ -210,11 +214,11 @@ class InvoiceItem(models.Model):
     @classmethod
     def get_for_autocomplete(cls, query):
         items = []
-        for item in cls.objects.filter(name__icontains=query):
+        for item in cls.objects.filter(name__icontains=query, product_object_id__isnull=True):
             items.append({
-                'obj_id': item.product_object_id,
-                'ct_id': item.product_content_type,
+                'obj_id': None,
+                'ct_id': None,
                 'label': item.name,
-                'desc': item.product.name if item.product else item.name,
+                'desc': item.name,
             })
         return items
