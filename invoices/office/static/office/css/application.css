@@ -71,7 +71,7 @@ form.facture a.add_new_client {margin-left: 10px; line-height: 22px; font-size: 
 table.client_data {float: left; clear: both;}
 table.client_data td {vertical-align: bottom;}
 
-.goods {padding-bottom: 200px;}
+.goods {clear: both;padding-bottom: 200px;}
 .goods p {line-height: 1.4;}
 .goods table {width: 100%; font-size: 13px; margin-bottom: 100px;}
 .goods table thead td {border-bottom: solid 2px #808285; font-size: 9px; font-weight: bold; font-style: normal; text-decoration: none; color: #666; text-transform: uppercase;}
