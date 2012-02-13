@@ -17,6 +17,10 @@ h4.overview_type_no_bg {font-weight: bold; font-size: 16px; color: #333; text-tr
 .invoice2 {background-color: red;}
 .invoice1 {background-color: blue;}
 .invoice4 {background-color: green;}
+div.overview {
+    display: block;
+    clear: both;
+}
 table.overview {
     font-size: 12px; 
     font-weight: normal; 
