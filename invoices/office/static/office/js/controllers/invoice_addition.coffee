@@ -57,6 +57,11 @@ class InvoiceAddition extends Spine.Controller
                 $('#id_customer_content_type').change()
             else
                 $('#id_customer_object_id').change()
+
+            #if @customer_type
+            #    $("#id_customer_content_type option[value=#{@customer_type}").attr 'selected', true
+            #    $('#id_customer_content_type').change()
+
             
     customer_type_chosen: (e) =>
         sel_el = $(e.target)
