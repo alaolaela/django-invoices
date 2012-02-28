@@ -116,6 +116,11 @@ def get_customerdata(request, ct_id, customer_id):
 
 @json_response
 def products_search(request):
+    if request.GET.get('p_ct') and request.GET.get('p_id'):
+        ct = ContentType.objects.get(id=request.GET['p_ct'])
+        m_cls = ct.model_class()
+        product = m_cls.objects.get(id=request.GET['p_id'])
+        return product.get_autocomplete_dict()
     items = []
     for model in settings.PRODUCT_MODELS:
         model_cls = get_model(*model.split('.'))

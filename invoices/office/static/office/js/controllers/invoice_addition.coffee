@@ -57,10 +57,16 @@ class InvoiceAddition extends Spine.Controller
                 $('#id_customer_content_type').change()
             else
                 $('#id_customer_object_id').change()
+            
+            if @customer_type
+                $("#id_customer_content_type option[value=#{@customer_type}]").attr 'selected', true
+                $('#id_customer_content_type').change()
 
-            #if @customer_type
-            #    $("#id_customer_content_type option[value=#{@customer_type}").attr 'selected', true
-            #    $('#id_customer_content_type').change()
+            if @product_type and @product_id
+                $.get "#{@PRODUCTS_SEARCH_ADDR}?p_ct=#{@product_type}&p_id=#{@product_id}", (data) =>
+                    el = $('.invoice-items tbody tr:first .commodity textarea')
+                    @set_product el, data['ct_id'], data['obj_id'], data['label'], data['desc'], data['rate']
+                    
 
             
     customer_type_chosen: (e) =>
@@ -76,6 +82,9 @@ class InvoiceAddition extends Spine.Controller
                     value: rec[0]
                     text: rec[1]
                 )
+                if @customer_id and parseInt(@customer_id) == rec[0]
+                    new_opt.attr 'selected', true
+
                 sel_customer.append new_opt
             sel_customer.change()
         , 'json'
@@ -160,22 +169,31 @@ class InvoiceAddition extends Spine.Controller
             content: msg[0]
         
     set_autocomplete: (el) ->
-        clear_button = $('<a href="#"></a>').css {'display': 'block'}
-        el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) ->
-            ct_input = el.siblings('.ct').children 'input'
-            oid_input = el.siblings('.oid').children 'input'
-            if ui.item
-                clear_button.text "X - " + ui.item.desc
-                ct_input.val ui.item.ct_id
-                oid_input.val ui.item.obj_id
-                el.before clear_button
-                clear_button.bind 'click', (e) ->
-                    e.preventDefault()
-                    ct_input.val ''
-                    oid_input.val ''
-                    $(@).remove()
-            else
-                    ct_input.val ''
-                    oid_input.val ''
+        el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) =>
+            @set_product el, ui.item.obj_id, ui.item.ct_id, ui.item.label, ui.item.desc, ui.item.rate
+
+    set_product: (el, p_id, ct_id, label, desc, rate) ->
+        el.parent().find('a.clear').remove()
+        clear_button = $('<a href="#" class="clear"></a>').css {'display': 'block'}
+        ct_input = el.siblings('.ct').children 'input'
+        oid_input = el.siblings('.oid').children 'input'
+        el.val label
+        el.parents('tr').find('.quantity input').val('1').change()
+        el.parents('tr').find('.net_price input').val(rate).change()
+        if p_id and ct_id
+            clear_button.text "X - " + desc
+            ct_input.val ct_id
+            oid_input.val p_id
+            el.before clear_button
+            clear_button.bind 'click', (e) ->
+                e.preventDefault()
+                ct_input.val ''
+                oid_input.val ''
+                $(@).remove()
+        else
+                ct_input.val ''
+                oid_input.val ''
+
+
 
 window.controllers.InvoiceAddition = InvoiceAddition

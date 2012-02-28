@@ -12,7 +12,7 @@ class App extends Spine.Controller
 
         $("#content").remove()
         @routes
-            "/add-invoice/:inv_type/:customer_type/:customer_id/:product_id": (params) ->
+            "/add-invoice/:inv_type/:customer_type/:customer_id/:product_type/:product_id": (params) ->
                 if not params.inv_type
                     return
                 rc()
@@ -20,6 +20,7 @@ class App extends Spine.Controller
                     inv_type: params.inv_type
                     customer_type: params.customer_type
                     customer_id: params.customer_id
+                    product_type: params.product_type
                     product_id: params.product_id
                     , el: $('#content')
             "/add-invoice/:inv_type": (params) ->
