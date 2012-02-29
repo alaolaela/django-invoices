@@ -182,7 +182,7 @@ class InvoiceAddition extends Spine.Controller
         if not el.length or el.val()
             $('.add_new_product').click()
             el = $(".invoice-items tbody tr:last .commodity textarea")
-        @set_product el, data['ct_id'], data['obj_id'], data['label'], data['desc'], data['rate']
+        @set_product el, data['obj_id'], data['ct_id'], data['label'], data['desc'], data['rate']
 
     set_product: (el, p_id, ct_id, label, desc, rate) ->
         el.parent().find('a.clear').remove()
