@@ -99,6 +99,8 @@ class InvoiceAddition extends Spine.Controller
             p = [cd.name, cd.address, "#{cd.postal_code} #{cd.city}"]
             if cd.daily_rate
                 p.push "<br />Stawka dzienna: #{cd.daily_rate} Euro"
+            if cd.rate
+                p.push "<br />Stawka miesięczna: #{cd.rate} Euro"
             if cd.broker_tocket_price
                 p.push "<br />Pośrednik - koszt biletu: #{cd.broker_tocket_price} Euro"
             $('#customer-data').html p.join('<br />')
