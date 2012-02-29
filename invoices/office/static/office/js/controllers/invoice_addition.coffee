@@ -3,6 +3,7 @@ class InvoiceAddition extends Spine.Controller
     INVOICES_TPL_ADDR: '/invoice/formtpl/'
     CHOICES_ADDR: '/invoice/choices/'
     CUSTOMER_DATA_ADDR: '/invoice/customerdata/'
+    CUSTOMER_INVOICE_DATA_ADDR: '/invoice/customerinvoicedata/'
     PRODUCTS_SEARCH_ADDR: '/invoice/products/'
     INVOICES_SAVE_ADDR: '/invoice/formsave/'
 
@@ -32,6 +33,7 @@ class InvoiceAddition extends Spine.Controller
             @load_tpl()
         tpl.load OFFICE_APP_NAME, 'add_right', =>
             @el.find('.right').html tpl.render 'add_right', {}
+        @product_id = (parseInt(pid) for pid in @product_id.split(','))
 
     load_tpl: =>
         base_addr = "#{@INVOICES_TPL_ADDR}#{conf.INVOICE_TYPES[@inv_type]}/"
@@ -63,9 +65,9 @@ class InvoiceAddition extends Spine.Controller
                 $('#id_customer_content_type').change()
 
             if @product_type and @product_id
-                $.get "#{@PRODUCTS_SEARCH_ADDR}?p_ct=#{@product_type}&p_id=#{@product_id}", (data) =>
-                    el = $('.invoice-items tbody tr:first .commodity textarea')
-                    @set_product el, data['ct_id'], data['obj_id'], data['label'], data['desc'], data['rate']
+                for pid in @product_id
+                    $.get "#{@PRODUCTS_SEARCH_ADDR}?p_ct=#{@product_type}&p_id=#{pid}", (data) =>
+                        @add_product data
                     
 
             
@@ -92,13 +94,14 @@ class InvoiceAddition extends Spine.Controller
     customer_chosen: (e) =>
         customer_id = $(e.target).val()
         ct_id = $('#id_customer_content_type').val()
-        $.get "#{@CUSTOMER_DATA_ADDR}#{ct_id}/#{customer_id}/", (data) =>
+        $.get "#{@CUSTOMER_INVOICE_DATA_ADDR}#{ct_id}/#{customer_id}/", (data) =>
             cd = data.customer_data
-            invoice_name = if cd.name then cd.name else cd.name
-            invoice_addr = if cd.invoice_address then cd.invoice_address else cd.address
-            invoice_addr2 = if cd.invoice_postal_code and cd.invoice_city then "#{cd.invoice_postal_code} #{cd.invoice_city}" else "#{cd.postal_code} #{cd.city}"
-            
-            $('#customer-data').html "#{invoice_name}<br />#{invoice_addr}<br />#{invoice_addr2}"
+            p = [cd.name, cd.address, "#{cd.postal_code} #{cd.city}"]
+            if cd.daily_rate
+                p.push "<br />Stawka dzienna: #{cd.daily_rate} Euro"
+            if cd.broker_tocket_price
+                p.push "<br />Pośrednik - koszt biletu: #{cd.broker_tocket_price} Euro"
+            $('#customer-data').html p.join('<br />')
         , 'json'
 
     new_invoice_item: (e) =>
@@ -172,14 +175,21 @@ class InvoiceAddition extends Spine.Controller
         el.autocomplete 'source': @PRODUCTS_SEARCH_ADDR, 'select': (e, ui) =>
             @set_product el, ui.item.obj_id, ui.item.ct_id, ui.item.label, ui.item.desc, ui.item.rate
 
+    add_product: (data) =>
+        el = $(".invoice-items tbody tr:last .commodity textarea")
+        if not el.length or el.val()
+            $('.add_new_product').click()
+            el = $(".invoice-items tbody tr:last .commodity textarea")
+        @set_product el, data['ct_id'], data['obj_id'], data['label'], data['desc'], data['rate']
+
     set_product: (el, p_id, ct_id, label, desc, rate) ->
         el.parent().find('a.clear').remove()
         clear_button = $('<a href="#" class="clear"></a>').css {'display': 'block'}
         ct_input = el.siblings('.ct').children 'input'
         oid_input = el.siblings('.oid').children 'input'
         el.val label
-        el.parents('tr').find('.quantity input').val('1').change()
-        el.parents('tr').find('.net_price input').val(rate).change()
+        el.parents('tr:first').find('.quantity input').val('1').change()
+        el.parents('tr:first').find('.net_price input').val(rate).change()
         if p_id and ct_id
             clear_button.text "X - " + desc
             ct_input.val ct_id

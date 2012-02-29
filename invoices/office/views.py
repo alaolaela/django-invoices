@@ -108,11 +108,18 @@ def get_choices(request, ct_id):
     return _get_customer_choices(ct_id)
 
 @json_response
-def get_customerdata(request, ct_id, customer_id):
+def get_customer_data(request, ct_id, customer_id):
     ct = ContentType.objects.get(id=ct_id)
     m_cls = ct.model_class()
     customer = m_cls.objects.get(id=customer_id)
     return {'customer_data': customer.get_data()}
+
+@json_response
+def get_customer_invoice_data(request, ct_id, customer_id):
+    ct = ContentType.objects.get(id=ct_id)
+    m_cls = ct.model_class()
+    customer = m_cls.objects.get(id=customer_id)
+    return {'customer_data': customer.get_invoice_data()}
 
 @json_response
 def products_search(request):
