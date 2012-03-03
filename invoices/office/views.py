@@ -127,13 +127,13 @@ def products_search(request):
         ct = ContentType.objects.get(id=request.GET['p_ct'])
         m_cls = ct.model_class()
         product = m_cls.objects.get(id=request.GET['p_id'])
-        return product.get_autocomplete_dict()
+        return product.get_autocomplete_dict(request)
     items = []
     for model in settings.PRODUCT_MODELS:
         model_cls = get_model(*model.split('.'))
         if hasattr(model_cls, 'get_for_autocomplete'):
-            items += model_cls.get_for_autocomplete(request.GET['term'])
-    items += InvoiceItem.get_for_autocomplete(request.GET['term'])
+            items += model_cls.get_for_autocomplete(request, request.GET['term'])
+    items += InvoiceItem.get_for_autocomplete(request, request.GET['term'])
     return items
 
 @json_response

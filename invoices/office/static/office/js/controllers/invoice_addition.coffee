@@ -66,7 +66,7 @@ class InvoiceAddition extends Spine.Controller
 
             if @product_type and @product_id
                 for pid in @product_id
-                    $.get "#{@PRODUCTS_SEARCH_ADDR}?p_ct=#{@product_type}&p_id=#{pid}", (data) =>
+                    $.get "#{@PRODUCTS_SEARCH_ADDR}?p_ct=#{@product_type}&p_id=#{pid}&#{@additional_params}", (data) =>
                         @add_product data
                     
 

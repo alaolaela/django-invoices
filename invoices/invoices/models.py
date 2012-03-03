@@ -212,7 +212,7 @@ class InvoiceItem(models.Model):
         return self.total_net_price * ((float(self.tax) / 100) + 1)
 
     @classmethod
-    def get_for_autocomplete(cls, query):
+    def get_for_autocomplete(cls, request, query):
         items = []
         for item in cls.objects.filter(name__icontains=query, product_object_id__isnull=True):
             items.append({
